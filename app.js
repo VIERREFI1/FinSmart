@@ -1,565 +1,1002 @@
-/* ═══════════════════════════════════════════
-   FINSMART — APPLICATION LOGIC
-   ═══════════════════════════════════════════ */
+/* =============================================
+   VAULT-ED: Your Digital Financial Twin
+   Main Application Logic
+   ============================================= */
 
 'use strict';
 
-// ═══════════ STATE ═══════════
-let state = {
+// ============================================================
+// STATE — single source of truth
+// ============================================================
+const State = {
+  user: {
+    name: 'Rizky Pratama',
+    initials: 'RP',
+    grade: 'Kelas 11 IPA',
+    level: 'Level 7 — Saver Pro',
+    avatar_color: 'var(--purple)',
+    joined: '2024-01-15'
+  },
+
+  wallet: {
+    ready_to_spend: 145000,
+    savings:        320000,
+    emergency:       80000,
+    currency: 'Rp',
+    interest_rate: 0.5,      // % per bulan (virtual)
+    last_interest_date: null
+  },
+
   transactions: [
-    { id: 1, date: '2026-04-15', desc: 'Kopi Kenangan',          cat: '☕ Kopi & Jajan',   type: 'expense', amount: 25000 },
-    { id: 2, date: '2026-04-15', desc: 'Transportasi angkot',    cat: '🚌 Transportasi',    type: 'expense', amount: 10000 },
-    { id: 3, date: '2026-04-14', desc: 'Gaji Part-time Cafe',    cat: '💼 Gaji Part-time',  type: 'income',  amount: 300000 },
-    { id: 4, date: '2026-04-14', desc: 'Makan Siang Warteg',     cat: '🍜 Makan & Minum',   type: 'expense', amount: 22000 },
-    { id: 5, date: '2026-04-14', desc: 'Buku Pelajaran',         cat: '📚 Pendidikan',      type: 'expense', amount: 85000 },
-    { id: 6, date: '2026-04-13', desc: 'Uang Jajan',             cat: '💰 Uang Jajan',      type: 'income',  amount: 500000 },
-    { id: 7, date: '2026-04-12', desc: 'Game Mobile',            cat: '🎮 Hiburan',         type: 'expense', amount: 50000 },
-    { id: 8, date: '2026-04-10', desc: 'Gaji Part-time Cafe',    cat: '💼 Gaji Part-time',  type: 'income',  amount: 450000 },
+    { id: 1,  date: '2025-06-28', name: 'Makan Siang Kantin',      category: 'food',  amount: -15000,  icon: '🍛' },
+    { id: 2,  date: '2025-06-28', name: 'Uang Jajan dari Mama',    category: 'save',  amount: +100000, icon: '💰' },
+    { id: 3,  date: '2025-06-27', name: 'Top-up Mobile Legends',   category: 'game',  amount: -25000,  icon: '🎮' },
+    { id: 4,  date: '2025-06-27', name: 'Ojek Online ke Sekolah',  category: 'trans', amount: -12000,  icon: '🛵' },
+    { id: 5,  date: '2025-06-26', name: 'Beli Buku Pelajaran',     category: 'shop',  amount: -55000,  icon: '📚' },
+    { id: 6,  date: '2025-06-26', name: 'Transfer ke Tabungan',    category: 'save',  amount: -50000,  icon: '🏦' },
+    { id: 7,  date: '2025-06-25', name: 'Jajan Es Teh + Gorengan', category: 'food',  amount: -8000,   icon: '🧋' },
+    { id: 8,  date: '2025-06-25', name: 'Tugas Les Berhasil',      category: 'save',  amount: +20000,  icon: '⭐' },
+    { id: 9,  date: '2025-06-24', name: 'Beli Minuman Kopi Susu',  category: 'food',  amount: -18000,  icon: '☕' },
+    { id: 10, date: '2025-06-24', name: 'Top-up Gopay',            category: 'trans', amount: -50000,  icon: '📱' },
+    { id: 11, date: '2025-06-23', name: 'Makan Bakso Bareng Teman',category: 'food',  amount: -20000,  icon: '🍜' },
+    { id: 12, date: '2025-06-22', name: 'Uang Jajan dari Papa',    category: 'save',  amount: +75000,  icon: '💰' },
   ],
-  simType: 'compound',
-  activeQuickType: 'expense',
+
+  milestones: [
+    { id: 1, title: 'Nabung Pertama!',     desc: 'Simpan uang pertama kali ke rekening tabungan',    target: 50000,   icon: '🌱', done: true  },
+    { id: 2, title: 'Si Hemat Sejati',     desc: 'Hemat 3 hari berturut-turut tanpa jajan berlebih', target: 100000,  icon: '🥗', done: true  },
+    { id: 3, title: '30% ke HP Impian',    desc: 'Kumpulkan 30% harga dari target HP Samsung A55',   target: 450000,  icon: '📱', done: true  },
+    { id: 4, title: '60% Target Tercapai', desc: 'Kamu sudah di titik 60%! Tinggal 5 langkah lagi!', target: 900000,  icon: '🏆', done: false, current: true },
+    { id: 5, title: 'HP Impian Terbeli!',  desc: 'Kumpulkan penuh Rp 1.500.000 untuk Samsung A55',   target: 1500000, icon: '🎉', done: false  },
+  ],
+
+  goals: [
+    { id: 1, name: 'Samsung Galaxy A55',   target: 1500000, current: 900000,  icon: '📱', deadline: '2025-08-31', color: 'var(--blue)' },
+    { id: 2, name: 'Sepatu Nike Air',      target: 800000,  current: 240000,  icon: '👟', deadline: '2025-09-15', color: 'var(--purple)' },
+    { id: 3, name: 'Dana Darurat Pribadi', target: 500000,  current: 80000,   icon: '🛡️', deadline: '2025-12-31', color: 'var(--yellow)' },
+  ],
+
+  tasks: [
+    { id: 1, title: 'Hemat Rp 50.000 minggu ini',   desc: 'Tantangan dari Mama: kurangi jajan minggu ini', reward: 'Nonton bioskop weekend', by: 'Mama', done: true,  icon: '💪' },
+    { id: 2, title: 'Catat semua pengeluaran 7 hari',desc: 'Rekam setiap pengeluaran tanpa terkecuali',    reward: 'Boleh main game 1 jam extra', by: 'Papa', done: false, icon: '📝' },
+    { id: 3, title: 'Raih tabungan Rp 200.000',      desc: 'Kumpulkan tabungan hingga Rp 200.000 bulan ini',reward: 'Beli buku komik pilihan',    by: 'Mama', done: false, icon: '🎯' },
+  ],
+
+  leaderboard: [
+    { rank: 1, name: 'Aulia Sari',    savings: 450000, you: false },
+    { rank: 2, name: 'Budi Santoso',  savings: 380000, you: false },
+    { rank: 3, name: 'Rizky Pratama', savings: 320000, you: true  },
+    { rank: 4, name: 'Citra Dewi',    savings: 290000, you: false },
+    { rank: 5, name: 'Dani Hendra',   savings: 210000, you: false },
+    { rank: 6, name: 'Eka Saputri',   savings: 175000, you: false },
+  ],
+
+  categories: {
+    food:  { label: 'Makanan & Minuman', icon: '🍛', color: 'var(--orange)' },
+    trans: { label: 'Transportasi',      icon: '🚌', color: 'var(--blue)'   },
+    game:  { label: 'Game & Hiburan',    icon: '🎮', color: 'var(--purple)' },
+    shop:  { label: 'Belanja',           icon: '🛍️', color: 'var(--yellow)' },
+    save:  { label: 'Tabungan / Masuk',  icon: '💰', color: 'var(--green)'  },
+    other: { label: 'Lainnya',           icon: '📦', color: '#888'          },
+  }
 };
 
-// ═══════════ NAVIGATION ═══════════
-function goTo(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+// ============================================================
+// UTILITIES
+// ============================================================
+const formatRupiah = (n) => {
+  const abs = Math.abs(n);
+  if (abs >= 1000000) return `Rp ${(abs / 1000000).toFixed(1)}jt`;
+  if (abs >= 1000)    return `Rp ${(abs / 1000).toFixed(0)}rb`;
+  return `Rp ${abs.toLocaleString('id-ID')}`;
+};
+
+const formatRupiahFull = (n) => {
+  return `Rp ${Math.abs(n).toLocaleString('id-ID')}`;
+};
+
+const totalWallet = () =>
+  State.wallet.ready_to_spend + State.wallet.savings + State.wallet.emergency;
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+const navigate = (pageId) => {
+  // Hide all pages
+  document.querySelectorAll('.main-content').forEach(p => p.classList.remove('active-page'));
+  // Deactivate all nav items
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  document.querySelector(`[data-page="${page}"]`).classList.add('active');
-  if (window.innerWidth <= 900) closeSidebar();
-}
 
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => goTo(item.dataset.page));
-});
+  // Show target page
+  const page = document.getElementById('page-' + pageId);
+  if (page) page.classList.add('active-page');
 
-// Hamburger
-const hamburger = document.getElementById('hamburger');
-const sidebar = document.getElementById('sidebar');
-hamburger.addEventListener('click', () => sidebar.classList.toggle('open'));
-function closeSidebar() { sidebar.classList.remove('open'); }
+  // Activate nav item
+  const navItem = document.querySelector(`[data-page="${pageId}"]`);
+  if (navItem) navItem.classList.add('active');
 
-// Filter tabs (ledger & edu)
-document.querySelectorAll('.filter-tab').forEach(tab => {
-  tab.addEventListener('click', function() {
-    this.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
-document.querySelectorAll('.edu-cat').forEach(cat => {
-  cat.addEventListener('click', function() {
-    document.querySelectorAll('.edu-cat').forEach(c => c.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
-// Quick tab toggle
-document.querySelectorAll('.quick-tab').forEach(tab => {
-  tab.addEventListener('click', function() {
-    document.querySelectorAll('.quick-tab').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-    state.activeQuickType = this.dataset.type;
-  });
-});
-
-// ═══════════ QUICK ADD ═══════════
-function quickAdd() {
-  const amountEl = document.getElementById('quickAmount');
-  const catEl    = document.getElementById('quickCategory');
-  const noteEl   = document.getElementById('quickNote');
-
-  const amount = parseInt(amountEl.value);
-  const cat    = catEl.value;
-
-  if (!amount || amount <= 0) { showToast('⚠️ Masukkan jumlah yang valid', 'warning'); return; }
-  if (!cat) { showToast('⚠️ Pilih kategori terlebih dahulu', 'warning'); return; }
-
-  const tx = {
-    id: Date.now(),
-    date: new Date().toISOString().slice(0,10),
-    desc: noteEl.value || cat.replace(/^.*? /, ''),
-    cat,
-    type: state.activeQuickType,
-    amount,
+  // Page-specific initialization
+  const inits = {
+    dashboard:   initDashboard,
+    wallet:      initWallet,
+    transactions:initTransactions,
+    goals:       initGoals,
+    timemachine: initTimeMachine,
+    wrapped:     initWrapped,
+    challenge:   initChallenge,
+    tasks:       initTasks,
+    categorizer: initCategorizer,
   };
+  if (inits[pageId]) inits[pageId]();
 
-  state.transactions.unshift(tx);
-  renderTxList();
-  amountEl.value = '';
-  catEl.value = '';
-  noteEl.value = '';
-  showToast(`✅ Transaksi ${state.activeQuickType === 'income' ? 'pemasukan' : 'pengeluaran'} ditambahkan!`, 'success');
-}
+  // Close mobile sidebar
+  document.querySelector('.sidebar').classList.remove('open');
 
-function renderTxList() {
-  const list = document.getElementById('txList');
-  if (!list) return;
-  list.innerHTML = state.transactions.slice(0,5).map(tx => {
-    const isIn = tx.type === 'income';
-    const emoji = getEmoji(tx.cat);
-    return `
-      <div class="tx-item">
-        <div class="tx-icon ${isIn ? 'tx-in' : 'tx-out'}">${emoji}</div>
-        <div class="tx-info">
-          <div class="tx-name">${tx.desc}</div>
-          <div class="tx-date">${formatDate(tx.date)}</div>
-        </div>
-        <div class="tx-amount ${isIn ? 'positive' : 'negative'}">
-          ${isIn ? '+' : '-'}Rp ${tx.amount.toLocaleString('id-ID')}
-        </div>
-      </div>`;
-  }).join('');
-}
+  // Update URL hash (simple routing)
+  history.replaceState(null, '', '#' + pageId);
+};
 
-function getEmoji(cat) {
-  if (cat.includes('Kopi') || cat.includes('kopi')) return '☕';
-  if (cat.includes('Transport')) return '🚌';
-  if (cat.includes('Gaji')) return '💼';
-  if (cat.includes('Makan')) return '🍜';
-  if (cat.includes('Pendidikan')) return '📚';
-  if (cat.includes('Uang')) return '💰';
-  if (cat.includes('Hiburan')) return '🎮';
-  if (cat.includes('Belanja')) return '🛍️';
-  return '💳';
-}
+// ============================================================
+// TOAST NOTIFICATIONS
+// ============================================================
+const toast = (msg, type = 'info', duration = 3500) => {
+  const icons = { success: '✅', warning: '⚠️', error: '❌', info: 'ℹ️' };
+  const container = document.querySelector('.toast-container');
 
-function formatDate(d) {
-  const date = new Date(d);
-  const now = new Date();
-  const diff = Math.round((now - date) / 86400000);
-  if (diff === 0) return 'Hari ini';
-  if (diff === 1) return 'Kemarin';
-  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
-}
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type]}</span><span>${msg}</span>`;
+  container.appendChild(el);
 
-// ═══════════ AUTO-POCKET SLIDER ═══════════
-function updateAPPercent() {
-  const val = parseInt(document.getElementById('apPercent').value);
-  document.getElementById('apPercentVal').textContent = val + '%';
-  const base = 500000;
-  const amount = Math.round(base * val / 100);
-  document.getElementById('apAmount').textContent = 'Rp ' + amount.toLocaleString('id-ID');
-}
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => el.classList.add('show'));
+  });
 
-// ═══════════ GROWTH SIMULATOR ═══════════
-let simChart = null;
+  setTimeout(() => {
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 400);
+  }, duration);
+};
 
-function runSimulator() {
-  const initial  = parseFloat(document.getElementById('simInitial').value) || 0;
-  const monthly  = parseFloat(document.getElementById('simMonthly').value) || 0;
-  const rateAnn  = parseFloat(document.getElementById('simRate').value) || 0;
-  const years    = parseInt(document.getElementById('simYears').value) || 1;
-  const months   = years * 12;
-  const rateM    = rateAnn / 100 / 12;
+// ============================================================
+// MODAL
+// ============================================================
+const openModal = (id) => {
+  document.getElementById(id).classList.add('open');
+};
 
-  const labels = [];
-  const valuesCompound = [];
-  const valuesPrincipal = [];
+const closeModal = (id) => {
+  document.getElementById(id).classList.remove('open');
+};
 
-  let balance = initial;
-
-  for (let m = 0; m <= months; m++) {
-    if (m % Math.max(1, Math.floor(months / 20)) === 0 || m === months) {
-      labels.push(m === 0 ? 'Mulai' : `${Math.round(m/12*10)/10}th`);
-      valuesCompound.push(Math.round(balance));
-      const principal = initial + monthly * m;
-      valuesPrincipal.push(Math.round(principal));
-    }
-    if (state.simType === 'compound') {
-      balance = balance * (1 + rateM) + monthly;
-    } else {
-      // simple: add monthly and add flat interest on initial
-      balance += monthly + (initial * rateAnn / 100 / 12);
-    }
-  }
-
-  const finalVal = Math.round(balance);
-  const principal = Math.round(initial + monthly * months);
-  const interest = finalVal - principal;
-
-  document.getElementById('simResultValue').textContent = 'Rp ' + finalVal.toLocaleString('id-ID');
-  document.getElementById('simPrincipal').textContent = 'Rp ' + principal.toLocaleString('id-ID');
-  document.getElementById('simInterest').textContent = 'Rp ' + Math.max(0, interest).toLocaleString('id-ID');
-  document.getElementById('insightNoSave').textContent = 'Rp ' + initial.toLocaleString('id-ID');
-  const mult = principal > 0 ? (finalVal / principal).toFixed(1) : '∞';
-  document.getElementById('insightMultiplier').textContent = mult + 'x';
-
-  drawSimChart(labels, valuesCompound, valuesPrincipal);
-}
-
-function drawSimChart(labels, values, principal) {
-  const canvas = document.getElementById('simChart');
+// ============================================================
+// CHARTS (pure canvas, no library)
+// ============================================================
+const drawLineChart = (canvasId, data, labels, color = '#00e5a0') => {
+  const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const W = canvas.parentElement.clientWidth || 500;
-  const H = 200;
-  canvas.width = W;
-  canvas.height = H;
+  const W = canvas.width = canvas.offsetWidth;
+  const H = canvas.height = canvas.offsetHeight;
 
   ctx.clearRect(0, 0, W, H);
 
-  const pad = { top: 10, right: 20, bottom: 30, left: 60 };
+  const pad = { top: 20, right: 20, bottom: 30, left: 55 };
   const chartW = W - pad.left - pad.right;
   const chartH = H - pad.top - pad.bottom;
 
-  const maxVal = Math.max(...values, 1);
+  const max = Math.max(...data) * 1.1;
+  const min = 0;
 
   // Grid lines
-  ctx.strokeStyle = 'rgba(42,47,69,0.8)';
+  const steps = 4;
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
   ctx.lineWidth = 1;
-  for (let i = 0; i <= 4; i++) {
-    const y = pad.top + chartH - (i / 4) * chartH;
+  for (let i = 0; i <= steps; i++) {
+    const y = pad.top + chartH - (i / steps) * chartH;
     ctx.beginPath();
     ctx.moveTo(pad.left, y);
     ctx.lineTo(pad.left + chartW, y);
     ctx.stroke();
-    // Y label
-    ctx.fillStyle = '#5a6380';
-    ctx.font = '10px DM Sans, sans-serif';
+
+    // Y labels
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.font = '10px Space Mono, monospace';
     ctx.textAlign = 'right';
-    const val = (maxVal * i / 4);
-    ctx.fillText(formatMillions(val), pad.left - 6, y + 4);
+    const val = (min + (max - min) * (i / steps));
+    ctx.fillText(formatRupiah(val), pad.left - 6, y + 4);
   }
 
   // X labels
-  ctx.fillStyle = '#5a6380';
-  ctx.font = '10px DM Sans, sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.font = '10px Space Mono, monospace';
   ctx.textAlign = 'center';
-  const step = Math.max(1, Math.floor(labels.length / 6));
-  labels.forEach((l, i) => {
-    if (i % step === 0 || i === labels.length - 1) {
-      const x = pad.left + (i / (labels.length - 1)) * chartW;
-      ctx.fillText(l, x, H - 5);
+  labels.forEach((label, i) => {
+    const x = pad.left + (i / (data.length - 1)) * chartW;
+    ctx.fillText(label, x, H - 6);
+  });
+
+  // Gradient fill
+  const gradient = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
+  gradient.addColorStop(0, color + '33');
+  gradient.addColorStop(1, color + '00');
+
+  ctx.beginPath();
+  data.forEach((val, i) => {
+    const x = pad.left + (i / (data.length - 1)) * chartW;
+    const y = pad.top + chartH - ((val - min) / (max - min)) * chartH;
+    if (i === 0) ctx.moveTo(x, y);
+    else {
+      // Smooth bezier
+      const prevX = pad.left + ((i - 1) / (data.length - 1)) * chartW;
+      const prevY = pad.top + chartH - ((data[i-1] - min) / (max - min)) * chartH;
+      const cpX = (prevX + x) / 2;
+      ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
     }
   });
-
-  // Principal area (fill)
-  ctx.beginPath();
-  ctx.moveTo(pad.left, pad.top + chartH);
-  principal.forEach((v, i) => {
-    const x = pad.left + (i / (values.length - 1)) * chartW;
-    const y = pad.top + chartH - (v / maxVal) * chartH;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
-  ctx.lineTo(pad.left + chartW, pad.top + chartH);
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(61,157,243,0.15)';
-  ctx.fill();
-
-  // Compound gradient fill
-  const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + chartH);
-  grad.addColorStop(0, 'rgba(0,214,143,0.3)');
-  grad.addColorStop(1, 'rgba(0,214,143,0.02)');
-  ctx.beginPath();
-  values.forEach((v, i) => {
-    const x = pad.left + (i / (values.length - 1)) * chartW;
-    const y = pad.top + chartH - (v / maxVal) * chartH;
-    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-  });
-  ctx.lineTo(pad.left + chartW, pad.top + chartH);
+  const lastX = pad.left + chartW;
+  const lastY = pad.top + chartH - ((data[data.length-1] - min) / (max - min)) * chartH;
+  ctx.lineTo(lastX, pad.top + chartH);
   ctx.lineTo(pad.left, pad.top + chartH);
   ctx.closePath();
-  ctx.fillStyle = grad;
+  ctx.fillStyle = gradient;
   ctx.fill();
 
-  // Lines
-  const drawLine = (data, color, width = 2) => {
+  // Line
+  ctx.beginPath();
+  data.forEach((val, i) => {
+    const x = pad.left + (i / (data.length - 1)) * chartW;
+    const y = pad.top + chartH - ((val - min) / (max - min)) * chartH;
+    if (i === 0) ctx.moveTo(x, y);
+    else {
+      const prevX = pad.left + ((i - 1) / (data.length - 1)) * chartW;
+      const prevY = pad.top + chartH - ((data[i-1] - min) / (max - min)) * chartH;
+      const cpX = (prevX + x) / 2;
+      ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
+    }
+  });
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Dots
+  data.forEach((val, i) => {
+    const x = pad.left + (i / (data.length - 1)) * chartW;
+    const y = pad.top + chartH - ((val - min) / (max - min)) * chartH;
     ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = width;
-    ctx.lineJoin = 'round';
-    data.forEach((v, i) => {
-      const x = pad.left + (i / (data.length - 1)) * chartW;
-      const y = pad.top + chartH - (v / maxVal) * chartH;
-      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-  };
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#0a0c10';
+    ctx.fill();
+  });
+};
 
-  drawLine(principal, '#3d9df3', 1.5);
-  drawLine(values, '#00d68f', 2.5);
-}
+const drawDonutChart = (canvasId, data, colors) => {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const size = Math.min(canvas.offsetWidth, canvas.offsetHeight);
+  canvas.width = size;
+  canvas.height = size;
+  const cx = size / 2, cy = size / 2;
+  const R = size * 0.38, r = size * 0.22;
 
-function formatMillions(v) {
-  if (v >= 1e9) return (v/1e9).toFixed(1) + 'M';
-  if (v >= 1e6) return (v/1e6).toFixed(1) + 'jt';
-  if (v >= 1e3) return (v/1e3).toFixed(0) + 'rb';
-  return v.toFixed(0);
-}
-
-function updateSimMonthly() {
-  const v = parseFloat(document.getElementById('simMonthly').value);
-  document.getElementById('simMonthlyLabel').textContent = 'Rp ' + v.toLocaleString('id-ID');
-  runSimulator();
-}
-function updateSimRate() {
-  const v = parseFloat(document.getElementById('simRate').value);
-  document.getElementById('simRateLabel').textContent = v + '%';
-  runSimulator();
-}
-function updateSimYears() {
-  const v = parseInt(document.getElementById('simYears').value);
-  document.getElementById('simYearsLabel').textContent = v + ' Tahun';
-  runSimulator();
-}
-function setSimType(type, btn) {
-  state.simType = type;
-  document.querySelectorAll('.sim-type-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  runSimulator();
-}
-
-// ═══════════ PIE CHART ═══════════
-function drawPieChart() {
-  const svg = document.getElementById('pieChart');
-  if (!svg) return;
-
-  const categories = [
-    { name: 'Kopi & Jajan', pct: 30, color: '#ff9f43' },
-    { name: 'Makan & Minum', pct: 28, color: '#00d68f' },
-    { name: 'Transportasi', pct: 15, color: '#3d9df3' },
-    { name: 'Hiburan',      pct: 13, color: '#6c63ff' },
-    { name: 'Pendidikan',   pct: 11, color: '#ff5e7d' },
-    { name: 'Lainnya',      pct:  3, color: '#8892b0' },
-  ];
-
-  const cx = 100, cy = 100, r = 80;
+  const total = data.reduce((s, d) => s + d.value, 0);
   let startAngle = -Math.PI / 2;
-  let paths = '';
 
-  categories.forEach(cat => {
-    const angle = (cat.pct / 100) * 2 * Math.PI;
-    const endAngle = startAngle + angle;
-    const x1 = cx + r * Math.cos(startAngle);
-    const y1 = cy + r * Math.sin(startAngle);
-    const x2 = cx + r * Math.cos(endAngle);
-    const y2 = cy + r * Math.sin(endAngle);
-    const large = angle > Math.PI ? 1 : 0;
-    paths += `<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${cat.color}" opacity="0.85" stroke="var(--bg)" stroke-width="2"/>`;
+  data.forEach((seg, i) => {
+    const sweep = (seg.value / total) * Math.PI * 2;
+    const endAngle = startAngle + sweep;
+
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(startAngle) * r, cy + Math.sin(startAngle) * r);
+    ctx.arc(cx, cy, R, startAngle, endAngle);
+    ctx.arc(cx, cy, r, endAngle, startAngle, true);
+    ctx.closePath();
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+
     startAngle = endAngle;
   });
 
-  // Donut hole
-  paths += `<circle cx="${cx}" cy="${cy}" r="45" fill="var(--card)"/>`;
   // Center text
-  paths += `<text x="${cx}" y="${cy-6}" text-anchor="middle" fill="var(--text)" font-family="Syne,sans-serif" font-size="14" font-weight="800">Rp 780</text>`;
-  paths += `<text x="${cx}" y="${cy+10}" text-anchor="middle" fill="var(--text2)" font-family="DM Sans,sans-serif" font-size="9">ribu / bulan</text>`;
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.font = `bold 14px Syne, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(formatRupiah(total), cx, cy - 8);
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.font = '10px Space Mono, monospace';
+  ctx.fillText('TOTAL', cx, cy + 10);
+};
 
-  svg.innerHTML = paths;
+// ============================================================
+// PAGE INITIALIZERS
+// ============================================================
 
-  // Legend
-  const legend = document.getElementById('pieLegend');
-  if (legend) {
-    legend.innerHTML = categories.map(cat => `
-      <div class="pie-legend-item">
-        <div class="pie-legend-dot" style="background:${cat.color}"></div>
-        <span class="pie-legend-label">${cat.name}</span>
-        <span class="pie-legend-pct" style="color:${cat.color}">${cat.pct}%</span>
-      </div>
-    `).join('');
-  }
-}
+// ---- DASHBOARD ----
+const initDashboard = () => {
+  const el = document.getElementById('page-dashboard');
+  if (!el) return;
 
-// ═══════════ BAR CHART ═══════════
-function drawBarChart() {
-  const container = document.getElementById('barChart');
-  if (!container) return;
-  const days = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15'];
-  const amounts = [45000, 0, 82000, 35000, 120000, 55000, 0, 78000, 95000, 42000, 0, 65000, 107000, 59000, 35000];
-  const maxAmt = Math.max(...amounts);
-  container.innerHTML = days.map((d, i) => {
-    const pct = amounts[i] ? (amounts[i] / maxAmt * 100) : 2;
+  // Virtual interest check
+  const savings = State.wallet.savings;
+  const interest = Math.floor(savings * (State.wallet.interest_rate / 100));
+
+  // Spending breakdown for donut
+  const spendByCategory = {};
+  State.transactions.forEach(tx => {
+    if (tx.amount < 0) {
+      const cat = tx.category;
+      spendByCategory[cat] = (spendByCategory[cat] || 0) + Math.abs(tx.amount);
+    }
+  });
+
+  // Recent 5 transactions
+  const recentHTML = State.transactions.slice(0, 5).map(tx => {
+    const catClass = tx.category === 'save' ? 'cat-save' :
+                     tx.category === 'food' ? 'cat-food' :
+                     tx.category === 'trans' ? 'cat-trans' :
+                     tx.category === 'game' ? 'cat-game' :
+                     tx.category === 'shop' ? 'cat-shop' : 'cat-other';
     return `
-      <div class="bar-col">
-        <div class="bar-fill" style="height:${pct}%"></div>
-        <div class="bar-label">${d}</div>
+      <div class="tx-item">
+        <div class="tx-icon" style="background:rgba(255,255,255,0.05)">${tx.icon}</div>
+        <div class="tx-info">
+          <div class="tx-name">${tx.name}</div>
+          <div class="tx-cat">
+            <span class="cat-chip ${catClass}">${State.categories[tx.category].label}</span>
+          </div>
+        </div>
+        <div>
+          <div class="tx-amount ${tx.amount > 0 ? 'income' : 'expense'}">
+            ${tx.amount > 0 ? '+' : '-'}${formatRupiah(tx.amount)}
+          </div>
+          <div class="tx-date" style="text-align:right">${tx.date.slice(5)}</div>
+        </div>
       </div>`;
   }).join('');
-}
 
-// ═══════════ MODAL ═══════════
-function openModal(type) {
-  const overlay = document.getElementById('modalOverlay');
-  const content = document.getElementById('modalContent');
+  el.querySelector('#dash-recent-tx').innerHTML = recentHTML;
 
-  if (type === 'addTx') {
-    content.innerHTML = `
-      <h2 class="modal-title">+ Tambah Transaksi</h2>
-      <div class="modal-form">
-        <div class="quick-tabs" style="margin-bottom:0">
-          <button class="quick-tab active" onclick="selectModalType('expense',this)">Pengeluaran</button>
-          <button class="quick-tab" onclick="selectModalType('income',this)">Pemasukan</button>
-        </div>
-        <div>
-          <label class="form-label">Jumlah</label>
-          <input type="number" id="m_amount" placeholder="Rp 0">
-        </div>
-        <div>
-          <label class="form-label">Kategori</label>
-          <select id="m_cat">
-            <option value="">Pilih kategori...</option>
-            <option>🍜 Makan & Minum</option>
-            <option>🚌 Transportasi</option>
-            <option>🎮 Hiburan</option>
-            <option>📚 Pendidikan</option>
-            <option>🛍️ Belanja</option>
-            <option>☕ Kopi & Jajan</option>
-            <option>💼 Gaji Part-time</option>
-            <option>💰 Uang Jajan</option>
-          </select>
-        </div>
-        <div>
-          <label class="form-label">Keterangan</label>
-          <input type="text" id="m_desc" placeholder="Contoh: Nasi padang siang">
-        </div>
-        <div>
-          <label class="form-label">Tanggal</label>
-          <input type="date" id="m_date" value="${new Date().toISOString().slice(0,10)}">
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-outline" onclick="closeModal()">Batal</button>
-          <button class="btn btn-primary" onclick="submitTx()">Simpan</button>
-        </div>
-      </div>`;
-  } else if (type === 'addGoal') {
-    content.innerHTML = `
-      <h2 class="modal-title">🎯 Buat Target Baru</h2>
-      <div class="modal-form">
-        <div>
-          <label class="form-label">Nama Target</label>
-          <input type="text" id="g_name" placeholder="Contoh: iPhone 15">
-        </div>
-        <div>
-          <label class="form-label">Emoji / Ikon</label>
-          <input type="text" id="g_emoji" placeholder="📱" style="font-size:24px">
-        </div>
-        <div class="modal-row">
-          <div>
-            <label class="form-label">Target Jumlah (Rp)</label>
-            <input type="number" id="g_target" placeholder="5000000">
-          </div>
-          <div>
-            <label class="form-label">Tabungan Awal (Rp)</label>
-            <input type="number" id="g_current" placeholder="0">
-          </div>
-        </div>
-        <div>
-          <label class="form-label">Deadline</label>
-          <input type="date" id="g_deadline">
-        </div>
-        <div class="modal-actions">
-          <button class="btn btn-outline" onclick="closeModal()">Batal</button>
-          <button class="btn btn-primary" onclick="submitGoal()">Buat Target</button>
-        </div>
-      </div>`;
-  }
+  // Draw spending donut
+  setTimeout(() => {
+    const donutData = Object.entries(spendByCategory).map(([cat, val]) => ({
+      label: State.categories[cat].label, value: val
+    }));
+    const donutColors = Object.keys(spendByCategory).map(cat => State.categories[cat].color);
+    drawDonutChart('dash-donut', donutData, donutColors);
 
-  overlay.classList.add('open');
-}
+    // Spending history line chart
+    const monthlyData = [145000, 198000, 167000, 221000, 185000, 203000];
+    const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'];
+    drawLineChart('dash-line-chart', monthlyData, monthLabels, '#00e5a0');
+  }, 100);
 
-let modalType = 'expense';
-function selectModalType(type, btn) {
-  modalType = type;
-  btn.closest('.quick-tabs').querySelectorAll('.quick-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-}
-
-function submitTx() {
-  const amount = parseInt(document.getElementById('m_amount').value);
-  const cat    = document.getElementById('m_cat').value;
-  const desc   = document.getElementById('m_desc').value;
-  const date   = document.getElementById('m_date').value;
-  if (!amount || !cat) { showToast('⚠️ Lengkapi data transaksi', 'warning'); return; }
-  state.transactions.unshift({ id: Date.now(), date, desc: desc || cat.replace(/^.*? /,''), cat, type: modalType, amount });
-  renderTxList();
-  closeModal();
-  showToast('✅ Transaksi berhasil ditambahkan!', 'success');
-}
-
-function submitGoal() {
-  const name    = document.getElementById('g_name').value;
-  const emoji   = document.getElementById('g_emoji').value || '🎯';
-  const target  = parseInt(document.getElementById('g_target').value);
-  const current = parseInt(document.getElementById('g_current').value) || 0;
-  if (!name || !target) { showToast('⚠️ Lengkapi data target', 'warning'); return; }
-  const pct = Math.min(100, Math.round(current / target * 100));
-  const strokeOffset = 326.7 - (326.7 * pct / 100);
-  const colors = ['var(--accent)', 'var(--accent-orange)', 'var(--accent-red)', 'var(--accent-yellow)'];
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  const card = `
-    <div class="goal-card">
-      <div class="goal-visual">
-        <div class="goal-emoji-big">${emoji}</div>
-        <svg class="goal-ring" viewBox="0 0 120 120">
-          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="8"/>
-          <circle cx="60" cy="60" r="52" fill="none" stroke="${color}" stroke-width="8"
-            stroke-dasharray="326.7" stroke-dashoffset="${strokeOffset}" stroke-linecap="round" transform="rotate(-90 60 60)"/>
-        </svg>
-        <div class="goal-ring-pct">${pct}%</div>
+  // Interest notification
+  const interestBannerHTML = `
+    <div class="interest-banner fade-in">
+      <div class="ib-icon">🏦</div>
+      <div class="ib-body">
+        <div class="ib-title">Bunga Virtual Masuk! 🎉</div>
+        <div class="ib-sub">Tabunganmu tidak diambil selama sebulan. Kamu mendapat bonus +${formatRupiahFull(interest)} sebagai simulasi bunga bank ${State.wallet.interest_rate}%/bulan.</div>
       </div>
-      <div class="goal-card-body">
-        <h4 class="goal-card-name">${name}</h4>
-        <div class="goal-card-amounts">
-          <span class="gc-current">Rp ${current.toLocaleString('id-ID')}</span>
-          <span class="gc-sep">/</span>
-          <span class="gc-target">Rp ${target.toLocaleString('id-ID')}</span>
-        </div>
-        <div class="goal-card-eta">🕐 Baru dibuat</div>
-        <div class="goal-card-bar"><div class="goal-card-fill" style="width:${pct}%;background:${color}"></div></div>
-        <button class="btn btn-primary btn-sm btn-block" onclick="addToGoal(this)">+ Tambah Tabungan</button>
-      </div>
+      <div class="ib-amount">+${formatRupiahFull(interest)}</div>
     </div>`;
-  const addBtn = document.querySelector('.goal-card-new');
-  addBtn.insertAdjacentHTML('beforebegin', card);
-  closeModal();
-  showToast(`🎯 Target "${name}" berhasil dibuat!`, 'success');
-}
+  el.querySelector('#interest-banner').innerHTML = interestBannerHTML;
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
+  // Prediction warning
+  const dailyAvgSpend = 25000;
+  const daysLeft = Math.floor(State.wallet.ready_to_spend / dailyAvgSpend);
+  const predictedDate = new Date();
+  predictedDate.setDate(predictedDate.getDate() + daysLeft);
+  const dateStr = predictedDate.toLocaleDateString('id-ID', { day: 'numeric', month: 'long' });
 
-function addToGoal(btn) {
-  const amount = prompt('Berapa rupiah yang ingin ditambahkan ke target ini?');
-  if (amount && parseInt(amount) > 0) {
-    showToast(`✅ Rp ${parseInt(amount).toLocaleString('id-ID')} ditambahkan ke tabungan!`, 'success');
+  el.querySelector('#prediction-bar').innerHTML = `
+    <div class="prediction-bar fade-in">
+      <div class="prediction-icon">🤖</div>
+      <div class="prediction-text">
+        <div class="prediction-title">Prediksi AI: Uangmu hampir habis!</div>
+        <div class="prediction-detail">Berdasarkan pola belanja rata-rata Rp ${dailyAvgSpend.toLocaleString('id-ID')}/hari, <strong style="color:var(--red)">uang jajanmu akan habis sekitar ${dateStr}</strong>. Kurangi pengeluaran sekarang!</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="navigate('timemachine')">Simulasi →</button>
+    </div>`;
+
+  // Stats
+  const totalSpend = State.transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
+  const totalIncome = State.transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+  el.querySelector('#dash-total-wallet').textContent = formatRupiahFull(totalWallet());
+  el.querySelector('#dash-total-spend').textContent  = formatRupiahFull(totalSpend);
+  el.querySelector('#dash-total-income').textContent = formatRupiahFull(totalIncome);
+  el.querySelector('#dash-savings').textContent      = formatRupiahFull(State.wallet.savings);
+};
+
+// ---- WALLET ----
+const initWallet = () => {
+  const el = document.getElementById('page-wallet');
+  if (!el) return;
+
+  const total = totalWallet();
+  el.querySelector('#w-total').textContent      = formatRupiahFull(total);
+  el.querySelector('#w-ready').textContent      = formatRupiahFull(State.wallet.ready_to_spend);
+  el.querySelector('#w-savings').textContent    = formatRupiahFull(State.wallet.savings);
+  el.querySelector('#w-emergency').textContent  = formatRupiahFull(State.wallet.emergency);
+
+  // Progress bars
+  const setBar = (id, val, max) => {
+    const el2 = document.getElementById(id);
+    if (el2) el2.style.width = Math.min((val / max) * 100, 100) + '%';
+  };
+  setBar('bar-ready',    State.wallet.ready_to_spend, total);
+  setBar('bar-savings',  State.wallet.savings,        total);
+  setBar('bar-emergency',State.wallet.emergency,      total);
+
+  // Savings history chart
+  setTimeout(() => {
+    const savData = [150000, 180000, 220000, 260000, 290000, 320000];
+    const savLabels = ['Jan','Feb','Mar','Apr','Mei','Jun'];
+    drawLineChart('wallet-savings-chart', savData, savLabels, '#3d9bff');
+  }, 100);
+};
+
+// ---- TRANSACTIONS ----
+const initTransactions = () => {
+  const el = document.getElementById('page-transactions');
+  if (!el) return;
+
+  renderTransactions(State.transactions);
+};
+
+const renderTransactions = (txs, filter = 'all') => {
+  const filtered = filter === 'all' ? txs :
+                   filter === 'income'  ? txs.filter(t => t.amount > 0) :
+                   filter === 'expense' ? txs.filter(t => t.amount < 0) :
+                   txs.filter(t => t.category === filter);
+
+  const container = document.getElementById('tx-list');
+  if (!container) return;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:rgba(255,255,255,0.25)">
+      <div style="font-size:32px;margin-bottom:8px">📭</div>
+      <div>Tidak ada transaksi ditemukan</div>
+    </div>`;
+    return;
   }
-}
 
-// ═══════════ TOAST ═══════════
-function showToast(msg, type = 'success') {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.className = `toast toast-${type} show`;
-  setTimeout(() => toast.classList.remove('show'), 3500);
-}
+  // Group by date
+  const grouped = {};
+  filtered.forEach(tx => {
+    const d = tx.date;
+    if (!grouped[d]) grouped[d] = [];
+    grouped[d].push(tx);
+  });
 
-// ═══════════ INIT ═══════════
-window.addEventListener('load', () => {
-  renderTxList();
-  runSimulator();
-  drawPieChart();
-  drawBarChart();
-});
+  const html = Object.entries(grouped).sort(([a],[b]) => b.localeCompare(a)).map(([date, txList]) => {
+    const dateFormatted = new Date(date).toLocaleDateString('id-ID', {
+      weekday: 'long', day: 'numeric', month: 'long'
+    });
+    const txHTML = txList.map(tx => {
+      const catClass = `cat-${tx.category}`;
+      return `
+        <div class="tx-item" style="cursor:pointer" title="Klik untuk detail">
+          <div class="tx-icon" style="background:rgba(255,255,255,0.05)">${tx.icon}</div>
+          <div class="tx-info">
+            <div class="tx-name">${tx.name}</div>
+            <div class="tx-cat">
+              <span class="cat-chip ${catClass}">${State.categories[tx.category]?.label || 'Lainnya'}</span>
+            </div>
+          </div>
+          <div>
+            <div class="tx-amount ${tx.amount > 0 ? 'income' : 'expense'}">
+              ${tx.amount > 0 ? '+' : '−'}${formatRupiahFull(tx.amount)}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
 
-window.addEventListener('resize', () => {
-  if (document.getElementById('page-simulator').classList.contains('active')) {
-    runSimulator();
+    return `
+      <div style="margin-bottom:var(--s-lg)">
+        <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;padding:0 4px;">${dateFormatted}</div>
+        <div class="card" style="padding:var(--s-sm) var(--s-md)">${txHTML}</div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = html;
+};
+
+// ---- GOALS / MILESTONE MAP ----
+const initGoals = () => {
+  const el = document.getElementById('page-goals');
+  if (!el) return;
+
+  // Goals progress cards
+  const goalsHTML = State.goals.map(g => {
+    const pct = Math.round((g.current / g.target) * 100);
+    const remaining = g.target - g.current;
+    const daysLeft = Math.ceil((new Date(g.deadline) - new Date()) / (1000 * 86400));
+    return `
+      <div class="card fade-in" style="position:relative;overflow:hidden">
+        <div style="position:absolute;top:-10px;right:-10px;font-size:60px;opacity:0.08;transform:rotate(-15deg)">${g.icon}</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:42px;height:42px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:20px;background:rgba(255,255,255,0.05)">${g.icon}</div>
+          <div>
+            <div style="font-weight:600;font-size:15px">${g.name}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.35);font-family:var(--font-mono)">${daysLeft} hari lagi • ${g.deadline}</div>
+          </div>
+          <div style="margin-left:auto">
+            <span class="badge ${pct >= 75 ? 'badge-green' : pct >= 40 ? 'badge-yellow' : 'badge-red'}">${pct}%</span>
+          </div>
+        </div>
+        <div class="progress-track" style="height:10px;margin-bottom:10px">
+          <div class="progress-fill" style="width:${pct}%;background:${g.color}" id="goal-bar-${g.id}"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:12px">
+          <span style="color:rgba(255,255,255,0.4)">Terkumpul: <strong style="color:white">${formatRupiahFull(g.current)}</strong></span>
+          <span style="color:rgba(255,255,255,0.4)">Sisa: <strong style="color:var(--yellow)">${formatRupiahFull(remaining)}</strong></span>
+        </div>
+      </div>`;
+  }).join('');
+  el.querySelector('#goals-cards').innerHTML = goalsHTML;
+
+  // Milestone path
+  const milestoneProgress = (State.milestones.filter(m => m.done).length / State.milestones.length) * 100;
+  const pathHTML = `
+    <div class="milestone-path">
+      <div class="milestone-line">
+        <div class="milestone-line-fill" id="milestone-fill" style="height:0%"></div>
+      </div>
+      ${State.milestones.map((m, i) => `
+        <div class="milestone-step fade-in fade-in-${i+1}">
+          <div class="milestone-node ${m.done ? 'done' : m.current ? 'current' : ''}">
+            ${m.done ? '✅' : m.current ? '⭐' : m.icon}
+          </div>
+          <div class="milestone-info">
+            <div class="milestone-title" style="color:${m.done ? 'var(--green)' : m.current ? 'var(--yellow)' : 'rgba(255,255,255,0.6)'}">
+              ${m.title}
+              ${m.done ? '<span class="badge badge-green" style="font-size:9px;margin-left:6px">SELESAI</span>' : ''}
+              ${m.current ? '<span class="badge badge-yellow" style="font-size:9px;margin-left:6px">DALAM PROSES</span>' : ''}
+            </div>
+            <div class="milestone-desc">${m.desc}</div>
+            <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.3)">Target: ${formatRupiahFull(m.target)}</div>
+            ${m.current ? `
+              <div style="margin-top:8px">
+                <div class="progress-track" style="height:6px;max-width:200px">
+                  <div class="progress-fill yellow" style="width:60%"></div>
+                </div>
+                <div style="font-size:11px;color:var(--yellow);margin-top:4px">60% — Tinggal 5 langkah lagi! 🔥</div>
+              </div>` : ''}
+          </div>
+        </div>`).join('')}
+    </div>`;
+  el.querySelector('#milestone-path').innerHTML = pathHTML;
+
+  setTimeout(() => {
+    const fill = document.getElementById('milestone-fill');
+    if (fill) fill.style.height = milestoneProgress + '%';
+  }, 300);
+};
+
+// ---- TIME MACHINE ----
+const initTimeMachine = () => {
+  // Compound interest calculator
+  const calcBtn = document.getElementById('tm-calc-btn');
+  if (calcBtn && !calcBtn._initialized) {
+    calcBtn._initialized = true;
+    calcBtn.addEventListener('click', () => {
+      const principal = parseFloat(document.getElementById('tm-principal').value) || 0;
+      const rate      = parseFloat(document.getElementById('tm-rate').value) || 0;
+      const years     = parseFloat(document.getElementById('tm-years').value) || 0;
+      const monthly   = parseFloat(document.getElementById('tm-monthly').value) || 0;
+
+      // A = P(1+r/n)^(nt) + PMT × [(1+r/n)^(nt) - 1] / (r/n)
+      const r = rate / 100 / 12;
+      const n = years * 12;
+
+      let future;
+      if (r === 0) {
+        future = principal + monthly * n;
+      } else {
+        future = principal * Math.pow(1 + r, n) +
+                 monthly * (Math.pow(1 + r, n) - 1) / r;
+      }
+
+      const totalDeposited = principal + monthly * n;
+      const gain = future - totalDeposited;
+
+      const resultEl = document.getElementById('tm-result');
+      resultEl.innerHTML = `
+        <div class="tm-result-box fade-in">
+          <div class="tm-result-label">Nilai Uangmu Setelah ${years} Tahun</div>
+          <div class="tm-result-value">${formatRupiahFull(Math.round(future))}</div>
+          <div class="tm-result-gain">
+            Dari <strong>${formatRupiahFull(Math.round(totalDeposited))}</strong> yang kamu simpan,
+            bunga menghasilkan <strong>+${formatRupiahFull(Math.round(gain))}</strong> untukmu! 🚀
+          </div>
+          <div style="margin-top:16px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;color:rgba(255,255,255,0.3);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Modal Awal</div>
+              <div style="font-weight:700;font-size:14px;margin-top:4px">${formatRupiah(principal)}</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.04);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;color:rgba(255,255,255,0.3);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Total Setor</div>
+              <div style="font-weight:700;font-size:14px;margin-top:4px">${formatRupiah(totalDeposited)}</div>
+            </div>
+            <div style="background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:var(--r-sm);padding:12px">
+              <div style="font-size:10px;color:rgba(0,229,160,0.7);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Keuntungan</div>
+              <div style="font-weight:800;font-size:14px;margin-top:4px;color:var(--green)">+${formatRupiah(gain)}</div>
+            </div>
+          </div>
+        </div>`;
+
+      // Draw projection chart
+      setTimeout(() => {
+        const chartData = [], chartLabels = [];
+        for (let yr = 0; yr <= years; yr++) {
+          const t = yr * 12;
+          const val = r === 0
+            ? principal + monthly * t
+            : principal * Math.pow(1 + r, t) + monthly * (Math.pow(1 + r, t) - 1) / r;
+          chartData.push(Math.round(val));
+          chartLabels.push(yr === 0 ? 'Sekarang' : `+${yr}thn`);
+        }
+        drawLineChart('tm-chart', chartData, chartLabels, '#b57bff');
+      }, 100);
+
+      toast('Simulasi berhasil dihitung! 📊', 'success');
+    });
   }
-});
 
-// Observe simulator visibility
-const simObserver = new MutationObserver(() => {
-  if (document.getElementById('page-simulator').classList.contains('active')) {
-    setTimeout(runSimulator, 50);
-  }
-});
-simObserver.observe(document.getElementById('page-simulator'), { attributes: true, attributeFilter: ['class'] });
+  // Coffee / daily habit calculator
+  const habitBtn = document.getElementById('habit-calc-btn');
+  if (habitBtn && !habitBtn._initialized) {
+    habitBtn._initialized = true;
+    habitBtn.addEventListener('click', () => {
+      const price = parseFloat(document.getElementById('habit-price').value) || 0;
+      const freq  = parseFloat(document.getElementById('habit-freq').value) || 0;
+      const item  = document.getElementById('habit-item').value || 'kebiasaan ini';
 
-const analysisObserver = new MutationObserver(() => {
-  if (document.getElementById('page-analysis').classList.contains('active')) {
-    setTimeout(() => { drawPieChart(); drawBarChart(); }, 50);
+      const daily   = price * freq;
+      const monthly = daily * 30;
+      const yearly  = daily * 365;
+      const fiveYear = yearly * 5;
+
+      const altInvest = yearly * 0.065 * 5; // simple 6.5% estimate
+
+      document.getElementById('habit-result').innerHTML = `
+        <div class="card fade-in" style="margin-top:16px">
+          <div style="font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:16px">
+            💸 "Kalau kamu beli ${item} ${freq}x sehari..."
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="background:rgba(255,92,114,0.06);border:1px solid rgba(255,92,114,0.15);border-radius:var(--r-sm);padding:14px;text-align:center">
+              <div style="font-size:10px;color:var(--red);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Per Bulan</div>
+              <div style="font-size:20px;font-weight:800;font-family:var(--font-display);color:var(--red);margin-top:4px">${formatRupiah(monthly)}</div>
+            </div>
+            <div style="background:rgba(255,92,114,0.06);border:1px solid rgba(255,92,114,0.15);border-radius:var(--r-sm);padding:14px;text-align:center">
+              <div style="font-size:10px;color:var(--red);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Per Tahun</div>
+              <div style="font-size:20px;font-weight:800;font-family:var(--font-display);color:var(--red);margin-top:4px">${formatRupiah(yearly)}</div>
+            </div>
+            <div style="background:rgba(245,197,66,0.06);border:1px solid rgba(245,197,66,0.15);border-radius:var(--r-sm);padding:14px;text-align:center">
+              <div style="font-size:10px;color:var(--yellow);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Dalam 5 Tahun</div>
+              <div style="font-size:20px;font-weight:800;font-family:var(--font-display);color:var(--yellow);margin-top:4px">${formatRupiah(fiveYear)}</div>
+            </div>
+            <div style="background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:var(--r-sm);padding:14px;text-align:center">
+              <div style="font-size:10px;color:var(--green);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Kalau Ditabung 5thn</div>
+              <div style="font-size:20px;font-weight:800;font-family:var(--font-display);color:var(--green);margin-top:4px">~${formatRupiah(fiveYear + altInvest)}</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;padding:10px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm);font-size:12px;color:rgba(255,255,255,0.4);text-align:center">
+            💡 Kalau kamu invest ${formatRupiah(yearly)}/tahun dengan bunga 6.5%, dalam 5 tahun uangmu bisa jadi <strong style="color:var(--green)">${formatRupiah(fiveYear + altInvest)}</strong>!
+          </div>
+        </div>`;
+    });
   }
+};
+
+// ---- MONTHLY WRAPPED ----
+const initWrapped = () => {
+  const el = document.getElementById('page-wrapped');
+  if (!el) return;
+
+  // Already initialized by HTML
+  const totalSpend = State.transactions.filter(t => t.amount < 0)
+    .reduce((s, t) => s + Math.abs(t.amount), 0);
+  const totalSaved = State.transactions.filter(t => t.amount > 0)
+    .reduce((s, t) => s + t.amount, 0);
+
+  // Find biggest spending category
+  const catSpend = {};
+  State.transactions.filter(t => t.amount < 0).forEach(t => {
+    catSpend[t.category] = (catSpend[t.category] || 0) + Math.abs(t.amount);
+  });
+  const biggestCat = Object.entries(catSpend).sort(([,a],[,b]) => b - a)[0];
+  const biggestCatName = biggestCat ? State.categories[biggestCat[0]].label : 'N/A';
+  const biggestCatPct  = biggestCat ? Math.round((biggestCat[1] / totalSpend) * 100) : 0;
+
+  // Build category breakdown bars
+  const catHTML = Object.entries(catSpend).sort(([,a],[,b]) => b - a).map(([cat, val]) => {
+    const pct = Math.round((val / totalSpend) * 100);
+    const catObj = State.categories[cat];
+    return `
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <span style="font-size:13px">${catObj.icon} ${catObj.label}</span>
+          <span style="font-family:var(--font-mono);font-size:12px;color:rgba(255,255,255,0.5)">${formatRupiah(val)} <span style="color:rgba(255,255,255,0.25)">(${pct}%)</span></span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:${pct}%;background:${catObj.color}"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  el.querySelector('#wrapped-cat-breakdown').innerHTML = catHTML;
+  el.querySelector('#wrapped-total-spend').textContent  = formatRupiah(totalSpend);
+  el.querySelector('#wrapped-total-saved').textContent  = formatRupiah(totalSaved);
+  el.querySelector('#wrapped-biggest-cat').textContent  = `${biggestCatName} (${biggestCatPct}%)`;
+  el.querySelector('#wrapped-tx-count').textContent     = State.transactions.length + ' transaksi';
+
+  // Health Score (fake but fun)
+  const savingsRatio = totalSaved / (totalSpend + totalSaved);
+  const healthScore  = Math.min(100, Math.round(savingsRatio * 100 + 30));
+  const healthEl = el.querySelector('#wrapped-health-score');
+  if (healthEl) {
+    healthEl.textContent = healthScore;
+    healthEl.style.color = healthScore >= 70 ? 'var(--green)' : healthScore >= 40 ? 'var(--yellow)' : 'var(--red)';
+  }
+};
+
+// ---- BUDGETING CHALLENGE ----
+const initChallenge = () => {
+  const el = document.getElementById('page-challenge');
+  if (!el) return;
+
+  const lbHTML = State.leaderboard.map(p => {
+    const rankClass = p.rank === 1 ? 'gold' : p.rank === 2 ? 'silver' : p.rank === 3 ? 'bronze' : 'you-r';
+    const rankIcon  = p.rank === 1 ? '🥇' : p.rank === 2 ? '🥈' : p.rank === 3 ? '🥉' : p.rank;
+    return `
+      <div class="lb-item ${p.you ? 'you' : ''} fade-in fade-in-${p.rank}">
+        <div class="lb-rank ${p.you ? 'you-r' : rankClass}">${rankIcon}</div>
+        <div class="lb-info">
+          <div class="lb-name">${p.name} ${p.you ? '<span class="badge badge-green" style="font-size:9px">KAMU</span>' : ''}</div>
+          <div class="lb-score">Tabungan bulan ini</div>
+        </div>
+        <div class="lb-savings">${formatRupiahFull(p.savings)}</div>
+      </div>`;
+  }).join('');
+  el.querySelector('#leaderboard-list').innerHTML = lbHTML;
+};
+
+// ---- TASKS (Teacher-Parent) ----
+const initTasks = () => {
+  const el = document.getElementById('page-tasks');
+  if (!el) return;
+  renderTasks();
+};
+
+const renderTasks = () => {
+  const container = document.getElementById('tasks-list');
+  if (!container) return;
+
+  const html = State.tasks.map(t => `
+    <div class="task-card ${t.done ? 'completed' : ''} fade-in">
+      <div class="task-header">
+        <div style="font-size:22px">${t.icon}</div>
+        <div class="task-title">${t.title}</div>
+        <div>
+          ${t.done
+            ? '<span class="badge badge-green">✓ Selesai</span>'
+            : `<button class="btn btn-primary btn-sm" onclick="completeTask(${t.id})">Tandai Selesai</button>`}
+        </div>
+      </div>
+      <div class="task-desc">${t.desc}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="task-reward">
+          🎁 Reward: ${t.reward}
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.3);font-family:var(--font-mono)">Dari: ${t.by}</div>
+      </div>
+    </div>`).join('');
+  container.innerHTML = html;
+};
+
+window.completeTask = (id) => {
+  const task = State.tasks.find(t => t.id === id);
+  if (task) {
+    task.done = true;
+    renderTasks();
+    toast(`🎉 Tugasmu selesai! Reward menanti: "${task.reward}"`, 'success', 5000);
+  }
+};
+
+// ---- AI CATEGORIZER ----
+const initCategorizer = () => {
+  const el = document.getElementById('page-categorizer');
+  if (!el) return;
+  // Already set up in HTML
+};
+
+// ============================================================
+// ADD TRANSACTION (Modal)
+// ============================================================
+const addTransaction = () => {
+  const name   = document.getElementById('new-tx-name').value.trim();
+  const amount = parseFloat(document.getElementById('new-tx-amount').value);
+  const type   = document.getElementById('new-tx-type').value;
+  const cat    = document.getElementById('new-tx-cat').value;
+
+  if (!name) { toast('Masukkan nama transaksi', 'warning'); return; }
+  if (!amount || isNaN(amount)) { toast('Masukkan jumlah yang valid', 'warning'); return; }
+
+  const finalAmount = type === 'income' ? Math.abs(amount) : -Math.abs(amount);
+  const icons = { food: '🍛', trans: '🚌', game: '🎮', shop: '🛍️', save: '💰', other: '📦' };
+
+  const tx = {
+    id:       State.transactions.length + 1,
+    date:     new Date().toISOString().slice(0, 10),
+    name,
+    category: cat,
+    amount:   finalAmount,
+    icon:     icons[cat] || '📦'
+  };
+
+  State.transactions.unshift(tx);
+
+  // Update wallet
+  if (finalAmount > 0) {
+    State.wallet.ready_to_spend += finalAmount;
+  } else {
+    const abs = Math.abs(finalAmount);
+    if (State.wallet.ready_to_spend >= abs) {
+      State.wallet.ready_to_spend -= abs;
+    } else {
+      toast('⚠️ Saldo Ready to Spend tidak cukup!', 'warning');
+      State.transactions.shift();
+      return;
+    }
+  }
+
+  closeModal('modal-add-tx');
+  document.getElementById('new-tx-name').value = '';
+  document.getElementById('new-tx-amount').value = '';
+  toast(`Transaksi "${name}" berhasil ditambahkan! 💸`, 'success');
+
+  // Refresh current page
+  if (document.getElementById('page-transactions').classList.contains('active-page')) initTransactions();
+  if (document.getElementById('page-dashboard').classList.contains('active-page')) initDashboard();
+  if (document.getElementById('page-wallet').classList.contains('active-page')) initWallet();
+};
+
+// ============================================================
+// AI SMART CATEGORIZER (Simulated)
+// ============================================================
+const runAICategorizer = () => {
+  const input = document.getElementById('ai-input').value.trim();
+  if (!input) { toast('Masukkan deskripsi pengeluaran', 'warning'); return; }
+
+  const resultEl = document.getElementById('ai-result');
+  resultEl.innerHTML = `<div style="text-align:center;padding:24px;color:rgba(255,255,255,0.4)">
+    <div style="font-size:28px;margin-bottom:8px;animation:spin 1s linear infinite;display:inline-block">⚙️</div>
+    <div style="font-size:13px">AI sedang menganalisis...</div>
+  </div>`;
+
+  // Simulate AI delay
+  setTimeout(() => {
+    const lower = input.toLowerCase();
+    let cat = 'other', confidence = 72, suggestions = [], tip = '';
+
+    if (/kantin|makan|minum|kopi|es|bakso|nasi|gorengan|boba|teh/i.test(lower)) {
+      cat = 'food'; confidence = 95;
+      suggestions = ['Makanan Berat', 'Minuman', 'Jajan Ringan'];
+      tip = '🍛 Makanan adalah pengeluaran terbesar kedua kamu. Coba batasi jajan di bawah Rp 30.000/hari!';
+    } else if (/gojek|grab|ojek|bis|angkot|kereta|mrt|transjakarta|bensin/i.test(lower)) {
+      cat = 'trans'; confidence = 93;
+      suggestions = ['Ojek Online', 'Transportasi Umum', 'BBM'];
+      tip = '🚌 Coba bandingkan tarif Gojek vs naik transportasi umum untuk rute yang sama!';
+    } else if (/game|ml|ff|valorant|steam|top.?up|diamond|voucher|skin/i.test(lower)) {
+      cat = 'game'; confidence = 97;
+      suggestions = ['Top-up Game', 'Langganan', 'Aksesori Gaming'];
+      tip = '🎮 Pengeluaran game kamu bulan ini sudah Rp 25.000. Tetapkan budget bulanan ya!';
+    } else if (/baju|sepatu|tas|buku|alat tulis|mall|toko/i.test(lower)) {
+      cat = 'shop'; confidence = 89;
+      suggestions = ['Pakaian', 'Perlengkapan Sekolah', 'Aksesori'];
+      tip = '🛍️ Sebelum membeli, tanya diri: "Butuh atau ingin?" Tunggu 24 jam sebelum memutuskan!';
+    } else if (/nabung|tabung|simpan|transfer|deposito/i.test(lower)) {
+      cat = 'save'; confidence = 96;
+      suggestions = ['Tabungan Rutin', 'Dana Darurat', 'Target Khusus'];
+      tip = '💰 Mantap! Kebiasaan menabung lebih penting dari jumlahnya. Konsisten itu kunci!';
+    } else {
+      confidence = 68;
+      suggestions = ['Tagihan', 'Kesehatan', 'Pendidikan'];
+      tip = '📦 Tidak yakin? Kamu bisa pilih kategori manual dari pilihan di bawah.';
+    }
+
+    const catObj = State.categories[cat];
+    resultEl.innerHTML = `
+      <div class="card fade-in" style="border-color:rgba(0,229,160,0.2)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:48px;height:48px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:24px;background:rgba(255,255,255,0.05)">${catObj.icon}</div>
+          <div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Kategori Terdeteksi</div>
+            <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:${catObj.color}">${catObj.label}</div>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-bottom:2px">AKURASI AI</div>
+            <div style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--green)">${confidence}%</div>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:8px;font-family:var(--font-mono)">SUB-KATEGORI YANG MUNGKIN</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${suggestions.map((s, i) => `<span class="badge ${i === 0 ? 'badge-green' : 'badge-blue'}" style="cursor:pointer">${i === 0 ? '✓ ' : ''}${s}</span>`).join('')}
+          </div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border-radius:var(--r-sm);padding:12px;font-size:13px;color:rgba(255,255,255,0.55);border-left:3px solid var(--yellow)">
+          ${tip}
+        </div>
+        <div style="margin-top:14px;display:flex;gap:8px">
+          <button class="btn btn-primary" style="flex:1" onclick="toast('✅ Kategori ${catObj.label} disimpan!', 'success')">Konfirmasi Kategori</button>
+          <button class="btn btn-ghost" onclick="toast('Kamu bisa pilih manual dari dropdown', 'info')">Ganti Kategori</button>
+        </div>
+      </div>`;
+  }, 1800);
+};
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  // Bind nav items
+  document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+    item.addEventListener('click', () => navigate(item.dataset.page));
+  });
+
+  // Mobile menu toggle
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  if (mobileBtn) {
+    mobileBtn.addEventListener('click', () => {
+      document.querySelector('.sidebar').classList.toggle('open');
+    });
+  }
+
+  // Modal close buttons
+  document.querySelectorAll('[data-close-modal]').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.dataset.closeModal));
+  });
+
+  // Click outside modal to close
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+  });
+
+  // Filter tabs for transactions
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderTransactions(State.transactions, tab.dataset.filter);
+    });
+  });
+
+  // Route on load
+  const hash = location.hash.replace('#', '') || 'dashboard';
+  navigate(hash);
+
+  // Handle window resize for charts
+  window.addEventListener('resize', () => {
+    const active = document.querySelector('.main-content.active-page');
+    if (active) {
+      const id = active.id.replace('page-', '');
+      const inits = { dashboard: initDashboard, wallet: initWallet };
+      if (inits[id]) setTimeout(inits[id], 100);
+    }
+  });
+
+  // Welcome toast
+  setTimeout(() => toast(`Selamat datang kembali, ${State.user.name.split(' ')[0]}! 👋`, 'success'), 800);
 });
-analysisObserver.observe(document.getElementById('page-analysis'), { attributes: true, attributeFilter: ['class'] });
