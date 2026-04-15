@@ -1,94 +1,122 @@
-// ==================== AUTHENTICATION FUNCTIONS ====================
+// ==================== NAVIGASI HALAMAN AUTH ====================
 
 function switchAuthPage(page) {
     document.querySelectorAll('.auth-page').forEach(p => p.classList.remove('active'));
-    if (page === 'login') {
-        document.getElementById('loginPage').classList.add('active');
-    } else if (page === 'signup') {
-        document.getElementById('signupPage').classList.add('active');
+
+    const target = page === 'login'
+        ? document.getElementById('loginPage')
+        : document.getElementById('signupPage');
+
+    if (target) {
+        target.classList.add('active');
+        // Fokus ke field pertama untuk aksesibilitas
+        setTimeout(() => {
+            const firstInput = target.querySelector('input');
+            if (firstInput) firstInput.focus();
+        }, 100);
     }
 }
 
+// ==================== HANDLER MASUK ====================
+
 function handleLogin(event) {
     event.preventDefault();
-    
-    const email = document.getElementById('loginEmail').value;
+
+    const email    = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     const rememberMe = document.getElementById('rememberMe').checked;
-    
+
     if (!email || !password) {
-        showToast('Please fill in all fields', 'error');
+        showToast('Mohon isi semua kolom yang diperlukan', 'error');
         return;
     }
-    
-    if (password.length < 1) {
-        showToast('Please enter a valid password', 'error');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showToast('Format alamat email tidak valid', 'error');
         return;
     }
-    
-    // Simulate login - save to localStorage
+
+    // Set loading state
+    const btn = document.getElementById('loginSubmitBtn');
+    if (btn) {
+        btn.textContent = '... MEMPROSES';
+        btn.disabled = true;
+    }
+
+    // Simulasi autentikasi
     localStorage.setItem('vaultedLoggedIn', 'true');
     localStorage.setItem('vaultedUserEmail', email);
     localStorage.setItem('vaultedUserName', email.split('@')[0]);
-    
+
     if (rememberMe) {
         localStorage.setItem('vaultedRememberMe', 'true');
         localStorage.setItem('vaultedRememberedEmail', email);
+    } else {
+        localStorage.removeItem('vaultedRememberMe');
+        localStorage.removeItem('vaultedRememberedEmail');
     }
-    
-    showToast('✓ Login successful! Redirecting...', 'success');
-    
-    // Redirect to dashboard after 1.5 seconds
+
+    showToast('✓ Masuk berhasil! Mengalihkan...', 'success');
+
     setTimeout(() => {
         const baseUrl = getBaseUrl();
         window.location.href = baseUrl + 'index.html';
     }, 1500);
 }
 
+// ==================== HANDLER DAFTAR ====================
+
 function handleSignup(event) {
     event.preventDefault();
-    
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const confirm = document.getElementById('signupConfirm').value;
+
+    const name        = document.getElementById('signupName').value.trim();
+    const email       = document.getElementById('signupEmail').value.trim();
+    const password    = document.getElementById('signupPassword').value;
+    const confirm     = document.getElementById('signupConfirm').value;
     const accountType = document.getElementById('accountType').value;
-    const agreeTerms = document.getElementById('agreeTerms').checked;
-    
+    const agreeTerms  = document.getElementById('agreeTerms').checked;
+
     if (!name || !email || !password || !confirm || !accountType) {
-        showToast('Please fill in all fields', 'error');
+        showToast('Mohon isi semua kolom yang diperlukan', 'error');
         return;
     }
-    
-    if (password !== confirm) {
-        showToast('Passwords do not match', 'error');
-        return;
-    }
-    
-    if (password.length < 6) {
-        showToast('Password must be at least 6 characters', 'error');
-        return;
-    }
-    
-    if (!agreeTerms) {
-        showToast('Please agree to the Terms of Service', 'error');
-        return;
-    }
-    
-    // Validate email format
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        showToast('Please enter a valid email address', 'error');
+        showToast('Format alamat email tidak valid', 'error');
         return;
     }
-    
-    // Simulate signup - save to localStorage
+
+    if (password.length < 6) {
+        showToast('Kata sandi minimal 6 karakter', 'error');
+        return;
+    }
+
+    if (password !== confirm) {
+        showToast('Kata sandi tidak cocok, coba lagi', 'error');
+        return;
+    }
+
+    if (!agreeTerms) {
+        showToast('Kamu harus menyetujui Syarat & Ketentuan', 'error');
+        return;
+    }
+
+    // Set loading state
+    const btn = document.getElementById('signupSubmitBtn');
+    if (btn) {
+        btn.textContent = '... MEMBUAT AKUN';
+        btn.disabled = true;
+    }
+
+    // Simpan data pengguna baru
     localStorage.setItem('vaultedLoggedIn', 'true');
     localStorage.setItem('vaultedUserEmail', email);
     localStorage.setItem('vaultedUserName', name);
     localStorage.setItem('vaultedAccountType', accountType);
-    
-    // Initialize wallet for new user
+
+    // Inisialisasi dompet untuk pengguna baru
     const initialWallet = {
         readyToSpend: 500000,
         savings: 300000,
@@ -96,76 +124,72 @@ function handleSignup(event) {
         currency: 'IDR'
     };
     localStorage.setItem('vaultedWallet', JSON.stringify(initialWallet));
-    
-    showToast('✓ Account created! Welcome to Vault-Ed!', 'success');
-    
-    // Redirect to dashboard after 1.5 seconds
+
+    showToast('✓ Akun berhasil dibuat! Selamat datang di Vault-Ed!', 'success');
+
     setTimeout(() => {
         const baseUrl = getBaseUrl();
         window.location.href = baseUrl + 'index.html';
     }, 1500);
 }
 
+// ==================== TOAST NOTIFIKASI ====================
+
 function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
+    if (!toast) return;
+
     toast.textContent = message;
     toast.className = `toast show ${type}`;
-    
+
     setTimeout(() => {
         toast.classList.remove('show');
-    }, 3000);
+    }, 3500);
 }
 
-// ==================== PAGE INITIALIZATION ====================
+// ==================== UTILITAS URL ====================
+
 function getBaseUrl() {
-    // Get the base URL for GitHub Pages or local
     const path = window.location.pathname;
-    if (path.includes('/FinSmart/')) {
-        return '/FinSmart/';
-    }
+    if (path.includes('/FinSmart/')) return '/FinSmart/';
     return '/';
 }
 
+// ==================== INISIALISASI HALAMAN ====================
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if user is already logged in
-    const isLoggedIn = localStorage.getItem('vaultedLoggedIn') === 'true';
-    if (isLoggedIn) {
-        // Redirect to dashboard if already logged in
-        const baseUrl = getBaseUrl();
-        window.location.href = baseUrl + 'index.html';
+    // Jika sudah masuk, langsung ke dashboard
+    if (localStorage.getItem('vaultedLoggedIn') === 'true') {
+        window.location.href = getBaseUrl() + 'index.html';
         return;
     }
-    
-    // Check if user has "Remember me" enabled
-    const rememberMe = localStorage.getItem('vaultedRememberMe') === 'true';
-    if (rememberMe) {
-        const rememberedEmail = localStorage.getItem('vaultedRememberedEmail');
-        if (rememberedEmail) {
-            document.getElementById('loginEmail').value = rememberedEmail;
-            document.getElementById('rememberMe').checked = true;
+
+    // Isi email tersimpan jika ada
+    if (localStorage.getItem('vaultedRememberMe') === 'true') {
+        const savedEmail = localStorage.getItem('vaultedRememberedEmail');
+        if (savedEmail) {
+            const emailInput = document.getElementById('loginEmail');
+            const remember   = document.getElementById('rememberMe');
+            if (emailInput) emailInput.value = savedEmail;
+            if (remember)   remember.checked = true;
         }
     }
-    
-    // Set up form submission handlers
-    const forms = document.querySelectorAll('form');
-    forms.forEach(form => {
-        form.addEventListener('submit', (e) => {
-            if (document.getElementById('loginPage').classList.contains('active')) {
-                handleLogin(e);
-            } else if (document.getElementById('signupPage').classList.contains('active')) {
-                handleSignup(e);
-            }
-        });
-    });
+
+    // Pasang event listener form
+    const loginForm  = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+
+    if (loginForm)  loginForm.addEventListener('submit', handleLogin);
+    if (signupForm) signupForm.addEventListener('submit', handleSignup);
+
+    // Fokus ke field pertama saat halaman dimuat
+    const firstInput = document.querySelector('.auth-page.active input');
+    if (firstInput) firstInput.focus();
 });
 
-// Prevent going back to auth page after login
+// Cegah kembali ke halaman auth setelah masuk
 window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        const isLoggedIn = localStorage.getItem('vaultedLoggedIn') === 'true';
-        if (isLoggedIn) {
-            const baseUrl = getBaseUrl();
-            window.location.href = baseUrl + 'index.html';
-        }
+    if (event.persisted && localStorage.getItem('vaultedLoggedIn') === 'true') {
+        window.location.href = getBaseUrl() + 'index.html';
     }
 });

@@ -1,101 +1,330 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vault-Ed - Sign In / Sign Up</title>
+    <title>Vault-Ed — Masuk / Daftar</title>
+    <meta name="description" content="Vault-Ed: Kembaran Digital Finansialmu. Kelola keuangan dengan cerdas.">
     <link rel="stylesheet" href="auth-styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="auth-container">
-        <!-- Login Page -->
-        <div class="auth-page active" id="loginPage">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <div class="auth-logo">💰</div>
-                    <h1>Vault-Ed</h1>
-                    <p>Your Digital Financial Twin</p>
-                </div>
-                
-                <form class="auth-form" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
+
+    <!-- Scanline overlay for CRT effect -->
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <!-- Data stream decorations -->
+    <div class="data-stream" style="left: 8%; height: 200px; animation-duration: 6s; animation-delay: 0s;" aria-hidden="true"></div>
+    <div class="data-stream" style="left: 23%; height: 150px; animation-duration: 8s; animation-delay: 2s;" aria-hidden="true"></div>
+    <div class="data-stream" style="right: 15%; height: 250px; animation-duration: 5s; animation-delay: 1s;" aria-hidden="true"></div>
+    <div class="data-stream" style="right: 30%; height: 180px; animation-duration: 7s; animation-delay: 3s;" aria-hidden="true"></div>
+
+    <main class="auth-container" role="main">
+
+        <!-- ==================== HALAMAN MASUK ==================== -->
+        <section
+            class="auth-page active"
+            id="loginPage"
+            aria-label="Formulir Masuk"
+            role="region"
+        >
+            <div class="auth-card" role="form" aria-labelledby="login-title">
+                <!-- Corner accents -->
+                <div class="corner-accent" aria-hidden="true"></div>
+                <div class="corner-accent-bl" aria-hidden="true"></div>
+
+                <!-- Header -->
+                <header class="auth-header">
+                    <div class="auth-logo-wrap" aria-hidden="true">
+                        <span class="auth-logo" role="img" aria-label="Vault-Ed logo">💰</span>
+                        <div class="logo-ring"></div>
+                        <div class="logo-ring-2"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    <h1 id="login-title">VAULT-ED</h1>
+                    <p class="subtitle">KEMBARAN DIGITAL FINANSIALMU</p>
+                    <div class="sys-status" aria-label="Status sistem: Online">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        SYS.ONLINE
                     </div>
+                </header>
+
+                <!-- Divider label -->
+                <div class="section-label" aria-hidden="true">AUTENTIKASI PENGGUNA</div>
+
+                <!-- Form Masuk -->
+                <form
+                    class="auth-form"
+                    id="loginForm"
+                    novalidate
+                    aria-label="Form masuk akun"
+                >
+                    <div class="form-group">
+                        <label for="loginEmail">Alamat Email</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">✉</span>
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                name="email"
+                                placeholder="nama@email.com"
+                                required
+                                autocomplete="email"
+                                aria-required="true"
+                                aria-describedby="login-email-hint"
+                            >
+                            <div class="input-line" aria-hidden="true"></div>
+                        </div>
+                        <span id="login-email-hint" class="sr-only">Masukkan alamat email aktifmu</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">Kata Sandi</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">🔒</span>
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                name="password"
+                                placeholder="Masukkan kata sandimu"
+                                required
+                                autocomplete="current-password"
+                                aria-required="true"
+                            >
+                            <div class="input-line" aria-hidden="true"></div>
+                        </div>
+                    </div>
+
                     <div class="form-group checkbox">
                         <label>
-                            <input type="checkbox" id="rememberMe">
-                            Remember me
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                                name="rememberMe"
+                                aria-label="Ingat akun saya di perangkat ini"
+                            >
+                            Ingat saya di perangkat ini
                         </label>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-large">Sign In</button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        aria-label="Masuk ke akun Vault-Ed"
+                        id="loginSubmitBtn"
+                    >
+                        ▶ MASUK
+                    </button>
                 </form>
-                
-                <div class="auth-divider">or</div>
-                
-                <button class="btn btn-secondary btn-large" onclick="switchAuthPage('signup')">Create New Account</button>
-                
-                <p class="auth-footer">Don't have an account? <a href="#" onclick="switchAuthPage('signup'); return false;">Sign up here</a></p>
-                <p class="auth-demo">💡 Demo: Use any email and password to test</p>
-            </div>
-        </div>
-        
-        <!-- Sign Up Page -->
-        <div class="auth-page" id="signupPage">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <div class="auth-logo">💰</div>
-                    <h1>Join Vault-Ed</h1>
-                    <p>Start Your Financial Journey</p>
+
+                <div class="auth-divider" aria-hidden="true">ATAU</div>
+
+                <button
+                    class="btn btn-secondary"
+                    onclick="switchAuthPage('signup')"
+                    aria-label="Buat akun baru di Vault-Ed"
+                    type="button"
+                >
+                    + BUAT AKUN BARU
+                </button>
+
+                <p class="auth-footer">
+                    Belum punya akun?
+                    <a href="#" onclick="switchAuthPage('signup'); return false;" aria-label="Navigasi ke halaman daftar">Daftar sekarang</a>
+                </p>
+
+                <div class="auth-demo" role="note" aria-label="Info demo">
+                    ⚡ MODE DEMO: Gunakan email dan kata sandi apa saja untuk mencoba
                 </div>
-                
-                <form class="auth-form" onsubmit="handleSignup(event)">
-                    <div class="form-group">
-                        <label>Full Name</label>
-                        <input type="text" id="signupName" placeholder="Your full name" required>
+            </div>
+        </section>
+
+        <!-- ==================== HALAMAN DAFTAR ==================== -->
+        <section
+            class="auth-page"
+            id="signupPage"
+            aria-label="Formulir Pendaftaran"
+            role="region"
+        >
+            <div class="auth-card" role="form" aria-labelledby="signup-title">
+                <!-- Corner accents -->
+                <div class="corner-accent" aria-hidden="true"></div>
+                <div class="corner-accent-bl" aria-hidden="true"></div>
+
+                <!-- Header -->
+                <header class="auth-header">
+                    <div class="auth-logo-wrap" aria-hidden="true">
+                        <span class="auth-logo" role="img" aria-label="Vault-Ed logo">💰</span>
+                        <div class="logo-ring"></div>
+                        <div class="logo-ring-2"></div>
                     </div>
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                    <h1 id="signup-title">VAULT-ED</h1>
+                    <p class="subtitle">MULAI PERJALANAN FINANSIALMU</p>
+                    <div class="sys-status" aria-label="Status sistem: Siap mendaftar">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        PENDAFTARAN.AKTIF
                     </div>
+                </header>
+
+                <div class="section-label" aria-hidden="true">DATA PENGGUNA BARU</div>
+
+                <!-- Form Daftar -->
+                <form
+                    class="auth-form"
+                    id="signupForm"
+                    novalidate
+                    aria-label="Form daftar akun baru"
+                >
                     <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="signupPassword" placeholder="Create a strong password" required>
+                        <label for="signupName">Nama Lengkap</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">👤</span>
+                            <input
+                                type="text"
+                                id="signupName"
+                                name="name"
+                                placeholder="Nama lengkapmu"
+                                required
+                                autocomplete="name"
+                                aria-required="true"
+                            >
+                            <div class="input-line" aria-hidden="true"></div>
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <label>Confirm Password</label>
-                        <input type="password" id="signupConfirm" placeholder="Confirm your password" required>
+                        <label for="signupEmail">Alamat Email</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">✉</span>
+                            <input
+                                type="email"
+                                id="signupEmail"
+                                name="email"
+                                placeholder="nama@email.com"
+                                required
+                                autocomplete="email"
+                                aria-required="true"
+                            >
+                            <div class="input-line" aria-hidden="true"></div>
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <label>Account Type</label>
-                        <select id="accountType" required>
-                            <option value="">Select Account Type</option>
-                            <option value="student">👨‍🎓 Student</option>
-                            <option value="parent">👨‍👩‍👧 Parent</option>
-                            <option value="teacher">👨‍🏫 Teacher</option>
-                        </select>
+                        <label for="signupPassword">
+                            Kata Sandi
+                            <span style="color:var(--text-muted);font-size:0.55rem;margin-left:0.4rem;">(min. 6 karakter)</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">🔒</span>
+                            <input
+                                type="password"
+                                id="signupPassword"
+                                name="password"
+                                placeholder="Buat kata sandi yang kuat"
+                                required
+                                autocomplete="new-password"
+                                aria-required="true"
+                                aria-describedby="password-hint"
+                            >
+                            <div class="input-line" aria-hidden="true"></div>
+                        </div>
+                        <span id="password-hint" class="sr-only">Kata sandi minimal 6 karakter</span>
                     </div>
+
+                    <div class="form-group">
+                        <label for="signupConfirm">Konfirmasi Kata Sandi</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">🔑</span>
+                            <input
+                                type="password"
+                                id="signupConfirm"
+                                name="confirm"
+                                placeholder="Ulangi kata sandimu"
+                                required
+                                autocomplete="new-password"
+                                aria-required="true"
+                            >
+                            <div class="input-line" aria-hidden="true"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="accountType">Jenis Akun</label>
+                        <div class="input-wrapper">
+                            <span class="input-icon" aria-hidden="true">🎭</span>
+                            <select
+                                id="accountType"
+                                name="accountType"
+                                required
+                                aria-required="true"
+                                aria-label="Pilih jenis akun"
+                            >
+                                <option value="">— Pilih jenis akun —</option>
+                                <option value="student">👨‍🎓 Pelajar / Mahasiswa</option>
+                                <option value="parent">👨‍👩‍👧 Orang Tua</option>
+                                <option value="teacher">👨‍🏫 Guru / Pengajar</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="form-group checkbox">
                         <label>
-                            <input type="checkbox" id="agreeTerms" required>
-                            I agree to the Terms of Service
+                            <input
+                                type="checkbox"
+                                id="agreeTerms"
+                                name="agreeTerms"
+                                required
+                                aria-required="true"
+                                aria-describedby="terms-hint"
+                            >
+                            Saya menyetujui Syarat & Ketentuan layanan
                         </label>
+                        <span id="terms-hint" class="sr-only">Harus dicentang untuk melanjutkan</span>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-large">Create Account</button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        aria-label="Buat akun Vault-Ed baru"
+                        id="signupSubmitBtn"
+                    >
+                        ▶ BUAT AKUN
+                    </button>
                 </form>
-                
-                <p class="auth-footer">Already have an account? <a href="#" onclick="switchAuthPage('login'); return false;">Sign in here</a></p>
+
+                <p class="auth-footer">
+                    Sudah punya akun?
+                    <a href="#" onclick="switchAuthPage('login'); return false;" aria-label="Navigasi ke halaman masuk">Masuk di sini</a>
+                </p>
             </div>
-        </div>
-    </div>
+        </section>
+
+    </main>
 
     <!-- Toast Notification -->
-    <div class="toast" id="toast"></div>
+    <div
+        class="toast"
+        id="toast"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+    ></div>
+
+    <!-- Screen reader only utility class -->
+    <style>
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
 
     <script src="auth-script.js"></script>
 </body>
