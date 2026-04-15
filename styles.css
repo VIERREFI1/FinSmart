@@ -79,18 +79,23 @@ body.dark-mode {
 .app-container {
     display: flex;
     height: 100vh;
+    background: var(--bg-secondary);
+    width: 100%;
     overflow: hidden;
 }
 
 /* ==================== SIDEBAR ==================== */
 .sidebar {
-    width: 280px;
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
     background: var(--bg-primary);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-sm);
-    transition: var(--transition);
+    position: relative;
+    z-index: 100;
     overflow-y: auto;
 }
 
@@ -185,6 +190,7 @@ body.dark-mode {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    min-width: 0;
 }
 
 /* ==================== HEADER ==================== */
