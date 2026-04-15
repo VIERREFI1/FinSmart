@@ -1077,13 +1077,11 @@ class VaultEdApp {
         localStorage.removeItem('vaultedUserEmail');
         localStorage.removeItem('vaultedUserName');
         
-        document.getElementById('authContainer').classList.remove('hidden');
-        document.getElementById('appContainer').classList.add('hidden');
+        this.showToast('You have been logged out', 'success');
         
-        document.querySelectorAll('.auth-page').forEach(p => p.classList.remove('active'));
-        document.getElementById('loginPage').classList.add('active');
-        
-        showAuthToast('You have been logged out', 'success');
+        setTimeout(() => {
+            window.location.href = 'auth.html';
+        }, 1500);
     }
     
     // ==================== NOTIFICATIONS ====================
