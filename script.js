@@ -26,10 +26,23 @@ class VaultEdApp {
     
     // ==================== INITIALIZATION ====================
     initializeApp() {
+        this.checkAuthStatus();
         this.setupEventListeners();
         this.updateDashboard();
         this.setCurrentDate();
         this.checkPredictiveAI();
+    }
+    
+    checkAuthStatus() {
+        const isLoggedIn = localStorage.getItem("vaultedLoggedIn") === "true";
+        if (!isLoggedIn) {
+            document.getElementById("authContainer").classList.remove("hidden");
+            document.getElementById("appContainer").classList.add("hidden");
+        } else {
+            document.getElementById("authContainer").classList.add("hidden");
+            document.getElementById("appContainer").classList.remove("hidden");
+        }
+    }
     }
     
     setupEventListeners() {
@@ -1060,7 +1073,17 @@ class VaultEdApp {
     
     logout() {
         this.saveToLocalStorage();
-        alert('You have been logged out. In a real app, you would be redirected to login.');
+        localStorage.setItem('vaultedLoggedIn', 'false');
+        localStorage.removeItem('vaultedUserEmail');
+        localStorage.removeItem('vaultedUserName');
+        
+        document.getElementById('authContainer').classList.remove('hidden');
+        document.getElementById('appContainer').classList.add('hidden');
+        
+        document.querySelectorAll('.auth-page').forEach(p => p.classList.remove('active'));
+        document.getElementById('loginPage').classList.add('active');
+        
+        showAuthToast('You have been logged out', 'success');
     }
     
     // ==================== NOTIFICATIONS ====================
@@ -1213,3 +1236,123 @@ function closeModal() {
 document.addEventListener('DOMContentLoaded', () => {
     app = new VaultEdApp();
 });
+
+// ==================== AUTHENTICATION FUNCTIONS ====================
+function switchAuthPage(page) {
+    document.querySelectorAll('.auth-page').forEach(p => p.classList.remove('active'));
+    if (page === 'login') {
+        document.getElementById('loginPage').classList.add('active');
+    } else if (page === 'signup') {
+        document.getElementById('signupPage').classList.add('active');
+    }
+}
+
+function handleLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
+    
+    if (!email || !password) {
+        showAuthToast('Please fill in all fields', 'error');
+        return;
+    }
+    
+    // Simulate login
+    localStorage.setItem('vaultedLoggedIn', 'true');
+    localStorage.setItem('vaultedUserEmail', email);
+    localStorage.setItem('vaultedUserName', email.split('@')[0]);
+    
+    if (rememberMe) {
+        localStorage.setItem('vaultedRememberMe', 'true');
+    }
+    
+    showAuthToast('Login successful! Welcome back!', 'success');
+    
+    setTimeout(() => {
+        document.getElementById('authContainer').classList.add('hidden');
+        document.getElementById('appContainer').classList.remove('hidden');
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+        
+        if (app) {
+            app.user.email = email;
+            app.user.name = localStorage.getItem('vaultedUserName');
+            app.updateDashboard();
+        }
+    }, 1500);
+}
+
+function handleSignup(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('signupConfirm').value;
+    const accountType = document.getElementById('accountType').value;
+    const agreeTerms = document.getElementById('agreeTerms').checked;
+    
+    if (!name || !email || !password || !confirm) {
+        showAuthToast('Please fill in all fields', 'error');
+        return;
+    }
+    
+    if (password !== confirm) {
+        showAuthToast('Passwords do not match', 'error');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showAuthToast('Password must be at least 6 characters', 'error');
+        return;
+    }
+    
+    if (!agreeTerms) {
+        showAuthToast('Please agree to the Terms of Service', 'error');
+        return;
+    }
+    
+    // Simulate signup
+    localStorage.setItem('vaultedLoggedIn', 'true');
+    localStorage.setItem('vaultedUserEmail', email);
+    localStorage.setItem('vaultedUserName', name);
+    localStorage.setItem('vaultedAccountType', accountType);
+    
+    showAuthToast('Account created successfully! Welcome to Vault-Ed!', 'success');
+    
+    setTimeout(() => {
+        document.getElementById('authContainer').classList.add('hidden');
+        document.getElementById('appContainer').classList.remove('hidden');
+        
+        document.getElementById('signupName').value = '';
+        document.getElementById('signupEmail').value = '';
+        document.getElementById('signupPassword').value = '';
+        document.getElementById('signupConfirm').value = '';
+        document.getElementById('agreeTerms').checked = false;
+        
+        if (app) {
+            app.user.email = email;
+            app.user.name = name;
+            app.updateDashboard();
+        }
+    }, 1500);
+}
+
+function showAuthToast(message, type = 'info') {
+    let toast = document.getElementById('authToast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'authToast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}

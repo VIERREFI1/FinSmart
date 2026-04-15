@@ -8,7 +8,92 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="app-container">
+    <!-- Authentication Pages -->
+    <div class="auth-container" id="authContainer">
+        <!-- Login Page -->
+        <div class="auth-page active" id="loginPage">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="auth-logo">💰</div>
+                    <h1>Vault-Ed</h1>
+                    <p>Your Digital Financial Twin</p>
+                </div>
+                
+                <form class="auth-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label>
+                            <input type="checkbox" id="rememberMe">
+                            Remember me
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large">Sign In</button>
+                </form>
+                
+                <div class="auth-divider">or</div>
+                
+                <button class="btn btn-secondary btn-large" onclick="switchAuthPage('signup')">Create New Account</button>
+                
+                <p class="auth-footer">Don't have an account? <a href="#" onclick="switchAuthPage('signup'); return false;">Sign up here</a></p>
+                <p class="auth-demo">Demo: Use any email and password to test</p>
+            </div>
+        </div>
+        
+        <!-- Sign Up Page -->
+        <div class="auth-page" id="signupPage">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="auth-logo">💰</div>
+                    <h1>Join Vault-Ed</h1>
+                    <p>Start Your Financial Journey</p>
+                </div>
+                
+                <form class="auth-form" onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signupName" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="signupEmail" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create a strong password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="signupConfirm" placeholder="Confirm your password" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <select id="accountType" required>
+                            <option value="student">Student</option>
+                            <option value="parent">Parent</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label>
+                            <input type="checkbox" id="agreeTerms" required>
+                            I agree to the Terms of Service
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large">Create Account</button>
+                </form>
+                
+                <p class="auth-footer">Already have an account? <a href="#" onclick="switchAuthPage('login'); return false;">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+        <div class="app-container hidden" id="appContainer">
         <!-- Navigation Sidebar -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -533,8 +618,17 @@
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <div id="reportContent"></div>
         </div>
+     </div>
     </div>
-
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+    <!-- Modal for Monthly Report -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="reportContent"></div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
