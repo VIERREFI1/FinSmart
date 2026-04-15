@@ -40,7 +40,8 @@ function handleLogin(event) {
     
     // Redirect to dashboard after 1.5 seconds
     setTimeout(() => {
-        window.location.href = 'index.html';
+        const baseUrl = getBaseUrl();
+        window.location.href = baseUrl + 'index.html';
     }, 1500);
 }
 
@@ -100,7 +101,8 @@ function handleSignup(event) {
     
     // Redirect to dashboard after 1.5 seconds
     setTimeout(() => {
-        window.location.href = 'index.html';
+        const baseUrl = getBaseUrl();
+        window.location.href = baseUrl + 'index.html';
     }, 1500);
 }
 
@@ -115,12 +117,22 @@ function showToast(message, type = 'info') {
 }
 
 // ==================== PAGE INITIALIZATION ====================
+function getBaseUrl() {
+    // Get the base URL for GitHub Pages or local
+    const path = window.location.pathname;
+    if (path.includes('/FinSmart/')) {
+        return '/FinSmart/';
+    }
+    return '/';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Check if user is already logged in
     const isLoggedIn = localStorage.getItem('vaultedLoggedIn') === 'true';
     if (isLoggedIn) {
         // Redirect to dashboard if already logged in
-        window.location.href = 'index.html';
+        const baseUrl = getBaseUrl();
+        window.location.href = baseUrl + 'index.html';
         return;
     }
     
@@ -135,10 +147,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     // Set up form submission handlers
-    document.querySelector('form').addEventListener('submit', (e) => {
-        if (document.getElementById('loginPage').classList.contains('active')) {
-            handleLogin(e);
-        }
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', (e) => {
+            if (document.getElementById('loginPage').classList.contains('active')) {
+                handleLogin(e);
+            } else if (document.getElementById('signupPage').classList.contains('active')) {
+                handleSignup(e);
+            }
+        });
     });
 });
 
@@ -147,7 +164,8 @@ window.addEventListener('pageshow', (event) => {
     if (event.persisted) {
         const isLoggedIn = localStorage.getItem('vaultedLoggedIn') === 'true';
         if (isLoggedIn) {
-            window.location.href = 'index.html';
+            const baseUrl = getBaseUrl();
+            window.location.href = baseUrl + 'index.html';
         }
     }
 });

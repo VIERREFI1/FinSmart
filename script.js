@@ -1,3 +1,12 @@
+// ==================== UTILITY FUNCTIONS ====================
+function getBaseUrl() {
+    const path = window.location.pathname;
+    if (path.includes('/FinSmart/')) {
+        return '/FinSmart/';
+    }
+    return '/';
+}
+
 // ==================== DATA MANAGEMENT ====================
 class VaultEdApp {
     constructor() {
@@ -1080,8 +1089,10 @@ class VaultEdApp {
         this.showToast('You have been logged out', 'success');
         
         setTimeout(() => {
-            window.location.href = 'auth.html';
+            const baseUrl = getBaseUrl();
+            window.location.href = baseUrl + 'auth.html';
         }, 1500);
+    }, 1500);
     }
     
     // ==================== NOTIFICATIONS ====================
