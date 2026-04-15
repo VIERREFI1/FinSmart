@@ -1,1045 +1,540 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vault-Ed — Your Digital Financial Twin</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏦</text></svg>" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault-Ed: Your Digital Financial Twin</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<!-- ===================== TOAST CONTAINER ===================== -->
-<div class="toast-container"></div>
-
-<!-- ===================== APP SHELL ===================== -->
-<div class="app-shell">
-
-  <!-- =========== SIDEBAR =========== -->
-  <aside class="sidebar">
-    <div class="sidebar-logo">
-      <div class="logo-icon">🏦</div>
-      <div>
-        <div class="logo-text">Vault<span>-Ed</span></div>
-        <div class="logo-sub">Financial Twin</div>
-      </div>
-    </div>
-
-    <div class="sidebar-section-label">Utama</div>
-
-    <div class="nav-item active" data-page="dashboard">
-      <span class="nav-icon">📊</span>
-      <span>Dashboard</span>
-    </div>
-    <div class="nav-item" data-page="wallet">
-      <span class="nav-icon">💳</span>
-      <span>Dynamic Wallet</span>
-    </div>
-    <div class="nav-item" data-page="transactions">
-      <span class="nav-icon">📋</span>
-      <span>Transaksi</span>
-      <span class="nav-badge">12</span>
-    </div>
-
-    <div class="sidebar-section-label">Analisis</div>
-
-    <div class="nav-item" data-page="goals">
-      <span class="nav-icon">🎯</span>
-      <span>Milestone Map</span>
-    </div>
-    <div class="nav-item" data-page="timemachine">
-      <span class="nav-icon">⏳</span>
-      <span>Time Machine</span>
-    </div>
-    <div class="nav-item" data-page="wrapped">
-      <span class="nav-icon">🌟</span>
-      <span>Monthly Wrapped</span>
-    </div>
-    <div class="nav-item" data-page="categorizer">
-      <span class="nav-icon">🤖</span>
-      <span>Smart Categorizer</span>
-    </div>
-
-    <div class="sidebar-section-label">Komunitas</div>
-
-    <div class="nav-item" data-page="challenge">
-      <span class="nav-icon">🏆</span>
-      <span>Budgeting Challenge</span>
-      <span class="nav-badge green">Live</span>
-    </div>
-    <div class="nav-item" data-page="tasks">
-      <span class="nav-icon">👨‍👩‍👦</span>
-      <span>Tugas Orang Tua</span>
-      <span class="nav-badge">2</span>
-    </div>
-
-    <div class="sidebar-footer">
-      <div class="user-profile">
-        <div class="avatar">RP</div>
-        <div class="user-info">
-          <div class="user-name">Rizky Pratama</div>
-          <div class="user-level">⚡ Level 7 — Saver Pro</div>
-        </div>
-        <span style="font-size:16px;opacity:0.3">⚙️</span>
-      </div>
-    </div>
-  </aside>
-
-  <!-- ===================== PAGE: DASHBOARD ===================== -->
-  <main class="main-content active-page" id="page-dashboard">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Dashboard</div>
-        <div class="page-subtitle">Gambaran keuanganmu hari ini</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-ghost btn-icon" title="Notifikasi">🔔</button>
-        <button class="btn btn-primary" onclick="openModal('modal-add-tx')">+ Catat Pengeluaran</button>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <!-- Prediction AI Bar -->
-      <div id="prediction-bar"></div>
-      <!-- Interest Banner -->
-      <div id="interest-banner"></div>
-
-      <!-- Stat Cards Row -->
-      <div class="grid-4" style="margin-bottom:var(--s-lg)">
-        <div class="stat-card fade-in fade-in-1" style="--accent-color:var(--green)">
-          <div class="stat-icon">💰</div>
-          <div class="stat-label">Total Dompet</div>
-          <div class="stat-value" id="dash-total-wallet">—</div>
-          <div class="stat-change up">↑ +5.2% bulan ini</div>
-        </div>
-        <div class="stat-card fade-in fade-in-2" style="--accent-color:var(--blue)">
-          <div class="stat-icon">🏦</div>
-          <div class="stat-label">Tabungan</div>
-          <div class="stat-value" id="dash-savings">—</div>
-          <div class="stat-change up">↑ Bunga +0.5%</div>
-        </div>
-        <div class="stat-card fade-in fade-in-3" style="--accent-color:var(--red)">
-          <div class="stat-icon">💸</div>
-          <div class="stat-label">Total Keluar</div>
-          <div class="stat-value" id="dash-total-spend">—</div>
-          <div class="stat-change down">↑ +12% dari minggu lalu</div>
-        </div>
-        <div class="stat-card fade-in fade-in-4" style="--accent-color:var(--yellow)">
-          <div class="stat-icon">📈</div>
-          <div class="stat-label">Total Masuk</div>
-          <div class="stat-value" id="dash-total-income">—</div>
-          <div class="stat-change up">↑ Stabil</div>
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-bottom:var(--s-lg)">
-        <!-- Spending Line Chart -->
-        <div class="card fade-in">
-          <div class="card-header">
-            <div class="card-title">Tren Pengeluaran 6 Bulan</div>
-            <span class="badge badge-green">2025</span>
-          </div>
-          <div class="chart-container">
-            <canvas id="dash-line-chart" style="width:100%;height:100%"></canvas>
-          </div>
-        </div>
-
-        <!-- Spending Donut -->
-        <div class="card fade-in">
-          <div class="card-header">
-            <div class="card-title">Distribusi Pengeluaran</div>
-            <span class="badge badge-blue">Bulan Ini</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:var(--s-lg)">
-            <canvas id="dash-donut" style="width:140px;height:140px;flex-shrink:0"></canvas>
-            <div style="flex:1">
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:var(--orange);flex-shrink:0"></span>Makanan & Minuman</div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:var(--blue);flex-shrink:0"></span>Transportasi</div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:var(--purple);flex-shrink:0"></span>Game & Hiburan</div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:var(--yellow);flex-shrink:0"></span>Belanja</div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:12px"><span style="width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0"></span>Tabungan</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Transactions -->
-      <div class="card fade-in">
-        <div class="card-header">
-          <div class="card-title">Transaksi Terbaru</div>
-          <button class="btn btn-ghost btn-sm" onclick="navigate('transactions')">Lihat Semua →</button>
-        </div>
-        <div id="dash-recent-tx"></div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: DYNAMIC WALLET ===================== -->
-  <main class="main-content" id="page-wallet">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Dynamic Wallet</div>
-        <div class="page-subtitle">Saldo terpisah untuk kontrol penuh</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-primary" onclick="openModal('modal-add-tx')">+ Tambah</button>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <!-- Wallet Hero -->
-      <div class="wallet-hero fade-in">
-        <div class="wallet-total-label">Total Semua Dompet</div>
-        <div class="wallet-total">Rp <span id="w-total">—</span></div>
-
-        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">
-          Terakhir diperbarui hari ini · Bunga virtual aktif <span class="badge badge-green">0.5%/bln</span>
-        </div>
-
-        <div class="wallet-breakdown">
-          <div class="wallet-pocket">
-            <div class="pocket-icon">💳</div>
-            <div class="pocket-label">Ready to Spend</div>
-            <div class="pocket-amount green" id="w-ready">—</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:4px">Untuk kebutuhan harian</div>
-          </div>
-          <div class="wallet-pocket">
-            <div class="pocket-icon">🏦</div>
-            <div class="pocket-label">Savings</div>
-            <div class="pocket-amount yellow" id="w-savings">—</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:4px">Menghasilkan bunga virtual</div>
-          </div>
-          <div class="wallet-pocket">
-            <div class="pocket-icon">🛡️</div>
-            <div class="pocket-label">Emergency</div>
-            <div class="pocket-amount blue" id="w-emergency">—</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:4px">Dana darurat pribadi</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pocket Detail Cards -->
-      <div class="grid-3" style="margin-bottom:var(--s-lg)">
-        <div class="card fade-in fade-in-1">
-          <div class="card-header">
-            <div class="card-title">💳 Ready to Spend</div>
-            <span class="badge badge-green">Aktif</span>
-          </div>
-          <div style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--green);margin-bottom:12px" id="w-ready-2">—</div>
-          <div class="progress-track" style="margin-bottom:8px">
-            <div class="progress-fill" id="bar-ready" style="width:0%"></div>
-          </div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.3)">dari total dompet</div>
-          <hr class="divider" />
-          <div style="font-size:12px;color:rgba(255,255,255,0.4)">
-            💡 Tip: Batasi pengeluaran harian di bawah <strong style="color:white">Rp 30.000</strong> agar bertahan sebulan penuh.
-          </div>
-        </div>
-
-        <div class="card fade-in fade-in-2">
-          <div class="card-header">
-            <div class="card-title">🏦 Savings</div>
-            <span class="badge badge-yellow">+Bunga</span>
-          </div>
-          <div style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--yellow);margin-bottom:12px" id="w-sav-2">—</div>
-          <div class="progress-track" style="margin-bottom:8px">
-            <div class="progress-fill yellow" id="bar-savings" style="width:0%"></div>
-          </div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.3)">dari total dompet</div>
-          <hr class="divider" />
-          <div style="font-size:12px;color:rgba(255,255,255,0.4)">
-            🏦 Bunga virtual <strong style="color:var(--yellow)">0.5%/bulan</strong> akan otomatis ditambahkan jika tidak diambil 30 hari.
-          </div>
-        </div>
-
-        <div class="card fade-in fade-in-3">
-          <div class="card-header">
-            <div class="card-title">🛡️ Emergency</div>
-            <span class="badge badge-blue">Terlindungi</span>
-          </div>
-          <div style="font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--blue);margin-bottom:12px" id="w-eme-2">—</div>
-          <div class="progress-track" style="margin-bottom:8px">
-            <div class="progress-fill blue" id="bar-emergency" style="width:0%"></div>
-          </div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.3)">dari total dompet</div>
-          <hr class="divider" />
-          <div style="font-size:12px;color:rgba(255,255,255,0.4)">
-            🎯 Target dana darurat ideal adalah <strong style="color:white">Rp 500.000</strong>. Kamu sudah 16% dari target!
-          </div>
-        </div>
-      </div>
-
-      <!-- Savings Growth Chart -->
-      <div class="card fade-in">
-        <div class="card-header">
-          <div class="card-title">📈 Pertumbuhan Tabungan</div>
-          <span class="badge badge-blue">6 Bulan</span>
-        </div>
-        <div class="chart-container" style="height:200px">
-          <canvas id="wallet-savings-chart" style="width:100%;height:100%"></canvas>
-        </div>
-      </div>
-
-      <!-- Transfer between pockets -->
-      <div class="card fade-in" style="margin-top:var(--s-lg)">
-        <div class="card-header">
-          <div class="card-title">🔄 Transfer Antar Dompet</div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end">
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Dari</label>
-            <select class="form-input" id="transfer-from">
-              <option value="ready">Ready to Spend</option>
-              <option value="savings">Savings</option>
-              <option value="emergency">Emergency</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Ke</label>
-            <select class="form-input" id="transfer-to">
-              <option value="savings">Savings</option>
-              <option value="ready">Ready to Spend</option>
-              <option value="emergency">Emergency</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Jumlah (Rp)</label>
-            <input type="number" class="form-input" id="transfer-amount" placeholder="50000" min="1000" />
-          </div>
-          <button class="btn btn-primary" onclick="doTransfer()">Transfer →</button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: TRANSACTIONS ===================== -->
-  <main class="main-content" id="page-transactions">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Riwayat Transaksi</div>
-        <div class="page-subtitle">Semua catatan keuanganmu</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-primary" onclick="openModal('modal-add-tx')">+ Catat</button>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <!-- Filter Tabs -->
-      <div style="display:flex;gap:8px;margin-bottom:var(--s-lg);flex-wrap:wrap">
-        <button class="btn btn-ghost filter-tab active" data-filter="all">Semua</button>
-        <button class="btn btn-ghost filter-tab" data-filter="income">💚 Pemasukan</button>
-        <button class="btn btn-ghost filter-tab" data-filter="expense">❤️ Pengeluaran</button>
-        <button class="btn btn-ghost filter-tab" data-filter="food">🍛 Makanan</button>
-        <button class="btn btn-ghost filter-tab" data-filter="trans">🚌 Transport</button>
-        <button class="btn btn-ghost filter-tab" data-filter="game">🎮 Game</button>
-        <button class="btn btn-ghost filter-tab" data-filter="shop">🛍️ Belanja</button>
-      </div>
-
-      <style>
-        .filter-tab.active {
-          background: rgba(0,229,160,0.1);
-          color: var(--green);
-          border-color: rgba(0,229,160,0.3);
-        }
-      </style>
-
-      <div id="tx-list"></div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: MILESTONE MAP / GOALS ===================== -->
-  <main class="main-content" id="page-goals">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Milestone Map</div>
-        <div class="page-subtitle">Perjalanan menuju target impianmu</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="toast('Fitur tambah target akan segera hadir! 🚀', 'info')">+ Target Baru</button>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <!-- Goals Progress -->
-      <div style="margin-bottom:var(--s-xl)">
-        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:var(--s-md)">
-          🎯 Target Aktif
-        </div>
-        <div class="grid-3" id="goals-cards"></div>
-      </div>
-
-      <!-- Milestone Timeline -->
-      <div class="card fade-in">
-        <div class="card-header">
-          <div class="card-title">🗺️ Milestone Perjalanan</div>
-          <span class="badge badge-yellow">3/5 Selesai</span>
-        </div>
-        <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">
-          Setiap langkah yang kamu selesaikan membawa kamu makin dekat ke HP impian. Kamu sudah luar biasa! 💪
-        </p>
-        <div id="milestone-path"></div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: TIME MACHINE ===================== -->
-  <main class="main-content" id="page-timemachine">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">The Time Machine ⏳</div>
-        <div class="page-subtitle">Simulasi keuangan masa depan & kebiasaan belanja</div>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <div style="background:linear-gradient(135deg,rgba(181,123,255,0.08),rgba(61,155,255,0.05));border:1px solid rgba(181,123,255,0.15);border-radius:var(--r-xl);padding:var(--s-xl);margin-bottom:var(--s-xl)">
-        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:4px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Fitur Unggulan</div>
-        <div style="font-family:var(--font-display);font-size:22px;font-weight:800;margin-bottom:8px">Lihat Masa Depan Uangmu 🚀</div>
-        <div style="font-size:14px;color:rgba(255,255,255,0.5)">
-          Gunakan kalkulator di bawah untuk mensimulasikan pertumbuhan tabunganmu, atau lihat berapa besar kerugian dari kebiasaan belanja sehari-hari.
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <!-- Compound Interest Calculator -->
-        <div class="card fade-in">
-          <div class="card-header">
-            <div class="card-title">🏦 Simulasi Tabungan + Bunga</div>
-            <span class="badge badge-purple">Kalkulator</span>
-          </div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">
-            Hitung berapa uangmu jika ditabung dengan bunga majemuk (compound interest).
-          </p>
-
-          <div class="form-group">
-            <label class="form-label">Modal Awal (Rp)</label>
-            <input type="number" class="form-input" id="tm-principal" placeholder="500000" value="320000" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Setoran Bulanan (Rp)</label>
-            <input type="number" class="form-input" id="tm-monthly" placeholder="100000" value="100000" />
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="form-group">
-              <label class="form-label">Bunga Per Tahun (%)</label>
-              <input type="number" class="form-input" id="tm-rate" placeholder="6" value="6" step="0.1" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Jangka Waktu (Tahun)</label>
-              <input type="number" class="form-input" id="tm-years" placeholder="10" value="10" min="1" max="40" />
-            </div>
-          </div>
-          <button class="btn btn-primary" style="width:100%" id="tm-calc-btn">⚡ Hitung Masa Depan</button>
-
-          <div id="tm-result"></div>
-
-          <div style="margin-top:16px" id="tm-chart-wrap" style="display:none">
-            <div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:8px;font-family:var(--font-mono)">PROYEKSI PERTUMBUHAN</div>
-            <div class="chart-container" style="height:180px">
-              <canvas id="tm-chart" style="width:100%;height:100%"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- Daily Habit Calculator -->
-        <div class="card fade-in fade-in-2">
-          <div class="card-header">
-            <div class="card-title">☕ Kalkulator Kebiasaan Harian</div>
-            <span class="badge badge-red">Penguras</span>
-          </div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">
-            Berapa kerugian dari kebiasaan kecil yang kamu lakukan setiap hari? Hitung sekarang!
-          </p>
-
-          <div class="form-group">
-            <label class="form-label">Nama Kebiasaan</label>
-            <input type="text" class="form-input" id="habit-item" placeholder="Kopi susu kekinian, Boba, Top-up ML..." value="Kopi Susu" />
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-            <div class="form-group">
-              <label class="form-label">Harga per kali (Rp)</label>
-              <input type="number" class="form-input" id="habit-price" placeholder="18000" value="18000" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Berapa kali per hari?</label>
-              <input type="number" class="form-input" id="habit-freq" placeholder="1" value="1" min="1" max="10" />
-            </div>
-          </div>
-          <button class="btn btn-danger" style="width:100%" id="habit-calc-btn">🔥 Hitung Kerugian</button>
-
-          <div id="habit-result"></div>
-
-          <!-- Quick examples -->
-          <div style="margin-top:16px">
-            <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:8px;font-family:var(--font-mono);text-transform:uppercase">Coba contoh ini →</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-ghost btn-sm" onclick="setHabit('Kopi Susu',18000,1)">☕ Kopi Susu</button>
-              <button class="btn btn-ghost btn-sm" onclick="setHabit('Boba',25000,1)">🧋 Boba</button>
-              <button class="btn btn-ghost btn-sm" onclick="setHabit('Rokok',30000,1)">🚬 Rokok</button>
-              <button class="btn btn-ghost btn-sm" onclick="setHabit('Top-up ML',20000,1)">🎮 Top-up ML</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Info Box -->
-      <div class="card fade-in" style="margin-top:var(--s-lg);background:linear-gradient(135deg,rgba(0,229,160,0.04),rgba(61,155,255,0.03));border-color:rgba(0,229,160,0.15)">
-        <div style="font-family:var(--font-display);font-size:16px;font-weight:700;margin-bottom:12px">💡 Tahukah Kamu?</div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-          <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.03);border-radius:var(--r-md)">
-            <div style="font-size:28px;margin-bottom:8px">⏰</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Mulai Lebih Awal</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)">Menabung Rp 100rb/bulan dari usia 16 menghasilkan <strong style="color:var(--green)">3x lebih besar</strong> daripada mulai usia 26!</div>
-          </div>
-          <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.03);border-radius:var(--r-md)">
-            <div style="font-size:28px;margin-bottom:8px">📈</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Bunga Majemuk</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)">Einstein menyebut bunga majemuk sebagai <strong style="color:var(--yellow)">"keajaiban dunia ke-8"</strong>. Uangmu bekerja untukmu!</div>
-          </div>
-          <div style="text-align:center;padding:16px;background:rgba(255,255,255,0.03);border-radius:var(--r-md)">
-            <div style="font-size:28px;margin-bottom:8px">🎯</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Aturan 50-30-20</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)"><strong style="color:var(--blue)">50%</strong> kebutuhan, <strong style="color:var(--purple)">30%</strong> keinginan, <strong style="color:var(--green)">20%</strong> tabungan. Simpel dan terbukti!</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: MONTHLY WRAPPED ===================== -->
-  <main class="main-content" id="page-wrapped">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Monthly Wrapped 🌟</div>
-        <div class="page-subtitle">Ringkasan kesehatan keuanganmu</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="toast('Laporan berhasil diekspor ke PDF! 📄', 'success')">📤 Export PDF</button>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <!-- Wrapped Hero -->
-      <div class="wrapped-hero fade-in">
-        <div class="wrapped-month">Juni 2025 · Financial Report</div>
-        <div class="wrapped-title">
-          Kamu adalah <span class="highlight">Smart Saver</span> bulan ini! 🏆
-        </div>
-        <div class="wrapped-tagline">
-          Kamu berhasil menghemat lebih dari rata-rata teman sekelasmu. Terus pertahankan!
-        </div>
-        <div style="display:flex;justify-content:center;gap:8px;margin-top:20px">
-          <span class="badge badge-green">✅ Hemat</span>
-          <span class="badge badge-blue">📈 Konsisten</span>
-          <span class="badge badge-purple">🎯 On Track</span>
-        </div>
-      </div>
-
-      <!-- Key Stats -->
-      <div class="wrapped-stats fade-in" style="margin-bottom:var(--s-lg)">
-        <div class="wrapped-stat">
-          <div class="ws-emoji">💸</div>
-          <div class="ws-value" id="wrapped-total-spend">—</div>
-          <div class="ws-label">Total Pengeluaran</div>
-        </div>
-        <div class="wrapped-stat">
-          <div class="ws-emoji">💰</div>
-          <div class="ws-value" id="wrapped-total-saved">—</div>
-          <div class="ws-label">Total Pemasukan</div>
-        </div>
-        <div class="wrapped-stat" style="background:linear-gradient(135deg,rgba(0,229,160,0.08),rgba(61,155,255,0.05));border-color:rgba(0,229,160,0.2)">
-          <div class="ws-emoji">🏥</div>
-          <div class="ws-value" id="wrapped-health-score" style="color:var(--green)">—</div>
-          <div class="ws-label">Financial Health Score /100</div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <!-- Category Breakdown -->
-        <div class="card fade-in">
-          <div class="card-header">
-            <div class="card-title">📊 Breakdown Kategori</div>
-          </div>
-          <div id="wrapped-cat-breakdown"></div>
-        </div>
-
-        <!-- Fun Stats -->
-        <div class="card fade-in fade-in-2">
-          <div class="card-header">
-            <div class="card-title">🎭 Fun Stats Bulan Ini</div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm)">
-              <span style="font-size:24px">📝</span>
-              <div>
-                <div style="font-size:13px;font-weight:600">Jumlah Transaksi</div>
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--blue)" id="wrapped-tx-count">—</div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm)">
-              <span style="font-size:24px">🔥</span>
-              <div>
-                <div style="font-size:13px;font-weight:600">Kategori Terbesar</div>
-                <div style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--orange)" id="wrapped-biggest-cat">—</div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm)">
-              <span style="font-size:24px">⭐</span>
-              <div>
-                <div style="font-size:13px;font-weight:600">Hari Paling Hemat</div>
-                <div style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--green)">Rabu, 26 Juni</div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,140,66,0.06);border:1px solid rgba(255,140,66,0.15);border-radius:var(--r-sm)">
-              <span style="font-size:24px">⚠️</span>
-              <div>
-                <div style="font-size:13px;font-weight:600">Hari Paling Boros</div>
-                <div style="font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--orange)">Jumat, 21 Juni</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Share Banner -->
-      <div class="card fade-in" style="margin-top:var(--s-lg);text-align:center;background:linear-gradient(135deg,rgba(181,123,255,0.08),rgba(0,229,160,0.06));border-color:rgba(181,123,255,0.2)">
-        <div style="font-size:32px;margin-bottom:12px">📱</div>
-        <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:8px">Bagikan Pencapaianmu!</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:16px">Share hasil Monthly Wrapped kamu ke teman dan motivasi mereka untuk hemat juga!</div>
-        <div style="display:flex;justify-content:center;gap:8px">
-          <button class="btn btn-ghost" onclick="toast('Link disalin ke clipboard! 🔗', 'success')">🔗 Copy Link</button>
-          <button class="btn btn-primary" onclick="toast('Gambar berhasil disimpan! 📸', 'success')">📸 Simpan sebagai Gambar</button>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: SMART CATEGORIZER ===================== -->
-  <main class="main-content" id="page-categorizer">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Smart Categorizer 🤖</div>
-        <div class="page-subtitle">AI langsung mengelompokkan pengeluaranmu</div>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <div class="grid-2">
-        <!-- AI Text Input -->
-        <div class="card fade-in">
-          <div class="card-header">
-            <div class="card-title">✍️ Input Teks Cepat</div>
-            <span class="badge badge-green">AI Ready</span>
-          </div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">
-            Ketik nama pengeluaran dengan cara apapun. AI akan langsung mengenali kategorinya!
-          </p>
-
-          <div class="form-group">
-            <label class="form-label">Deskripsi Pengeluaran</label>
-            <input type="text" class="form-input" id="ai-input" placeholder="Contoh: makan bakso bareng teman, top-up mobile legends, ojek ke sekolah..." style="font-size:15px;padding:14px" />
-          </div>
-
-          <button class="btn btn-primary" style="width:100%;padding:12px" onclick="runAICategorizer()">
-            🤖 Kategorikan dengan AI
-          </button>
-
-          <div style="margin-top:12px">
-            <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:8px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">Coba contoh →</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ai-input').value='beli bakso di kantin'">🍜 Bakso Kantin</button>
-              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ai-input').value='top up diamond ff'">💎 Top-up FF</button>
-              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ai-input').value='naik gojek ke sekolah'">🛵 Gojek</button>
-              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ai-input').value='beli sepatu di toko'">👟 Sepatu</button>
-            </div>
-          </div>
-
-          <div id="ai-result" style="margin-top:16px"></div>
-        </div>
-
-        <!-- Scan Struk -->
-        <div class="card fade-in fade-in-2">
-          <div class="card-header">
-            <div class="card-title">📷 Scan Struk / Nota</div>
-            <span class="badge badge-blue">OCR</span>
-          </div>
-          <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">
-            Foto atau upload struk belanjaanmu, AI akan otomatis membaca dan mencatat pengeluaran!
-          </p>
-
-          <div class="scan-drop" id="scan-dropzone" onclick="toast('📷 Fitur kamera akan segera tersedia! Untuk sekarang gunakan input teks.', 'info')">
-            <div class="scan-drop-icon">📷</div>
-            <div class="scan-drop-text">Klik atau seret foto struk ke sini</div>
-            <div class="scan-drop-sub">JPG, PNG, PDF · Maks. 5MB</div>
-            <div style="margin-top:16px">
-              <span class="badge badge-blue">OCR Technology</span>
-              <span class="badge badge-green" style="margin-left:6px">Auto-Extract</span>
-            </div>
-          </div>
-
-          <div style="margin-top:16px;padding:14px;background:rgba(61,155,255,0.05);border:1px solid rgba(61,155,255,0.15);border-radius:var(--r-md)">
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--blue)">✨ Cara kerjanya</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.8">
-              1. Upload foto struk atau nota<br/>
-              2. AI membaca teks dengan OCR<br/>
-              3. Jumlah & kategori terdeteksi otomatis<br/>
-              4. Konfirmasi dan simpan ke Vault-Ed
-            </div>
-          </div>
-
-          <!-- Mock scan history -->
-          <div style="margin-top:16px">
-            <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:8px;font-family:var(--font-mono);text-transform:uppercase">Riwayat Scan Terakhir</div>
-            <div class="tx-item">
-              <div class="tx-icon" style="background:rgba(255,140,66,0.1)">🧾</div>
-              <div class="tx-info">
-                <div class="tx-name">Struk Minimarket ABC</div>
-                <div class="tx-cat"><span class="cat-chip cat-food">Makanan</span></div>
-              </div>
-              <div class="tx-amount expense">−Rp 37.500</div>
-            </div>
-            <div class="tx-item">
-              <div class="tx-icon" style="background:rgba(61,155,255,0.1)">🧾</div>
-              <div class="tx-info">
-                <div class="tx-name">Struk Ojek Online</div>
-                <div class="tx-cat"><span class="cat-chip cat-trans">Transportasi</span></div>
-              </div>
-              <div class="tx-amount expense">−Rp 12.000</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- AI Tips -->
-      <div class="card fade-in" style="margin-top:var(--s-lg)">
-        <div class="card-header">
-          <div class="card-title">🧠 Wawasan AI Bulan Ini</div>
-          <span class="badge badge-purple">Analisis Personal</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-          <div style="padding:16px;background:rgba(255,140,66,0.06);border:1px solid rgba(255,140,66,0.15);border-radius:var(--r-md)">
-            <div style="font-size:20px;margin-bottom:8px">🍛</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Pengeluaran Makanan</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)">Kamu menghabiskan <strong style="color:var(--orange)">38%</strong> untuk makanan. Di atas rata-rata teman. Coba masak sendiri 2x seminggu!</div>
-          </div>
-          <div style="padding:16px;background:rgba(181,123,255,0.06);border:1px solid rgba(181,123,255,0.15);border-radius:var(--r-md)">
-            <div style="font-size:20px;margin-bottom:8px">🎮</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Pengeluaran Game</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)">Top-up game bulan ini: <strong style="color:var(--purple)">Rp 25.000</strong>. Lumayan, tapi pastikan sudah menabung dulu ya!</div>
-          </div>
-          <div style="padding:16px;background:rgba(0,229,160,0.06);border:1px solid rgba(0,229,160,0.15);border-radius:var(--r-md)">
-            <div style="font-size:20px;margin-bottom:8px">💡</div>
-            <div style="font-size:13px;font-weight:600;margin-bottom:4px">Rekomendasi AI</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)">Kurangi jajan Rp <strong style="color:var(--green)">15.000/hari</strong> dan kamu bisa mencapai target HP <strong style="color:var(--green)">2 bulan lebih cepat!</strong></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- ===================== PAGE: BUDGETING CHALLENGE ===================== -->
-  <main class="main-content" id="page-challenge">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Budgeting Challenge 🏆</div>
-        <div class="page-subtitle">Kompetisi hemat bareng teman — siapa yang paling tangguh?</div>
-      </div>
-      <div class="topbar-actions">
-        <span class="badge badge-green" style="font-size:12px;padding:6px 12px">🔴 Live · Minggu ke-4</span>
-      </div>
-    </div>
-
-    <div class="page-body">
-      <!-- Current Challenge Banner -->
-      <div style="background:linear-gradient(135deg,rgba(245,197,66,0.1),rgba(255,140,66,0.06));border:1px solid rgba(245,197,66,0.2);border-radius:var(--r-xl);padding:var(--s-xl);margin-bottom:var(--s-lg);position:relative;overflow:hidden" class="fade-in">
-        <div style="position:absolute;top:-20px;right:-20px;font-size:80px;opacity:0.08">🏆</div>
-        <div style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Tantangan Aktif</div>
-        <div style="font-family:var(--font-display);font-size:24px;font-weight:800;margin-bottom:8px">"Siapa yang paling hemat minggu ini?" 💰</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:16px">Hemat sebanyak mungkin dari uang jajan selama 7 hari. Semakin hemat, semakin tinggi rankingmu!</div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-          <div style="text-align:center">
-            <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--yellow)" id="challenge-countdown">3 Hari</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.35);font-family:var(--font-mono)">Tersisa</div>
-          </div>
-          <div style="width:1px;height:40px;background:var(--border)"></div>
-          <div style="text-align:center">
-            <div style="font-family:var(--font-display);font-size:28px;font-weight:800;color:var(--green)">6</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.35);font-family:var(--font-mono)">Peserta</div>
-          </div>
-          <div style="width:1px;height:40px;background:var(--border)"></div>
-          <div>
-            <div style="font-size:13px;font-weight:600">Kamu ada di posisi 🥉 #3</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.4)">Selisih Rp 60.000 dari #1. Ayo kejar!</div>
-          </div>
-          <div style="margin-left:auto">
-            <button class="btn btn-primary" onclick="toast('Undangan berhasil dikirim! 📨', 'success')">+ Ajak Teman</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <!-- Leaderboard -->
-        <div class="card fade-in">
-          <div class="card-header">
-            <div class="card-title">🏅 Papan Peringkat</div>
-            <span class="badge badge-yellow">Live</span>
-          </div>
-          <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:4px"></div>
-          <div style="margin-top:16px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm);font-size:12px;color:rgba(255,255,255,0.35);text-align:center">
-            Peringkat diperbarui setiap malam · <span style="color:var(--green)">Kamu +Rp 15rb dari kemarin! 📈</span>
-          </div>
-        </div>
-
-        <!-- Your Stats + Achievements -->
-        <div style="display:flex;flex-direction:column;gap:16px">
-          <div class="card fade-in fade-in-2">
-            <div class="card-header">
-              <div class="card-title">📊 Statistikmu Minggu Ini</div>
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="text-align:center;padding:12px;background:rgba(0,229,160,0.06);border-radius:var(--r-sm);border:1px solid rgba(0,229,160,0.15)">
-                <div style="font-size:11px;color:var(--green);font-family:var(--font-mono);margin-bottom:4px">TABUNGAN</div>
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--green)">Rp 320rb</div>
-              </div>
-              <div style="text-align:center;padding:12px;background:rgba(255,92,114,0.06);border-radius:var(--r-sm);border:1px solid rgba(255,92,114,0.15)">
-                <div style="font-size:11px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">PENGELUARAN</div>
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--red)">Rp 183rb</div>
-              </div>
-              <div style="text-align:center;padding:12px;background:rgba(245,197,66,0.06);border-radius:var(--r-sm);border:1px solid rgba(245,197,66,0.15)">
-                <div style="font-size:11px;color:var(--yellow);font-family:var(--font-mono);margin-bottom:4px">RASIO HEMAT</div>
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--yellow)">63.5%</div>
-              </div>
-              <div style="text-align:center;padding:12px;background:rgba(61,155,255,0.06);border-radius:var(--r-sm);border:1px solid rgba(61,155,255,0.15)">
-                <div style="font-size:11px;color:var(--blue);font-family:var(--font-mono);margin-bottom:4px">RANKING</div>
-                <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--blue)">#3 / 6</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Achievements -->
-          <div class="card fade-in fade-in-3">
-            <div class="card-header">
-              <div class="card-title">🎖️ Pencapaian</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(0,229,160,0.06);border-radius:var(--r-sm)">
-                <span style="font-size:20px">🌱</span>
-                <div>
-                  <div style="font-size:13px;font-weight:600">Pemula Hemat</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.35)">Ikut challenge pertama kali</div>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">💰</span>
+                    <span class="logo-text">Vault-Ed</span>
                 </div>
-                <span class="badge badge-green" style="margin-left:auto">✓</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(245,197,66,0.06);border-radius:var(--r-sm)">
-                <span style="font-size:20px">🔥</span>
-                <div>
-                  <div style="font-size:13px;font-weight:600">Streak 5 Hari</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.35)">Catat transaksi 5 hari berturut</div>
+                <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+            </div>
+
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active" data-page="dashboard">📊 Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-page="wallet">💳 Wallet</a></li>
+                <li><a href="#" class="nav-link" data-page="transactions">📝 Transactions</a></li>
+                <li><a href="#" class="nav-link" data-page="goals">🎯 Savings Goals</a></li>
+                <li><a href="#" class="nav-link" data-page="reports">📈 Monthly Report</a></li>
+                <li><a href="#" class="nav-link" data-page="simulator">⏰ Time Machine</a></li>
+                <li><a href="#" class="nav-link" data-page="challenge">🏆 Challenge</a></li>
+                <li><a href="#" class="nav-link" data-page="parent">👨‍👩‍👧 Parent Link</a></li>
+                <li><a href="#" class="nav-link" data-page="settings">⚙️ Settings</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
                 </div>
-                <span class="badge badge-yellow" style="margin-left:auto">✓</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm);opacity:0.5">
-                <span style="font-size:20px">💎</span>
-                <div>
-                  <div style="font-size:13px;font-weight:600">Top 1 Challenge</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.35)">Raih ranking #1 di tantangan mingguan</div>
+                <div class="header-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">👤</div>
+                        <div class="user-info">
+                            <p class="user-name" id="userName">Student</p>
+                            <p class="user-email" id="userEmail">student@vault-ed.com</p>
+                        </div>
+                    </div>
                 </div>
-                <span class="badge badge-blue" style="margin-left:auto">🔒</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
+            </header>
 
-  <!-- ===================== PAGE: TUGAS ORANG TUA ===================== -->
-  <main class="main-content" id="page-tasks">
-    <div class="topbar">
-      <button class="mobile-menu-btn">☰</button>
-      <div>
-        <div class="page-title">Tugas dari Orang Tua 👨‍👩‍👦</div>
-        <div class="page-subtitle">Teacher-Parent Link · Misi keuangan dari keluarga</div>
-      </div>
-      <div class="topbar-actions">
-        <button class="btn btn-ghost" onclick="toast('Kode undangan: VAULT-RP-2025 · Bagikan ke orang tuamu! 🔑', 'info', 5000)">🔗 Kode Link</button>
-      </div>
-    </div>
+            <!-- Pages Container -->
+            <div class="pages-container">
+                <!-- Dashboard Page -->
+                <div class="page active" id="page-dashboard">
+                    <div class="dashboard-grid">
+                        <!-- Wallet Overview -->
+                        <div class="card wallet-card">
+                            <h2>💳 Your Wallet</h2>
+                            <div class="wallet-display">
+                                <div class="wallet-item">
+                                    <span class="wallet-label">Ready to Spend</span>
+                                    <span class="wallet-amount" id="readyToSpendAmount">Rp 0</span>
+                                    <div class="wallet-bar">
+                                        <div class="wallet-bar-fill" id="readyToSpendBar"></div>
+                                    </div>
+                                </div>
+                                <div class="wallet-item">
+                                    <span class="wallet-label">Savings</span>
+                                    <span class="wallet-amount" id="savingsAmount">Rp 0</span>
+                                    <div class="wallet-bar">
+                                        <div class="wallet-bar-fill savings" id="savingsBar"></div>
+                                    </div>
+                                </div>
+                                <div class="wallet-item">
+                                    <span class="wallet-label">Emergency</span>
+                                    <span class="wallet-amount" id="emergencyAmount">Rp 0</span>
+                                    <div class="wallet-bar">
+                                        <div class="wallet-bar-fill emergency" id="emergencyBar"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wallet-total">
+                                <span>Total Balance</span>
+                                <span class="total-amount" id="totalBalance">Rp 0</span>
+                            </div>
+                            <button class="btn btn-primary" onclick="showPage('wallet')">Manage Wallet</button>
+                        </div>
 
-    <div class="page-body">
-      <!-- Parent Link Banner -->
-      <div style="background:linear-gradient(135deg,rgba(61,155,255,0.08),rgba(181,123,255,0.05));border:1px solid rgba(61,155,255,0.2);border-radius:var(--r-xl);padding:var(--s-xl);margin-bottom:var(--s-xl);display:flex;align-items:center;gap:var(--s-lg)" class="fade-in">
-        <div style="font-size:40px">👨‍👩‍👦</div>
-        <div>
-          <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:6px">Terhubung dengan Orang Tua</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.5)">Papa & Mama bisa memantau perkembanganmu dan memberi tugas keuangan. Selesaikan tugas untuk mendapatkan reward nyata!</div>
-        </div>
-        <div style="margin-left:auto;text-align:right;flex-shrink:0">
-          <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:4px;font-family:var(--font-mono)">TERHUBUNG</div>
-          <div style="display:flex;gap:6px;justify-content:flex-end">
-            <span class="badge badge-green">👨 Papa</span>
-            <span class="badge badge-blue">👩 Mama</span>
-          </div>
-        </div>
-      </div>
+                        <!-- Quick Stats -->
+                        <div class="card stats-card">
+                            <h2>📊 This Month</h2>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-label">Total Spent</span>
+                                    <span class="stat-value" id="monthlySpent">Rp 0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Total Saved</span>
+                                    <span class="stat-value saved" id="monthlySaved">Rp 0</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Savings Rate</span>
+                                    <span class="stat-value" id="savingsRate">0%</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Top Category</span>
+                                    <span class="stat-value" id="topCategory">-</span>
+                                </div>
+                            </div>
+                        </div>
 
-      <div class="grid-2">
-        <div>
-          <div style="font-family:var(--font-display);font-size:18px;font-weight:700;margin-bottom:var(--s-md)">📋 Tugas Aktif</div>
-          <div id="tasks-list"></div>
-        </div>
+                        <!-- Recent Transactions -->
+                        <div class="card transactions-card">
+                            <h2>📝 Recent Transactions</h2>
+                            <div class="transactions-list" id="recentTransactionsList">
+                                <p class="empty-state">No transactions yet. Add one to get started!</p>
+                            </div>
+                            <button class="btn btn-secondary" onclick="showPage('transactions')">View All</button>
+                        </div>
 
-        <!-- Progress & Upcoming Rewards -->
-        <div style="display:flex;flex-direction:column;gap:var(--s-md)">
-          <div class="card fade-in">
-            <div class="card-header">
-              <div class="card-title">🎁 Reward Menanti</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(245,197,66,0.06);border:1px solid rgba(245,197,66,0.15);border-radius:var(--r-md)">
-                <span style="font-size:22px">🎬</span>
-                <div style="flex:1">
-                  <div style="font-size:13px;font-weight:600">Nonton bioskop weekend</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.35)">Dari: Mama · Tugas 1 selesai ✓</div>
+                        <!-- Savings Goals Preview -->
+                        <div class="card goals-preview">
+                            <h2>🎯 Active Goals</h2>
+                            <div class="goals-list" id="goalsPreviewList">
+                                <p class="empty-state">No goals yet. Create one to start saving!</p>
+                            </div>
+                            <button class="btn btn-secondary" onclick="showPage('goals')">Manage Goals</button>
+                        </div>
+
+                        <!-- Alerts & Warnings -->
+                        <div class="card alerts-card">
+                            <h2>⚠️ Alerts</h2>
+                            <div class="alerts-list" id="alertsList">
+                                <p class="empty-state">No alerts. Keep up the good work!</p>
+                            </div>
+                        </div>
+
+                        <!-- Interest Accrual -->
+                        <div class="card interest-card">
+                            <h2>🏦 Interest Accrual</h2>
+                            <div class="interest-info">
+                                <p>Your Savings earns <strong>2% annual interest</strong></p>
+                                <p class="interest-note">Keep your savings untouched for a full month to earn a bonus!</p>
+                                <div class="interest-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="interestProgress"></div>
+                                    </div>
+                                    <span class="progress-text" id="interestDaysLeft">Days until bonus: -</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <span class="badge badge-green">Terbuka!</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-md);opacity:0.6">
-                <span style="font-size:22px">🎮</span>
-                <div style="flex:1">
-                  <div style="font-size:13px;font-weight:600">Main game 1 jam extra</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.35)">Dari: Papa · Selesaikan Tugas 2</div>
-                </div>
-                <span class="badge badge-blue">🔒 Terkunci</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-md);opacity:0.6">
-                <span style="font-size:22px">📚</span>
-                <div style="flex:1">
-                  <div style="font-size:13px;font-weight:600">Buku komik pilihan</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,0.35)">Dari: Mama · Selesaikan Tugas 3</div>
-                </div>
-                <span class="badge badge-blue">🔒 Terkunci</span>
-              </div>
-            </div>
-          </div>
 
-          <div class="card fade-in fade-in-2">
-            <div class="card-header">
-              <div class="card-title">📊 Progress Keseluruhan</div>
+                <!-- Wallet Page -->
+                <div class="page" id="page-wallet">
+                    <div class="card">
+                        <h2>💳 Manage Your Wallet</h2>
+                        <div class="wallet-management">
+                            <div class="wallet-section">
+                                <h3>Current Allocation</h3>
+                                <div class="allocation-display">
+                                    <div class="allocation-item">
+                                        <span>Ready to Spend</span>
+                                        <input type="number" id="readyToSpendInput" placeholder="0" min="0">
+                                    </div>
+                                    <div class="allocation-item">
+                                        <span>Savings</span>
+                                        <input type="number" id="savingsInput" placeholder="0" min="0">
+                                    </div>
+                                    <div class="allocation-item">
+                                        <span>Emergency</span>
+                                        <input type="number" id="emergencyInput" placeholder="0" min="0">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary" onclick="updateWallet()">Update Allocation</button>
+                            </div>
+
+                            <div class="wallet-section">
+                                <h3>Add Funds</h3>
+                                <div class="add-funds-form">
+                                    <input type="number" id="addFundsAmount" placeholder="Amount (Rp)" min="0">
+                                    <select id="addFundsWallet">
+                                        <option value="readyToSpend">Ready to Spend</option>
+                                        <option value="savings">Savings</option>
+                                        <option value="emergency">Emergency</option>
+                                    </select>
+                                    <button class="btn btn-primary" onclick="addFunds()">Add Funds</button>
+                                </div>
+                            </div>
+
+                            <div class="wallet-section">
+                                <h3>Transfer Between Wallets</h3>
+                                <div class="transfer-form">
+                                    <select id="transferFrom">
+                                        <option value="">From Wallet</option>
+                                        <option value="readyToSpend">Ready to Spend</option>
+                                        <option value="savings">Savings</option>
+                                        <option value="emergency">Emergency</option>
+                                    </select>
+                                    <select id="transferTo">
+                                        <option value="">To Wallet</option>
+                                        <option value="readyToSpend">Ready to Spend</option>
+                                        <option value="savings">Savings</option>
+                                        <option value="emergency">Emergency</option>
+                                    </select>
+                                    <input type="number" id="transferAmount" placeholder="Amount (Rp)" min="0">
+                                    <button class="btn btn-primary" onclick="transferFunds()">Transfer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Page -->
+                <div class="page" id="page-transactions">
+                    <div class="card">
+                        <h2>📝 Transaction Management</h2>
+                        
+                        <div class="transaction-form">
+                            <h3>Add New Transaction</h3>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <input type="text" id="transDescription" placeholder="What did you buy?">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Amount (Rp)</label>
+                                    <input type="number" id="transAmount" placeholder="0" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="transCategory">
+                                        <option value="">Select Category</option>
+                                        <option value="Canteen">🍔 Canteen</option>
+                                        <option value="Transport">🚌 Transport</option>
+                                        <option value="Gaming">🎮 Gaming Top-up</option>
+                                        <option value="Entertainment">🎬 Entertainment</option>
+                                        <option value="Shopping">🛍️ Shopping</option>
+                                        <option value="Education">📚 Education</option>
+                                        <option value="Health">🏥 Health</option>
+                                        <option value="Other">📌 Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Source Wallet</label>
+                                    <select id="transSourceWallet">
+                                        <option value="readyToSpend">Ready to Spend</option>
+                                        <option value="savings">Savings</option>
+                                        <option value="emergency">Emergency</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="transDate">
+                            </div>
+                            <button class="btn btn-primary" onclick="addTransaction()">Add Transaction</button>
+                        </div>
+
+                        <div class="transactions-history">
+                            <h3>Transaction History</h3>
+                            <div class="filters">
+                                <select id="filterCategory">
+                                    <option value="">All Categories</option>
+                                    <option value="Canteen">🍔 Canteen</option>
+                                    <option value="Transport">🚌 Transport</option>
+                                    <option value="Gaming">🎮 Gaming</option>
+                                    <option value="Entertainment">🎬 Entertainment</option>
+                                    <option value="Shopping">🛍️ Shopping</option>
+                                    <option value="Education">📚 Education</option>
+                                    <option value="Health">🏥 Health</option>
+                                    <option value="Other">📌 Other</option>
+                                </select>
+                                <input type="month" id="filterMonth">
+                            </div>
+                            <div class="transactions-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Category</th>
+                                            <th>Amount</th>
+                                            <th>Source</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transactionsTableBody">
+                                        <tr><td colspan="6" class="empty-state">No transactions yet</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Savings Goals Page -->
+                <div class="page" id="page-goals">
+                    <div class="card">
+                        <h2>🎯 Savings Goals</h2>
+                        
+                        <div class="goal-form">
+                            <h3>Create New Goal</h3>
+                            <div class="form-group">
+                                <label>Goal Name (e.g., Buy a Phone)</label>
+                                <input type="text" id="goalName" placeholder="What are you saving for?">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Target Amount (Rp)</label>
+                                    <input type="number" id="goalTarget" placeholder="0" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Target Date</label>
+                                    <input type="date" id="goalDeadline">
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="addGoal()">Create Goal</button>
+                        </div>
+
+                        <div class="goals-display">
+                            <h3>Your Goals</h3>
+                            <div class="goals-grid" id="goalsGrid">
+                                <p class="empty-state">No goals yet. Create one to start your savings journey!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Report Page -->
+                <div class="page" id="page-reports">
+                    <div class="card">
+                        <h2>📈 Monthly Report (Spotify Wrapped Style)</h2>
+                        <div class="report-container" id="reportContainer">
+                            <div class="report-placeholder">
+                                <p>Generate your monthly report to see your spending insights!</p>
+                                <button class="btn btn-primary" onclick="generateMonthlyReport()">Generate Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Machine Simulator Page -->
+                <div class="page" id="page-simulator">
+                    <div class="card">
+                        <h2>⏰ Time Machine Simulator</h2>
+                        
+                        <div class="simulator-tabs">
+                            <button class="tab-btn active" onclick="switchTab('interest')">Compound Interest</button>
+                            <button class="tab-btn" onclick="switchTab('habit')">Daily Habit Cost</button>
+                        </div>
+
+                        <div class="tab-content active" id="tab-interest">
+                            <h3>💰 Compound Interest Calculator</h3>
+                            <div class="simulator-form">
+                                <div class="form-group">
+                                    <label>Initial Amount (Rp)</label>
+                                    <input type="number" id="initialAmount" placeholder="0" min="0" value="1000000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Annual Interest Rate (%)</label>
+                                    <input type="number" id="interestRate" placeholder="0" min="0" max="100" value="2">
+                                </div>
+                                <div class="form-group">
+                                    <label>Years</label>
+                                    <input type="number" id="years" placeholder="0" min="1" max="50" value="10">
+                                </div>
+                                <button class="btn btn-primary" onclick="calculateInterest()">Calculate</button>
+                            </div>
+                            <div class="simulator-result" id="interestResult"></div>
+                        </div>
+
+                        <div class="tab-content" id="tab-habit">
+                            <h3>☕ Daily Habit Cost Calculator</h3>
+                            <div class="simulator-form">
+                                <div class="form-group">
+                                    <label>Daily Cost (Rp)</label>
+                                    <input type="number" id="dailyCost" placeholder="0" min="0" value="25000">
+                                </div>
+                                <div class="form-group">
+                                    <label>What is this habit?</label>
+                                    <input type="text" id="habitName" placeholder="e.g., Daily Coffee" value="Daily Coffee">
+                                </div>
+                                <div class="form-group">
+                                    <label>Time Period</label>
+                                    <select id="timePeriod">
+                                        <option value="week">1 Week</option>
+                                        <option value="month">1 Month</option>
+                                        <option value="year" selected>1 Year</option>
+                                        <option value="5years">5 Years</option>
+                                        <option value="10years">10 Years</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="calculateHabitCost()">Calculate</button>
+                            </div>
+                            <div class="simulator-result" id="habitResult"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Budgeting Challenge Page -->
+                <div class="page" id="page-challenge">
+                    <div class="card">
+                        <h2>🏆 Weekly Budgeting Challenge</h2>
+                        
+                        <div class="challenge-section">
+                            <h3>Join a Challenge</h3>
+                            <div class="challenge-form">
+                                <input type="text" id="friendName" placeholder="Friend's name">
+                                <button class="btn btn-primary" onclick="inviteFriend()">Invite Friend</button>
+                            </div>
+                        </div>
+
+                        <div class="leaderboard-section">
+                            <h3>Weekly Leaderboard</h3>
+                            <div class="leaderboard" id="leaderboard">
+                                <div class="leaderboard-item">
+                                    <span class="rank">1</span>
+                                    <span class="name">You</span>
+                                    <span class="spending">Rp 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="challenge-info">
+                            <p>💡 <strong>Tip:</strong> The person with the lowest weekly spending wins! Challenge resets every Monday.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parent Link Page -->
+                <div class="page" id="page-parent">
+                    <div class="card">
+                        <h2>👨‍👩‍👧 Parent-Child Financial Tasks</h2>
+                        
+                        <div class="parent-section">
+                            <h3>📋 Assigned Tasks</h3>
+                            <div class="tasks-list" id="tasksList">
+                                <p class="empty-state">No tasks assigned yet.</p>
+                            </div>
+                        </div>
+
+                        <div class="parent-section">
+                            <h3>🎁 Completed Tasks & Rewards</h3>
+                            <div class="rewards-list" id="rewardsList">
+                                <p class="empty-state">No completed tasks yet.</p>
+                            </div>
+                        </div>
+
+                        <div class="parent-section">
+                            <h3>📝 Demo: Create a Task (Parent View)</h3>
+                            <div class="create-task-form">
+                                <input type="text" id="taskTitle" placeholder="Task title">
+                                <textarea id="taskDescription" placeholder="Task description"></textarea>
+                                <input type="number" id="taskTarget" placeholder="Target amount (Rp)" min="0">
+                                <input type="text" id="taskReward" placeholder="Reward (e.g., 1 hour gaming)">
+                                <input type="date" id="taskDueDate">
+                                <button class="btn btn-primary" onclick="createParentTask()">Create Task</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div class="page" id="page-settings">
+                    <div class="card">
+                        <h2>⚙️ Settings</h2>
+                        
+                        <div class="settings-section">
+                            <h3>Profile Settings</h3>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="settingsName" placeholder="Your name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="settingsEmail" placeholder="your@email.com">
+                            </div>
+                            <button class="btn btn-primary" onclick="saveSettings()">Save Profile</button>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Preferences</h3>
+                            <div class="preference-item">
+                                <label>
+                                    <input type="checkbox" id="notificationsEnabled" checked>
+                                    Enable Notifications
+                                </label>
+                            </div>
+                            <div class="preference-item">
+                                <label>
+                                    <input type="checkbox" id="darkMode">
+                                    Dark Mode
+                                </label>
+                            </div>
+                            <div class="preference-item">
+                                <label>Currency: 
+                                    <select id="currencySelect">
+                                        <option value="IDR" selected>IDR (Rp)</option>
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary" onclick="savePreferences()">Save Preferences</button>
+                        </div>
+
+                        <div class="settings-section">
+                            <h3>Data Management</h3>
+                            <button class="btn btn-secondary" onclick="exportData()">Export Data (JSON)</button>
+                            <button class="btn btn-secondary" onclick="exportCSV()">Export Transactions (CSV)</button>
+                            <button class="btn btn-danger" onclick="resetData()">Reset All Data</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div style="text-align:center;padding:16px">
-              <div style="font-family:var(--font-display);font-size:42px;font-weight:800;color:var(--green)">33%</div>
-              <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:12px">1 dari 3 tugas selesai</div>
-              <div class="progress-track" style="height:10px">
-                <div class="progress-fill" style="width:33%"></div>
-              </div>
-            </div>
-            <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--r-sm);font-size:12px;color:rgba(255,255,255,0.4);text-align:center">
-              💪 Selesaikan semua tugas untuk unlock <strong style="color:var(--yellow)">bonus dari Papa!</strong>
-            </div>
-          </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Modal for Monthly Report -->
+    <div class="modal" id="reportModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div id="reportContent"></div>
         </div>
-      </div>
-    </div>
-  </main>
-
-</div><!-- end app-shell -->
-
-<!-- ===================== MODAL: ADD TRANSACTION ===================== -->
-<div class="modal-overlay" id="modal-add-tx">
-  <div class="modal">
-    <div class="modal-close" data-close-modal="modal-add-tx">✕</div>
-    <div class="modal-title">+ Catat Transaksi Baru 💸</div>
-    <p style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:var(--s-lg)">Isi detail transaksimu di bawah ini.</p>
-
-    <div class="form-group">
-      <label class="form-label">Nama Transaksi</label>
-      <input type="text" class="form-input" id="new-tx-name" placeholder="Makan siang kantin, Top-up game..." />
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group">
-        <label class="form-label">Tipe</label>
-        <select class="form-input" id="new-tx-type">
-          <option value="expense">💸 Pengeluaran</option>
-          <option value="income">💰 Pemasukan</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Jumlah (Rp)</label>
-        <input type="number" class="form-input" id="new-tx-amount" placeholder="15000" min="1" />
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label class="form-label">Kategori</label>
-      <select class="form-input" id="new-tx-cat">
-        <option value="food">🍛 Makanan & Minuman</option>
-        <option value="trans">🚌 Transportasi</option>
-        <option value="game">🎮 Game & Hiburan</option>
-        <option value="shop">🛍️ Belanja</option>
-        <option value="save">💰 Tabungan / Pemasukan</option>
-        <option value="other">📦 Lainnya</option>
-      </select>
-    </div>
-
-    <div style="display:flex;gap:8px;margin-top:var(--s-lg)">
-      <button class="btn btn-ghost" style="flex:1" data-close-modal="modal-add-tx">Batal</button>
-      <button class="btn btn-primary" style="flex:2" onclick="addTransaction()">✓ Simpan Transaksi</button>
-    </div>
-  </div>
-</div>
-
-<script src="js/app.js"></script>
-<script>
-  // Extra inline helpers
-  function setHabit(name, price, freq) {
-    document.getElementById('habit-item').value  = name;
-    document.getElementById('habit-price').value = price;
-    document.getElementById('habit-freq').value  = freq;
-  }
-
-  function doTransfer() {
-    const from   = document.getElementById('transfer-from').value;
-    const to     = document.getElementById('transfer-to').value;
-    const amount = parseFloat(document.getElementById('transfer-amount').value);
-
-    if (!amount || isNaN(amount) || amount <= 0) { toast('Masukkan jumlah yang valid', 'warning'); return; }
-    if (from === to) { toast('Pilih dompet yang berbeda!', 'warning'); return; }
-    if (State.wallet[from.replace('-','_')] < amount) { toast('Saldo tidak cukup!', 'error'); return; }
-
-    const key = { ready: 'ready_to_spend', savings: 'savings', emergency: 'emergency' };
-    State.wallet[key[from]] -= amount;
-    State.wallet[key[to]]   += amount;
-    document.getElementById('transfer-amount').value = '';
-    initWallet();
-    toast(`Transfer Rp ${amount.toLocaleString('id-ID')} berhasil! ✅`, 'success');
-  }
-
-  // Fix wallet page secondary IDs after init
-  const origInitWallet = initWallet;
-  window.initWallet = function() {
-    origInitWallet();
-    const el = document.getElementById('page-wallet');
-    if (!el) return;
-    const r2 = el.querySelector('#w-ready-2');
-    const s2 = el.querySelector('#w-sav-2');
-    const e2 = el.querySelector('#w-eme-2');
-    if (r2) r2.textContent = formatRupiahFull(State.wallet.ready_to_spend);
-    if (s2) s2.textContent = formatRupiahFull(State.wallet.savings);
-    if (e2) e2.textContent = formatRupiahFull(State.wallet.emergency);
-  };
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
