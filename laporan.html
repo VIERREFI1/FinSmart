@@ -5,183 +5,301 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Laporan — FinanceKu</title>
   <link rel="stylesheet" href="../css/style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <nav class="navbar">
-    <a href="../index.html" class="nav-brand">
-      <span class="logo-icon">₿</span>
-      <span class="logo-text">Finance<span class="accent">Ku</span></span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="../index.html">Dashboard</a></li>
-      <li><a href="pemasukan.html">Pemasukan</a></li>
-      <li><a href="pengeluaran.html">Pengeluaran</a></li>
-      <li><a href="tabungan.html">Tabungan</a></li>
-      <li><a href="laporan.html" class="active">Laporan</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger">&#9776;</button>
-  </nav>
+<nav class="navbar">
+  <a href="../index.html" class="nav-brand">
+    <div class="logo-icon">₿</div>
+    <span class="logo-text">Finance<span class="accent">Ku</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Dashboard</a></li>
+    <li><a href="pemasukan.html">Pemasukan</a></li>
+    <li><a href="pengeluaran.html">Pengeluaran</a></li>
+    <li><a href="tabungan.html">Tabungan</a></li>
+    <li><a href="laporan.html" class="active">Laporan</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
 
-  <div class="page-hero">
-    <span class="section-tag">Laporan</span>
-    <h1>Total Laporan <span class="gradient-text">Keuangan</span></h1>
-    <p>Ringkasan lengkap pemasukan, pengeluaran, saldo akhir, dan analisis kebiasaan pengeluaranmu.</p>
-  </div>
+<div class="page-hero">
+  <span class="section-tag">Laporan</span>
+  <h1>Total Laporan <span class="gradient-text">Keuangan</span></h1>
+  <p>Ringkasan lengkap pemasukan, pengeluaran, saldo akhir, dan analisis mendalam kebiasaan finansialmu.</p>
+</div>
 
-  <div class="page-content">
-    <!-- Summary -->
-    <div class="report-summary">
-      <div class="report-box" style="border-color:rgba(0,208,156,0.3)">
-        <div class="amount green" id="rpTotalPemasukan">Rp 0</div>
-        <div class="label">Total Pemasukan</div>
-      </div>
-      <div class="report-box" style="border-color:rgba(255,107,107,0.3)">
-        <div class="amount red" id="rpTotalPengeluaran">Rp 0</div>
-        <div class="label">Total Pengeluaran</div>
-      </div>
-      <div class="report-box" style="border-color:rgba(108,99,255,0.3)">
-        <div class="amount" id="rpSaldoAkhir" style="color:var(--blue)">Rp 0</div>
-        <div class="label">Saldo Akhir</div>
-      </div>
+<div class="page-content">
+
+  <!-- Summary -->
+  <div class="report-summary">
+    <div class="report-box" style="border-color:rgba(0,229,160,0.2)">
+      <div class="amount green" id="rpTotalPemasukan">Rp 0</div>
+      <div class="label">Total Pemasukan</div>
     </div>
-
-    <!-- Health Indicator -->
-    <div class="form-card" id="healthCard">
-      <h3>💡 Kesehatan Keuangan</h3>
-      <div id="healthMsg" style="color:var(--text-muted);font-size:0.95rem;line-height:1.7"></div>
-      <div style="margin-top:20px">
-        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px">Rasio Pengeluaran vs Pemasukan</p>
-        <div class="progress-bar" style="height:12px">
-          <div class="progress-fill" id="healthBar" style="width:0%;background:linear-gradient(90deg,var(--green),var(--red))"></div>
-        </div>
-        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px" id="healthPct">0% dari total pemasukan digunakan untuk pengeluaran</p>
-      </div>
+    <div class="report-box" style="border-color:rgba(255,107,107,0.2)">
+      <div class="amount red" id="rpTotalPengeluaran">Rp 0</div>
+      <div class="label">Total Pengeluaran</div>
     </div>
-
-    <!-- Kebiasaan Pengeluaran -->
-    <div class="form-card" id="habitCard" style="display:none">
-      <h3>🔍 Analisis Kebiasaan Pengeluaran</h3>
-      <div class="habit-grid" id="habitGrid"></div>
-    </div>
-
-    <!-- Semua Transaksi -->
-    <div class="form-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px">
-        <h3 style="margin-bottom:0;padding-bottom:0;border:none">📋 Semua Transaksi</h3>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <select id="filterType" onchange="render()" style="padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body)">
-            <option value="all">Semua</option>
-            <option value="pemasukan">Pemasukan</option>
-            <option value="pengeluaran">Pengeluaran</option>
-          </select>
-          <button class="btn-ghost small" onclick="exportCSV()">⬇ Export CSV</button>
-        </div>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="data-table">
-          <thead>
-            <tr><th>Nama</th><th>Tipe</th><th>Kategori</th><th>Jumlah</th><th>Tanggal</th></tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Reset -->
-    <div style="text-align:center;margin-top:20px">
-      <button class="btn-danger" onclick="resetAll()">⚠ Reset Semua Data</button>
+    <div class="report-box" style="border-color:rgba(124,111,255,0.2)">
+      <div class="amount" id="rpSaldoAkhir" style="color:var(--violet)">Rp 0</div>
+      <div class="label">Saldo Akhir</div>
     </div>
   </div>
 
-  <script src="../js/main.js"></script>
-  <script>
-    function render() {
-      const totalP = store.pemasukan.reduce((s,d)=>s+Number(d.jumlah),0);
-      const totalE = store.pengeluaran.reduce((s,d)=>s+Number(d.jumlah),0);
-      const saldo = totalP - totalE;
+  <!-- Score / Health Meter (NEW) -->
+  <div class="form-card" id="healthCard">
+    <h3>💳 Skor Kesehatan Keuangan</h3>
+    <div style="display:grid;grid-template-columns:1fr 180px;gap:32px;align-items:center;flex-wrap:wrap">
+      <div>
+        <div id="healthMsg" style="color:var(--text-soft);font-size:0.95rem;line-height:1.75;margin-bottom:20px"></div>
+        <div>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:8px;font-weight:600">Rasio Pengeluaran vs Pemasukan</p>
+          <div class="progress-bar" style="height:14px">
+            <div class="progress-fill" id="healthBar" style="width:0%;transition:width 1.5s ease"></div>
+          </div>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin-top:8px" id="healthPct">— belum ada data</p>
+        </div>
+      </div>
+      <div id="scoreCircle" style="text-align:center">
+        <div style="width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--mint) 0% 0%, var(--surface2) 0% 100%);display:grid;place-items:center;margin:0 auto;position:relative" id="scoreRing">
+          <div style="width:110px;height:110px;border-radius:50%;background:var(--surface);display:grid;place-items:center;flex-direction:column">
+            <div style="font-family:var(--font-display);font-size:2rem;font-weight:900" id="scoreNum">—</div>
+            <div style="font-size:0.72rem;color:var(--text-muted)">/ 100</div>
+          </div>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:10px" id="scoreLabel">Skor Keuangan</p>
+      </div>
+    </div>
+  </div>
 
-      document.getElementById('rpTotalPemasukan').textContent = formatRp(totalP);
-      document.getElementById('rpTotalPengeluaran').textContent = formatRp(totalE);
-      document.getElementById('rpSaldoAkhir').textContent = formatRp(saldo);
+  <!-- Monthly Chart -->
+  <div class="form-card">
+    <h3>📊 Grafik Bulanan</h3>
+    <div style="display:flex;gap:16px;align-items:center;margin-bottom:24px">
+      <div class="chart-legend">
+        <span class="legend-dot green"></span> Pemasukan
+        <span class="legend-dot red"></span> Pengeluaran
+      </div>
+    </div>
+    <div class="chart-bars" id="chartBars" style="height:160px"></div>
+    <div class="chart-months" id="chartMonths"></div>
+  </div>
 
-      // Health
-      if (totalP > 0) {
-        const pct = Math.min(100, Math.round((totalE/totalP)*100));
-        document.getElementById('healthBar').style.width = pct+'%';
-        document.getElementById('healthPct').textContent = pct+'% dari total pemasukan digunakan untuk pengeluaran';
-        let msg = '';
-        if (pct < 50) msg = '✅ <strong>Sangat Baik!</strong> Pengeluaranmu kurang dari 50% pemasukan. Teruskan dan tingkatkan target tabunganmu!';
-        else if (pct < 70) msg = '🟡 <strong>Cukup Baik.</strong> Pengeluaran di bawah 70%. Coba kurangi pengeluaran tidak perlu untuk meningkatkan tabungan.';
-        else if (pct < 90) msg = '🟠 <strong>Perlu Perhatian.</strong> Pengeluaranmu mendekati 90% pemasukan. Evaluasi kebiasaan pengeluaranmu segera.';
-        else msg = '🔴 <strong>Kritis!</strong> Pengeluaranmu hampir melebihi pemasukan. Segera kurangi pengeluaran atau cari sumber pemasukan tambahan.';
-        document.getElementById('healthMsg').innerHTML = msg;
-      }
+  <!-- Habit Analysis -->
+  <div class="form-card" id="habitCard" style="display:none">
+    <h3>🔍 Analisis Kebiasaan Pengeluaran</h3>
+    <p style="color:var(--text-soft);font-size:0.85rem;margin-bottom:16px">Distribusi pengeluaran berdasarkan kategori — temukan di mana uangmu paling banyak habis.</p>
+    <div class="habit-grid" id="habitGrid"></div>
+  </div>
 
-      // Kebiasaan
-      if (store.pengeluaran.length) {
-        const cats = {};
-        const totalE2 = store.pengeluaran.reduce((s,d)=>s+Number(d.jumlah),0);
-        store.pengeluaran.forEach(d=>{ cats[d.kategori]=(cats[d.kategori]||0)+Number(d.jumlah); });
-        const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('habitCard').style.display = 'block';
-        document.getElementById('habitGrid').innerHTML = sorted.map(([k,v])=>{
-          const pct = Math.round((v/totalE2)*100);
-          return `<div class="habit-item">
-            <div class="habit-label"><span>${k}</span><span>${pct}% — ${formatRp(v)}</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-          </div>`;
-        }).join('');
-      }
+  <!-- Month filter + All Transactions -->
+  <div class="form-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+      <h3 style="margin:0;padding:0;border:none">📋 Semua Transaksi</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <select id="filterType" onchange="render()" style="padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body);font-size:0.85rem">
+          <option value="all">Semua Tipe</option>
+          <option value="pemasukan">Pemasukan</option>
+          <option value="pengeluaran">Pengeluaran</option>
+        </select>
+        <select id="filterMonth" onchange="render()" style="padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body);font-size:0.85rem">
+          <option value="all">Semua Bulan</option>
+        </select>
+        <button class="btn-ghost small" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="btn-ghost small" onclick="printReport()">🖨️ Print</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;margin-top:20px">
+      <table class="data-table">
+        <thead>
+          <tr><th>Nama</th><th>Tipe</th><th>Kategori</th><th>Jumlah</th><th>Tanggal</th><th>Catatan</th></tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
 
-      // All Transactions
-      const ft = document.getElementById('filterType').value;
-      let rows = [];
-      if (ft !== 'pengeluaran') {
-        store.pemasukan.forEach(d => rows.push({...d, tipe:'pemasukan'}));
-      }
-      if (ft !== 'pemasukan') {
-        store.pengeluaran.forEach(d => rows.push({...d, tipe:'pengeluaran'}));
-      }
-      rows.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+  <!-- Reset -->
+  <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:24px;background:var(--surface);border:1px solid rgba(255,107,107,0.15);border-radius:var(--radius)">
+    <div style="text-align:center;max-width:400px">
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:16px">⚠️ <strong>Zona Berbahaya</strong> — Tindakan berikut tidak dapat dibatalkan</p>
+      <button class="btn-danger" style="padding:12px 24px" onclick="resetAll()">🗑️ Reset Semua Data</button>
+    </div>
+  </div>
+</div>
 
-      const tbody = document.getElementById('tableBody');
-      if (!rows.length) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:40px">Belum ada transaksi</td></tr>';
-        return;
-      }
-      tbody.innerHTML = rows.map(d=>`
-        <tr>
-          <td><strong>${d.nama}</strong></td>
-          <td><span class="badge ${d.tipe==='pemasukan'?'badge-green':'badge-red'}">${d.tipe==='pemasukan'?'Pemasukan':'Pengeluaran'}</span></td>
-          <td style="color:var(--text-muted)">${d.kategori}</td>
-          <td class="${d.tipe==='pemasukan'?'green':'red'}" style="font-family:var(--font-display);font-weight:700">
-            ${d.tipe==='pemasukan'?'+':'-'} ${formatRp(d.jumlah)}
-          </td>
-          <td style="color:var(--text-muted)">${d.tanggal}</td>
-        </tr>
-      `).join('');
-    }
+<script src="../js/main.js"></script>
+<script>
+const catIcons = {
+  'Gaji':'💵','Freelance':'💼','Bonus':'🎁','Investasi':'📈','Hadiah':'🎀',
+  'Makanan & Minuman':'🍜','Transport':'🚗','Belanja':'🛒','Tagihan':'📋',
+  'Hiburan':'🎮','Kesehatan':'🏥','Pendidikan':'📚','Lainnya':'📦',
+};
 
-    function exportCSV() {
-      const rows = [['Nama','Tipe','Kategori','Jumlah','Tanggal','Catatan']];
-      store.pemasukan.forEach(d=>rows.push([d.nama,'Pemasukan',d.kategori,d.jumlah,d.tanggal,d.catatan||'']));
-      store.pengeluaran.forEach(d=>rows.push([d.nama,'Pengeluaran',d.kategori,d.jumlah,d.tanggal,d.catatan||'']));
-      const csv = rows.map(r=>r.join(',')).join('\n');
-      const a = document.createElement('a');
-      a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
-      a.download = 'laporan_keuangan.csv';
-      a.click();
-    }
+function populateMonthFilter() {
+  const all = [
+    ...store.pemasukan.map(d=>d.tanggal),
+    ...store.pengeluaran.map(d=>d.tanggal),
+  ];
+  const months = [...new Set(all.map(t=>t.substring(0,7)))].sort().reverse();
+  const sel = document.getElementById('filterMonth');
+  sel.innerHTML = '<option value="all">Semua Bulan</option>';
+  months.forEach(m => {
+    const [y,mo] = m.split('-');
+    const names = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    sel.innerHTML += `<option value="${m}">${names[parseInt(mo)-1]} ${y}</option>`;
+  });
+}
 
-    function resetAll() {
-      if (confirm('Hapus SEMUA data? Tindakan ini tidak bisa dibatalkan!')) {
-        store.pemasukan=[]; store.pengeluaran=[]; store.tabungan=[];
-        save(); render();
-      }
-    }
+function buildMonthlyChart() {
+  const el = document.getElementById('chartBars');
+  const monthsEl = document.getElementById('chartMonths');
+  if (!el) return;
+  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const now = new Date();
+  const data = [];
+  for (let i=5;i>=0;i--) {
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const m = d.getMonth(), y = d.getFullYear();
+    const inc = store.pemasukan.filter(e=>{const ed=new Date(e.tanggal);return ed.getMonth()===m&&ed.getFullYear()===y;}).reduce((s,e)=>s+Number(e.jumlah),0);
+    const exp = store.pengeluaran.filter(e=>{const ed=new Date(e.tanggal);return ed.getMonth()===m&&ed.getFullYear()===y;}).reduce((s,e)=>s+Number(e.jumlah),0);
+    data.push({inc,exp,label:months[m]});
+  }
+  const max = Math.max(...data.map(d=>Math.max(d.inc,d.exp)),1);
+  el.innerHTML = data.map(d=>`
+    <div class="chart-group">
+      <div class="bar income" style="height:${(d.inc/max)*100}%" title="${formatRpFull(d.inc)}"></div>
+      <div class="bar expense" style="height:${(d.exp/max)*100}%" title="${formatRpFull(d.exp)}"></div>
+    </div>`).join('');
+  if (monthsEl) monthsEl.innerHTML = data.map(d=>`<span>${d.label}</span>`).join('');
+}
 
-    render();
-  </script>
+function calcScore(totalP, totalE) {
+  if (!totalP) return 0;
+  const ratio = totalE / totalP;
+  if (ratio >= 1) return 10;
+  if (ratio >= 0.9) return 25;
+  if (ratio >= 0.8) return 45;
+  if (ratio >= 0.7) return 60;
+  if (ratio >= 0.6) return 72;
+  if (ratio >= 0.5) return 82;
+  if (ratio >= 0.4) return 89;
+  return 95;
+}
+
+function render() {
+  const totalP = store.pemasukan.reduce((s,d)=>s+Number(d.jumlah),0);
+  const totalE = store.pengeluaran.reduce((s,d)=>s+Number(d.jumlah),0);
+  const saldo = totalP - totalE;
+
+  document.getElementById('rpTotalPemasukan').textContent = formatRpFull(totalP);
+  document.getElementById('rpTotalPengeluaran').textContent = formatRpFull(totalE);
+  const sEl = document.getElementById('rpSaldoAkhir');
+  sEl.textContent = formatRpFull(saldo);
+  sEl.style.color = saldo >= 0 ? 'var(--mint)' : 'var(--coral)';
+
+  // Score
+  const score = calcScore(totalP, totalE);
+  const scoreEl = document.getElementById('scoreNum');
+  if (scoreEl) {
+    scoreEl.textContent = totalP ? score : '—';
+    const scoreColor = score >= 80 ? 'var(--mint)' : score >= 60 ? 'var(--amber)' : 'var(--coral)';
+    scoreEl.style.color = scoreColor;
+    const ring = document.getElementById('scoreRing');
+    if (ring && totalP) ring.style.background = `conic-gradient(${scoreColor} 0% ${score}%, var(--surface2) ${score}% 100%)`;
+    const labels = ['—','Kritis','Perlu Perhatian','Cukup Baik','Baik','Sangat Baik'];
+    const lIdx = !totalP ? 0 : score<30?1:score<50?2:score<70?3:score<85?4:5;
+    const lEl = document.getElementById('scoreLabel');
+    if (lEl) lEl.textContent = labels[lIdx];
+  }
+
+  // Health
+  if (totalP > 0) {
+    const pct = Math.min(100, Math.round((totalE/totalP)*100));
+    document.getElementById('healthBar').style.width = pct+'%';
+    document.getElementById('healthPct').textContent = `${pct}% dari total pemasukan digunakan untuk pengeluaran`;
+    let msg = '';
+    if (pct < 50) msg = '✅ <strong>Sangat Baik!</strong> Pengeluaranmu kurang dari 50% pemasukan. Teruskan kebiasaan baik ini dan tingkatkan target tabunganmu!';
+    else if (pct < 70) msg = '🟡 <strong>Cukup Baik.</strong> Pengeluaran di bawah 70%. Coba kurangi 1-2 kategori pengeluaran tidak perlu untuk meningkatkan tabungan.';
+    else if (pct < 90) msg = '🟠 <strong>Perlu Perhatian.</strong> Pengeluaranmu mendekati 90% pemasukan. Evaluasi kebiasaan pengeluaranmu segera dan buat budget ketat.';
+    else msg = '🔴 <strong>Kritis!</strong> Pengeluaranmu hampir melebihi pemasukan. Segera kurangi pengeluaran tidak perlu atau cari sumber pemasukan tambahan.';
+    document.getElementById('healthMsg').innerHTML = msg;
+  } else {
+    document.getElementById('healthMsg').innerHTML = '<span style="color:var(--text-muted)">Tambahkan data pemasukan untuk melihat analisis kesehatan keuanganmu.</span>';
+  }
+
+  // Habits
+  if (store.pengeluaran.length) {
+    const cats = {};
+    const totalE2 = store.pengeluaran.reduce((s,d)=>s+Number(d.jumlah),0);
+    store.pengeluaran.forEach(d=>{ cats[d.kategori]=(cats[d.kategori]||0)+Number(d.jumlah); });
+    const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+    document.getElementById('habitCard').style.display='block';
+    document.getElementById('habitGrid').innerHTML = sorted.map(([k,v])=>{
+      const pct = Math.round((v/totalE2)*100);
+      return `<div class="habit-item">
+        <div class="habit-label"><span>${catIcons[k]||'📦'} ${k}</span><span>${pct}% — ${formatRp(v)}</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--grad-coral)"></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  // Table
+  populateMonthFilter();
+  const ft = document.getElementById('filterType').value;
+  const fm = document.getElementById('filterMonth').value;
+  let rows = [];
+  if (ft !== 'pengeluaran') store.pemasukan.forEach(d=>rows.push({...d,tipe:'pemasukan'}));
+  if (ft !== 'pemasukan') store.pengeluaran.forEach(d=>rows.push({...d,tipe:'pengeluaran'}));
+  if (fm !== 'all') rows = rows.filter(d=>d.tanggal.startsWith(fm));
+  rows.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+
+  const tbody = document.getElementById('tableBody');
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📋</div><p>Belum ada transaksi untuk ditampilkan.</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.map(d=>`
+    <tr>
+      <td><strong>${d.nama}</strong></td>
+      <td><span class="badge ${d.tipe==='pemasukan'?'badge-green':'badge-red'}">${d.tipe==='pemasukan'?'↑ Pemasukan':'↓ Pengeluaran'}</span></td>
+      <td style="color:var(--text-muted)">${catIcons[d.kategori]||'📦'} ${d.kategori}</td>
+      <td class="${d.tipe==='pemasukan'?'green':'red'}" style="font-family:var(--font-display);font-weight:800">
+        ${d.tipe==='pemasukan'?'+':'-'} ${formatRpFull(d.jumlah)}
+      </td>
+      <td style="color:var(--text-muted)">${d.tanggal}</td>
+      <td style="color:var(--text-muted);font-size:0.8rem;max-width:140px">${d.catatan||'—'}</td>
+    </tr>`).join('');
+
+  buildMonthlyChart();
+}
+
+function exportCSV() {
+  const rows = [['Nama','Tipe','Kategori','Jumlah','Tanggal','Catatan']];
+  store.pemasukan.forEach(d=>rows.push([d.nama,'Pemasukan',d.kategori,d.jumlah,d.tanggal,d.catatan||'']));
+  store.pengeluaran.forEach(d=>rows.push([d.nama,'Pengeluaran',d.kategori,d.jumlah,d.tanggal,d.catatan||'']));
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download = 'laporan_financeku_'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  toast('CSV berhasil didownload!', 'success', '⬇️');
+}
+
+function printReport() {
+  window.print();
+}
+
+function resetAll() {
+  if (confirm('Hapus SEMUA data? Tindakan ini TIDAK BISA DIBATALKAN!')) {
+    store.pemasukan=[]; store.pengeluaran=[]; store.tabungan=[]; store.budget={};
+    save(); render();
+    toast('Semua data berhasil direset', 'info', '🗑️');
+  }
+}
+
+render();
+</script>
 </body>
 </html>

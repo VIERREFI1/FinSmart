@@ -5,73 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pengeluaran — FinanceKu</title>
   <link rel="stylesheet" href="../css/style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <nav class="navbar">
-    <a href="../index.html" class="nav-brand">
-      <span class="logo-icon">₿</span>
-      <span class="logo-text">Finance<span class="accent">Ku</span></span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="../index.html">Dashboard</a></li>
-      <li><a href="pemasukan.html">Pemasukan</a></li>
-      <li><a href="pengeluaran.html" class="active">Pengeluaran</a></li>
-      <li><a href="tabungan.html">Tabungan</a></li>
-      <li><a href="laporan.html">Laporan</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger">&#9776;</button>
-  </nav>
+<nav class="navbar">
+  <a href="../index.html" class="nav-brand">
+    <div class="logo-icon">₿</div>
+    <span class="logo-text">Finance<span class="accent">Ku</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Dashboard</a></li>
+    <li><a href="pemasukan.html">Pemasukan</a></li>
+    <li><a href="pengeluaran.html" class="active">Pengeluaran</a></li>
+    <li><a href="tabungan.html">Tabungan</a></li>
+    <li><a href="laporan.html">Laporan</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
 
-  <div class="page-hero">
-    <span class="section-tag">Pengeluaran</span>
-    <h1>Jumlah <span class="gradient-text">Pengeluaran</span></h1>
-    <p>Catat dan pantau semua uang keluar agar keuanganmu tetap sehat.</p>
+<div class="page-hero">
+  <span class="section-tag">Pengeluaran</span>
+  <h1>Pantau <span class="gradient-text">Pengeluaran</span></h1>
+  <p>Catat semua uang keluar agar keuanganmu tetap sehat dan terkontrol.</p>
+</div>
+
+<div class="page-content">
+  <!-- Stats -->
+  <div class="stats-grid" style="margin-bottom:36px">
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon red-bg">↓</span></div>
+      <h3 class="stat-value red" id="totalPengeluaran">Rp 0</h3>
+      <p class="stat-label">Total Pengeluaran</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon blue-bg">#</span></div>
+      <h3 class="stat-value" id="countPengeluaran">0</h3>
+      <p class="stat-label">Jumlah Transaksi</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon yellow-bg">⌀</span></div>
+      <h3 class="stat-value" id="avgPengeluaran">Rp 0</h3>
+      <p class="stat-label">Rata-rata per Transaksi</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon sky-bg">📅</span></div>
+      <h3 class="stat-value sky" id="todayPengeluaran">Rp 0</h3>
+      <p class="stat-label">Pengeluaran Hari Ini</p>
+    </div>
   </div>
 
-  <div class="page-content">
-    <div class="stats-grid" style="margin-bottom:40px">
-      <div class="stat-card">
-        <div class="stat-top">
-          <span class="stat-icon red-bg">↓</span>
-        </div>
-        <h3 class="stat-value red" id="totalPengeluaran">Rp 0</h3>
-        <p class="stat-label">Total Pengeluaran</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top"><span class="stat-icon blue-bg">#</span></div>
-        <h3 class="stat-value" id="countPengeluaran">0</h3>
-        <p class="stat-label">Jumlah Transaksi</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top"><span class="stat-icon yellow-bg">⌀</span></div>
-        <h3 class="stat-value" id="avgPengeluaran">Rp 0</h3>
-        <p class="stat-label">Rata-rata per Transaksi</p>
-      </div>
+  <!-- Budget Tracker (NEW FEATURE) -->
+  <div class="form-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <h3 style="margin:0;padding:0;border:none">💳 Budget per Kategori</h3>
+      <button class="btn-ghost small" onclick="toggleBudgetEdit()">⚙️ Atur Budget</button>
     </div>
-
-    <!-- Kebiasaan Pengeluaran -->
-    <div class="form-card" id="kebiasaanCard" style="display:none">
-      <h3>🔍 Analisis Kebiasaan Pengeluaran</h3>
-      <div class="habit-grid" id="habitGrid"></div>
-    </div>
-
-    <div class="form-card">
-      <h3>+ Tambah Pengeluaran</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nama Pengeluaran</label>
-          <input type="text" id="inpNama" placeholder="e.g. Belanja, Makan, Transport..."/>
-        </div>
-        <div class="form-group">
-          <label>Jumlah (Rp)</label>
-          <input type="number" id="inpJumlah" placeholder="0" min="0"/>
-        </div>
-      </div>
-      <div class="form-row">
+    <div id="budgetEditSection" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:16px">Set batas pengeluaran bulanan per kategori. Kamu akan diberi peringatan jika mendekati limit.</p>
+      <div class="form-row" style="margin-bottom:0">
         <div class="form-group">
           <label>Kategori</label>
-          <select id="inpKategori">
+          <select id="budgetKat">
             <option>Makanan & Minuman</option>
             <option>Transport</option>
             <option>Belanja</option>
@@ -83,102 +77,275 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Tanggal</label>
-          <input type="date" id="inpTanggal"/>
+          <label>Limit Budget (Rp)</label>
+          <div class="input-prefix-wrap">
+            <span class="prefix">Rp</span>
+            <input type="number" id="budgetLimit" placeholder="500000" min="0"/>
+          </div>
         </div>
       </div>
-      <div class="form-group" style="margin-bottom:20px">
-        <label>Catatan (opsional)</label>
-        <textarea id="inpCatatan" rows="2" placeholder="Catatan tambahan..."></textarea>
-      </div>
-      <div class="form-actions">
-        <button class="btn-primary" onclick="tambah()">Simpan Pengeluaran</button>
-        <button class="btn-ghost" onclick="resetForm()">Reset</button>
+      <div class="form-actions" style="margin-top:16px">
+        <button class="btn-primary" onclick="saveBudget()">Simpan Budget</button>
       </div>
     </div>
+    <div id="budgetGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px;margin-top:20px"></div>
+  </div>
 
-    <div class="form-card">
-      <h3>Riwayat Pengeluaran</h3>
-      <div style="overflow-x:auto">
-        <table class="data-table">
-          <thead>
-            <tr><th>Nama</th><th>Kategori</th><th>Jumlah</th><th>Tanggal</th><th>Catatan</th><th>Aksi</th></tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
+  <!-- Habit Analysis -->
+  <div class="form-card" id="kebiasaanCard" style="display:none">
+    <h3>🔍 Analisis Kebiasaan Pengeluaran</h3>
+    <div class="habit-grid" id="habitGrid"></div>
+  </div>
+
+  <!-- Alerts -->
+  <div id="alertsSection"></div>
+
+  <!-- Form -->
+  <div class="form-card">
+    <h3>📤 Tambah Pengeluaran Baru</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Pengeluaran *</label>
+        <input type="text" id="inpNama" placeholder="Makan Siang, Bensin, Netflix..."/>
       </div>
+      <div class="form-group">
+        <label>Jumlah (Rp) *</label>
+        <div class="input-prefix-wrap">
+          <span class="prefix">Rp</span>
+          <input type="number" id="inpJumlah" placeholder="0" min="0" oninput="previewAmount(this)"/>
+        </div>
+        <small id="amountPreview" style="color:var(--coral);font-weight:700;font-size:0.82rem;margin-top:4px;display:none"></small>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Kategori</label>
+        <select id="inpKategori">
+          <option>🍜 Makanan & Minuman</option>
+          <option>🚗 Transport</option>
+          <option>🛒 Belanja</option>
+          <option>📋 Tagihan</option>
+          <option>🎮 Hiburan</option>
+          <option>🏥 Kesehatan</option>
+          <option>📚 Pendidikan</option>
+          <option>💳 Lainnya</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tanggal *</label>
+        <input type="date" id="inpTanggal"/>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:24px">
+      <label>Catatan (opsional)</label>
+      <textarea id="inpCatatan" rows="2" placeholder="Nama toko, keperluan, atau detail tambahan..."></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" style="background:var(--grad-coral);box-shadow:0 4px 24px rgba(255,107,107,0.3)" onclick="tambah()">Simpan Pengeluaran</button>
+      <button class="btn-ghost" onclick="resetForm()">Reset Form</button>
     </div>
   </div>
 
-  <script src="../js/main.js"></script>
-  <script>
-    const catColors = {
-      'Makanan & Minuman':'badge-green','Transport':'badge-blue','Belanja':'badge-yellow',
-      'Tagihan':'badge-red','Hiburan':'badge-blue','Kesehatan':'badge-green',
-      'Pendidikan':'badge-blue','Lainnya':'badge-red'
-    };
+  <!-- Table -->
+  <div class="form-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border)">
+      <h3 style="margin:0;padding:0;border:none">📋 Riwayat Pengeluaran</h3>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <select id="filterKat" onchange="render()" style="padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body);font-size:0.85rem">
+          <option value="all">Semua Kategori</option>
+          <option>Makanan &amp; Minuman</option>
+          <option>Transport</option>
+          <option>Belanja</option>
+          <option>Tagihan</option>
+          <option>Hiburan</option>
+          <option>Kesehatan</option>
+          <option>Pendidikan</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+    </div>
+    <div style="overflow-x:auto;margin-top:20px">
+      <table class="data-table">
+        <thead><tr><th>Nama</th><th>Kategori</th><th>Jumlah</th><th>Tanggal</th><th>Catatan</th><th>Aksi</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-    function render() {
-      const data = store.pengeluaran;
-      const total = data.reduce((s,d)=>s+Number(d.jumlah),0);
-      document.getElementById('totalPengeluaran').textContent = formatRp(total);
-      document.getElementById('countPengeluaran').textContent = data.length;
-      document.getElementById('avgPengeluaran').textContent = data.length ? formatRp(Math.round(total/data.length)) : 'Rp 0';
+<script src="../js/main.js"></script>
+<script>
+const catColors = {
+  'Makanan & Minuman':'badge-green','Transport':'badge-blue','Belanja':'badge-yellow',
+  'Tagihan':'badge-red','Hiburan':'badge-blue','Kesehatan':'badge-green',
+  'Pendidikan':'badge-sky','Lainnya':'badge-red'
+};
+const catIcons = {
+  'Makanan & Minuman':'🍜','Transport':'🚗','Belanja':'🛒','Tagihan':'📋',
+  'Hiburan':'🎮','Kesehatan':'🏥','Pendidikan':'📚','Lainnya':'💳'
+};
 
-      // kebiasaan
-      if (data.length > 0) {
-        const cats = {};
-        data.forEach(d=>{ cats[d.kategori] = (cats[d.kategori]||0)+Number(d.jumlah); });
-        const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
-        document.getElementById('kebiasaanCard').style.display = 'block';
-        document.getElementById('habitGrid').innerHTML = sorted.map(([k,v])=>{
-          const pct = Math.round((v/total)*100);
-          return `<div class="habit-item">
-            <div class="habit-label"><span>${k}</span><span>${pct}% — ${formatRp(v)}</span></div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-          </div>`;
-        }).join('');
-      }
+function previewAmount(input) {
+  const n = Number(input.value);
+  const el = document.getElementById('amountPreview');
+  if (n > 0) { el.textContent = '- ' + formatRpFull(n); el.style.display = 'block'; }
+  else el.style.display = 'none';
+}
 
-      const tbody = document.getElementById('tableBody');
-      if (!data.length) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:40px">Belum ada data pengeluaran</td></tr>';
-        return;
-      }
-      tbody.innerHTML = [...data].reverse().map((d,i)=>`
-        <tr>
-          <td><strong>${d.nama}</strong></td>
-          <td><span class="badge ${catColors[d.kategori]||'badge-red'}">${d.kategori}</span></td>
-          <td class="red" style="font-family:var(--font-display);font-weight:700">${formatRp(d.jumlah)}</td>
-          <td style="color:var(--text-muted)">${d.tanggal}</td>
-          <td style="color:var(--text-muted);font-size:0.85rem">${d.catatan||'-'}</td>
-          <td><button class="btn-danger" style="font-size:0.78rem;padding:6px 12px" onclick="hapus(${store.pengeluaran.length-1-i})">Hapus</button></td>
-        </tr>
-      `).join('');
-    }
+function toggleBudgetEdit() {
+  const el = document.getElementById('budgetEditSection');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
 
-    function tambah() {
-      const nama = document.getElementById('inpNama').value.trim();
-      const jumlah = document.getElementById('inpJumlah').value;
-      const kategori = document.getElementById('inpKategori').value;
-      const tanggal = document.getElementById('inpTanggal').value;
-      const catatan = document.getElementById('inpCatatan').value;
-      if (!nama||!jumlah||!tanggal) { alert('Nama, jumlah, dan tanggal wajib diisi!'); return; }
-      store.pengeluaran.push({nama,jumlah:Number(jumlah),kategori,tanggal,catatan});
-      save(); render(); resetForm();
-    }
+function saveBudget() {
+  const kat = document.getElementById('budgetKat').value;
+  const limit = Number(document.getElementById('budgetLimit').value);
+  if (!limit) { toast('Masukkan limit budget!', 'error'); return; }
+  store.budget[kat] = limit;
+  save(); renderBudget();
+  toast(`Budget ${kat} diset ke ${formatRp(limit)}`, 'success', '💳');
+}
 
-    function hapus(idx) {
-      if (confirm('Hapus?')) { store.pengeluaran.splice(idx,1); save(); render(); }
-    }
+function renderBudget() {
+  const grid = document.getElementById('budgetGrid');
+  const today = new Date();
+  const cats = Object.keys(catIcons);
+  const html = cats.map(kat => {
+    const limit = store.budget[kat] || 0;
+    const spent = store.pengeluaran.filter(d => {
+      const ed = new Date(d.tanggal);
+      return d.kategori === kat && ed.getMonth() === today.getMonth() && ed.getFullYear() === today.getFullYear();
+    }).reduce((s,d) => s+Number(d.jumlah), 0);
+    const pct = limit ? Math.min(100, Math.round((spent/limit)*100)) : 0;
+    const color = pct >= 90 ? 'var(--coral)' : pct >= 70 ? 'var(--amber)' : 'var(--mint)';
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="font-weight:700;font-size:0.85rem">${catIcons[kat]} ${kat}</span>
+        <span style="font-size:0.75rem;color:var(--text-muted)">${limit ? formatRp(limit) : 'No limit'}</span>
+      </div>
+      <div style="font-family:var(--font-display);font-weight:800;color:${color};margin-bottom:8px">${formatRp(spent)}</div>
+      ${limit ? `<div class="progress-bar" style="height:6px"><div style="height:100%;width:${pct}%;background:${color};border-radius:50px;transition:width 1s"></div></div>
+      <div style="font-size:0.7rem;color:var(--text-muted);margin-top:5px">${pct}% dari limit</div>` : ''}
+    </div>`;
+  }).join('');
+  grid.innerHTML = html;
+}
 
-    function resetForm() {
-      ['inpNama','inpJumlah','inpCatatan'].forEach(id=>document.getElementById(id).value='');
-      document.getElementById('inpTanggal').value = new Date().toISOString().split('T')[0];
-    }
+function renderAlerts() {
+  const section = document.getElementById('alertsSection');
+  const today = new Date();
+  const alerts = [];
+  Object.entries(store.budget).forEach(([kat, limit]) => {
+    const spent = store.pengeluaran.filter(d => {
+      const ed = new Date(d.tanggal);
+      return d.kategori === kat && ed.getMonth() === today.getMonth() && ed.getFullYear() === today.getFullYear();
+    }).reduce((s,d) => s+Number(d.jumlah), 0);
+    const pct = Math.round((spent/limit)*100);
+    if (pct >= 100) alerts.push({ type:'danger', icon:'🔴', title:`Budget ${kat} Terlampaui!`, msg:`Sudah ${formatRp(spent)} dari limit ${formatRp(limit)} (${pct}%)` });
+    else if (pct >= 80) alerts.push({ type:'warning', icon:'⚠️', title:`Budget ${kat} Hampir Habis`, msg:`${pct}% terpakai — sisa ${formatRp(limit-spent)} untuk bulan ini` });
+  });
+  section.innerHTML = alerts.map(a => `
+    <div class="alert-card ${a.type}">
+      <div class="alert-icon">${a.icon}</div>
+      <div class="alert-text"><h4>${a.title}</h4><p>${a.msg}</p></div>
+    </div>
+  `).join('');
+}
 
-    document.getElementById('inpTanggal').value = new Date().toISOString().split('T')[0];
-    render();
-  </script>
+function render() {
+  const data = store.pengeluaran;
+  const total = data.reduce((s,d) => s+Number(d.jumlah), 0);
+  const today = new Date().toISOString().split('T')[0];
+  const todayTotal = data.filter(d=>d.tanggal===today).reduce((s,d)=>s+Number(d.jumlah),0);
+  document.getElementById('totalPengeluaran').textContent = formatRpFull(total);
+  document.getElementById('countPengeluaran').textContent = data.length;
+  document.getElementById('avgPengeluaran').textContent = data.length ? formatRp(Math.round(total/data.length)) : 'Rp 0';
+  document.getElementById('todayPengeluaran').textContent = formatRp(todayTotal);
+
+  // habit
+  if (data.length > 0) {
+    const cats = {};
+    data.forEach(d=>{ cats[d.kategori]=(cats[d.kategori]||0)+Number(d.jumlah); });
+    const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+    document.getElementById('kebiasaanCard').style.display='block';
+    document.getElementById('habitGrid').innerHTML = sorted.map(([k,v])=>{
+      const pct = Math.round((v/total)*100);
+      return `<div class="habit-item">
+        <div class="habit-label"><span>${catIcons[k]||'💳'} ${k}</span><span>${pct}% — ${formatRp(v)}</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:var(--grad-coral)"></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  renderBudget();
+  renderAlerts();
+
+  const filterKat = document.getElementById('filterKat').value;
+  let display = filterKat === 'all' ? [...data] : data.filter(d=>d.kategori===filterKat);
+  display = display.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+
+  const tbody = document.getElementById('tableBody');
+  if (!display.length) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🏦</div><p>Belum ada pengeluaran dicatat.<br>Mulai track pengeluaranmu hari ini!</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = display.map(d => {
+    const idx = store.pengeluaran.indexOf(d);
+    return `<tr>
+      <td><strong>${d.nama}</strong></td>
+      <td><span class="badge ${catColors[d.kategori]||'badge-red'}">${catIcons[d.kategori]||'💳'} ${d.kategori}</span></td>
+      <td class="red" style="font-family:var(--font-display);font-weight:800">${formatRpFull(d.jumlah)}</td>
+      <td style="color:var(--text-muted)">${d.tanggal}</td>
+      <td style="color:var(--text-muted);font-size:0.82rem;max-width:160px">${d.catatan||'—'}</td>
+      <td><button class="btn-danger" onclick="hapus(${idx})">Hapus</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function tambah() {
+  const nama = document.getElementById('inpNama').value.trim();
+  const jumlah = document.getElementById('inpJumlah').value;
+  const rawKat = document.getElementById('inpKategori').value;
+  const kategori = rawKat.replace(/^[^\s]+ /,''); // strip emoji
+  const tanggal = document.getElementById('inpTanggal').value;
+  const catatan = document.getElementById('inpCatatan').value.trim();
+  if (!nama||!jumlah||!tanggal) { toast('Nama, jumlah, dan tanggal wajib diisi!','error'); return; }
+  if (Number(jumlah)<=0) { toast('Jumlah harus lebih dari 0!','error'); return; }
+  store.pengeluaran.push({nama,jumlah:Number(jumlah),kategori,tanggal,catatan});
+  save(); render(); resetForm();
+  toast(`${catIcons[kategori]||'💳'} ${nama} berhasil dicatat!`, 'success');
+
+  // check budget
+  const limit = store.budget[kategori];
+  if (limit) {
+    const today2 = new Date();
+    const spent = store.pengeluaran.filter(d=>{
+      const ed=new Date(d.tanggal);
+      return d.kategori===kategori && ed.getMonth()===today2.getMonth() && ed.getFullYear()===today2.getFullYear();
+    }).reduce((s,d)=>s+Number(d.jumlah),0);
+    const pct = Math.round((spent/limit)*100);
+    if (pct>=100) toast(`⚠️ Budget ${kategori} terlampaui!`, 'error');
+    else if (pct>=80) toast(`⚠️ Budget ${kategori} sudah ${pct}%`, 'info');
+  }
+}
+
+function hapus(idx) {
+  const nama = store.pengeluaran[idx].nama;
+  if (confirm(`Hapus "${nama}"?`)) {
+    store.pengeluaran.splice(idx,1);
+    save(); render();
+    toast(`${nama} dihapus`, 'info', '🗑️');
+  }
+}
+
+function resetForm() {
+  ['inpNama','inpJumlah','inpCatatan'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('inpTanggal').value = new Date().toISOString().split('T')[0];
+  document.getElementById('amountPreview').style.display='none';
+}
+
+document.getElementById('inpTanggal').value = new Date().toISOString().split('T')[0];
+render();
+</script>
 </body>
 </html>

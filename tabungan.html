@@ -5,224 +5,342 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tabungan — FinanceKu</title>
   <link rel="stylesheet" href="../css/style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <nav class="navbar">
-    <a href="../index.html" class="nav-brand">
-      <span class="logo-icon">₿</span>
-      <span class="logo-text">Finance<span class="accent">Ku</span></span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="../index.html">Dashboard</a></li>
-      <li><a href="pemasukan.html">Pemasukan</a></li>
-      <li><a href="pengeluaran.html">Pengeluaran</a></li>
-      <li><a href="tabungan.html" class="active">Tabungan</a></li>
-      <li><a href="laporan.html">Laporan</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger">&#9776;</button>
-  </nav>
+<nav class="navbar">
+  <a href="../index.html" class="nav-brand">
+    <div class="logo-icon">₿</div>
+    <span class="logo-text">Finance<span class="accent">Ku</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Dashboard</a></li>
+    <li><a href="pemasukan.html">Pemasukan</a></li>
+    <li><a href="pengeluaran.html">Pengeluaran</a></li>
+    <li><a href="tabungan.html" class="active">Tabungan</a></li>
+    <li><a href="laporan.html">Laporan</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
 
-  <div class="page-hero">
-    <span class="section-tag">Tabungan</span>
-    <h1>Target <span class="gradient-text">Tabungan</span></h1>
-    <p>Tentukan target, pantau perkembangan, dan simulasikan pertumbuhan tabunganmu.</p>
+<div class="page-hero">
+  <span class="section-tag">Tabungan</span>
+  <h1>Target <span class="gradient-text">Tabungan</span></h1>
+  <p>Buat target, pantau progress, dan simulasikan pertumbuhan tabunganmu dengan bunga.</p>
+</div>
+
+<div class="page-content">
+  <!-- Stats -->
+  <div class="stats-grid" style="margin-bottom:36px">
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon green-bg">🎯</span></div>
+      <h3 class="stat-value" id="totalTargets">0</h3>
+      <p class="stat-label">Total Target Aktif</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon blue-bg">💰</span></div>
+      <h3 class="stat-value green" id="totalTerkumpul">Rp 0</h3>
+      <p class="stat-label">Total Terkumpul</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon yellow-bg">📊</span></div>
+      <h3 class="stat-value" id="totalTarget">Rp 0</h3>
+      <p class="stat-label">Total Target</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top"><span class="stat-icon sky-bg">✅</span></div>
+      <h3 class="stat-value sky" id="completedTargets">0</h3>
+      <p class="stat-label">Target Tercapai</p>
+    </div>
   </div>
 
-  <div class="page-content">
-    <!-- Target Cards -->
-    <div style="margin-bottom:40px">
-      <div class="section-header row">
-        <div><h2 class="section-title">Target <span class="gradient-text">Aktif</span></h2></div>
-      </div>
-      <div class="saving-cards" id="savingCards">
-        <div style="color:var(--text-muted);text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)">
-          Belum ada target tabungan. Tambahkan di bawah!
-        </div>
+  <!-- Target Cards -->
+  <div style="margin-bottom:40px">
+    <div class="section-header row">
+      <div>
+        <span class="section-tag">Aktif</span>
+        <h2 class="section-title">Target <span class="gradient-text">Tabungan</span></h2>
       </div>
     </div>
+    <div class="saving-cards" id="savingCards">
+      <div style="color:var(--text-muted);text-align:center;padding:60px;background:var(--surface);border-radius:var(--radius);border:1px dashed var(--border)">
+        <div style="font-size:3rem;margin-bottom:16px">🎯</div>
+        <p>Belum ada target. Yuk buat target pertamamu!</p>
+      </div>
+    </div>
+  </div>
 
-    <!-- Add Target Form -->
-    <div class="form-card">
-      <h3>🎯 Tambah Target Tabungan</h3>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Nama Target</label>
-          <input type="text" id="tNama" placeholder="e.g. Beli Laptop, Liburan..."/>
-        </div>
-        <div class="form-group">
-          <label>Target Jumlah (Rp)</label>
-          <input type="number" id="tTarget" placeholder="0" min="0"/>
+  <!-- Add Target Form -->
+  <div class="form-card">
+    <h3>🎯 Buat Target Tabungan Baru</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Target *</label>
+        <input type="text" id="tNama" placeholder="Beli Laptop, Liburan Bali, Motor Baru..."/>
+      </div>
+      <div class="form-group">
+        <label>Ikon / Emoji</label>
+        <input type="text" id="tEmoji" placeholder="🎯" maxlength="2" style="font-size:1.4rem;text-align:center"/>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Target Jumlah (Rp) *</label>
+        <div class="input-prefix-wrap">
+          <span class="prefix">Rp</span>
+          <input type="number" id="tTarget" placeholder="5000000" min="0"/>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Saldo Awal / Sudah Tersimpan (Rp)</label>
+      <div class="form-group">
+        <label>Sudah Terkumpul (Rp)</label>
+        <div class="input-prefix-wrap">
+          <span class="prefix">Rp</span>
           <input type="number" id="tTerkumpul" placeholder="0" min="0"/>
         </div>
-        <div class="form-group">
-          <label>Deadline</label>
-          <input type="date" id="tDeadline"/>
-        </div>
-      </div>
-      <div class="form-actions">
-        <button class="btn-primary" onclick="tambahTarget()">Simpan Target</button>
-        <button class="btn-ghost" onclick="resetTargetForm()">Reset</button>
       </div>
     </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Deadline *</label>
+        <input type="date" id="tDeadline"/>
+      </div>
+      <div class="form-group">
+        <label>Warna Tema</label>
+        <select id="tWarna">
+          <option value="mint">🟢 Hijau Mint</option>
+          <option value="violet">🟣 Ungu Violet</option>
+          <option value="amber">🟡 Amber Emas</option>
+          <option value="coral">🔴 Coral Merah</option>
+          <option value="sky">🔵 Biru Langit</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-primary" onclick="tambahTarget()">Buat Target</button>
+      <button class="btn-ghost" onclick="resetTargetForm()">Reset</button>
+    </div>
+  </div>
 
-    <!-- Simulasi -->
-    <div class="form-card">
-      <h3>📈 Simulasi Pertumbuhan Tabungan</h3>
-      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:24px">
-        Hitung berapa yang kamu butuhkan per bulan untuk mencapai target, atau lihat pertumbuhan dengan bunga.
-      </p>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Saldo Awal (Rp)</label>
+  <!-- Simulasi -->
+  <div class="form-card">
+    <h3>📈 Simulasi Pertumbuhan Tabungan</h3>
+    <p style="color:var(--text-soft);font-size:0.88rem;margin-bottom:24px;line-height:1.65">
+      Hitung proyeksi tabunganmu dengan bunga compounding. Lihat bagaimana menabung secara rutin bisa menghasilkan pertumbuhan luar biasa!
+    </p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Saldo Awal (Rp)</label>
+        <div class="input-prefix-wrap">
+          <span class="prefix">Rp</span>
           <input type="number" id="simAwal" placeholder="0" value="0"/>
         </div>
-        <div class="form-group">
-          <label>Tambahan per Bulan (Rp)</label>
+      </div>
+      <div class="form-group">
+        <label>Tambahan per Bulan (Rp)</label>
+        <div class="input-prefix-wrap">
+          <span class="prefix">Rp</span>
           <input type="number" id="simBulan" placeholder="500000" value="500000"/>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Bunga per Tahun (%)</label>
-          <input type="number" id="simBunga" placeholder="3.5" step="0.1" value="3.5"/>
-        </div>
-        <div class="form-group">
-          <label>Durasi (Bulan)</label>
-          <input type="number" id="simDurasi" placeholder="12" value="12"/>
-        </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Bunga per Tahun (%)</label>
+        <input type="number" id="simBunga" placeholder="3.5" step="0.1" value="3.5"/>
       </div>
-      <div class="form-actions" style="margin-bottom:24px">
-        <button class="btn-primary" onclick="simulasi()">Hitung Simulasi</button>
-      </div>
-
-      <div id="simResult" style="display:none">
-        <div class="report-summary" style="margin-bottom:0">
-          <div class="report-box">
-            <div class="amount green" id="simFinal">-</div>
-            <div class="label">Saldo Akhir</div>
-          </div>
-          <div class="report-box">
-            <div class="amount blue" id="simTotal">-</div>
-            <div class="label">Total Setor</div>
-          </div>
-          <div class="report-box">
-            <div class="amount yellow" id="simBungaTotal">-</div>
-            <div class="label">Total Bunga</div>
-          </div>
-        </div>
-        <div style="margin-top:24px">
-          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:12px">Proyeksi per Bulan</p>
-          <div id="simBars" style="display:flex;gap:4px;align-items:flex-end;height:100px"></div>
-        </div>
+      <div class="form-group">
+        <label>Durasi (Bulan)</label>
+        <input type="number" id="simDurasi" placeholder="12" value="12" min="1" max="360"/>
       </div>
     </div>
-  </div>
+    <div class="form-actions" style="margin-bottom:28px">
+      <button class="btn-violet" onclick="simulasi()">🔮 Hitung Proyeksi</button>
+    </div>
 
-  <script src="../js/main.js"></script>
-  <script>
-    function renderTargets() {
-      const data = store.tabungan;
-      const el = document.getElementById('savingCards');
-      if (!data.length) {
-        el.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)">Belum ada target tabungan. Tambahkan di bawah!</div>';
-        return;
-      }
-      el.innerHTML = data.map((d,i) => {
-        const pct = Math.min(100, Math.round((d.terkumpul/d.target)*100));
-        const deadline = new Date(d.deadline);
-        const now = new Date();
-        const sisaHari = Math.ceil((deadline-now)/(1000*60*60*24));
-        return `
-        <div class="saving-card">
-          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
-            <div>
-              <h4>${d.nama}</h4>
-              <p style="color:var(--text-muted);font-size:0.82rem">Deadline: ${d.deadline}</p>
-            </div>
-            <span class="badge ${pct>=100?'badge-green':'badge-blue'}">${pct}%</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <span style="font-size:0.85rem;color:var(--text-muted)">Terkumpul</span>
-            <span style="font-family:var(--font-display);font-weight:700;color:var(--green)">${formatRp(d.terkumpul)}</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-          <div class="saving-meta">
-            <span>Target: ${formatRp(d.target)}</span>
-            <span style="color:${sisaHari<0?'var(--red)':'var(--text-muted)'}">${sisaHari>0?sisaHari+' hari lagi':sisaHari===0?'Hari ini!':'Lewat deadline'}</span>
-          </div>
-          <div style="margin-top:16px;display:flex;gap:8px">
-            <button class="btn-primary" style="font-size:0.8rem;padding:8px 16px" onclick="setor(${i})">+ Setor</button>
-            <button class="btn-danger" style="font-size:0.78rem" onclick="hapusTarget(${i})">Hapus</button>
-          </div>
-        </div>`;
-      }).join('');
-    }
-
-    function tambahTarget() {
-      const nama = document.getElementById('tNama').value.trim();
-      const target = document.getElementById('tTarget').value;
-      const terkumpul = document.getElementById('tTerkumpul').value||0;
-      const deadline = document.getElementById('tDeadline').value;
-      if (!nama||!target||!deadline) { alert('Semua field wajib diisi!'); return; }
-      store.tabungan.push({nama,target:Number(target),terkumpul:Number(terkumpul),deadline});
-      save(); renderTargets(); resetTargetForm();
-    }
-
-    function hapusTarget(i) {
-      if (confirm('Hapus target ini?')) { store.tabungan.splice(i,1); save(); renderTargets(); }
-    }
-
-    function setor(i) {
-      const jumlah = prompt('Berapa jumlah yang ingin disetor (Rp)?');
-      if (!jumlah || isNaN(jumlah)) return;
-      store.tabungan[i].terkumpul = Math.min(store.tabungan[i].target, store.tabungan[i].terkumpul + Number(jumlah));
-      save(); renderTargets();
-    }
-
-    function resetTargetForm() {
-      ['tNama','tTarget','tTerkumpul'].forEach(id=>document.getElementById(id).value='');
-    }
-
-    function simulasi() {
-      const awal = Number(document.getElementById('simAwal').value)||0;
-      const bulan = Number(document.getElementById('simBulan').value)||0;
-      const bunga = Number(document.getElementById('simBunga').value)||0;
-      const durasi = Number(document.getElementById('simDurasi').value)||12;
-
-      let saldo = awal;
-      const monthly = bunga/100/12;
-      const bulanan = [];
-
-      for (let m=1;m<=durasi;m++) {
-        saldo = saldo*(1+monthly)+bulan;
-        bulanan.push(Math.round(saldo));
-      }
-
-      const final = bulanan[bulanan.length-1];
-      const totalSetor = awal+(bulan*durasi);
-      const totalBunga = final-totalSetor;
-
-      document.getElementById('simFinal').textContent = formatRp(final);
-      document.getElementById('simTotal').textContent = formatRp(totalSetor);
-      document.getElementById('simBungaTotal').textContent = formatRp(Math.max(0,totalBunga));
-      document.getElementById('simResult').style.display='block';
-
-      const maxVal = Math.max(...bulanan);
-      document.getElementById('simBars').innerHTML = bulanan.map((v,i)=>`
-        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
-          <div style="width:100%;height:${Math.round((v/maxVal)*90)}px;background:linear-gradient(180deg,var(--green),rgba(0,208,156,0.3));border-radius:3px 3px 0 0"></div>
-          <span style="font-size:0.6rem;color:var(--text-muted)">B${i+1}</span>
+    <div id="simResult" style="display:none">
+      <div class="report-summary" style="margin-bottom:28px">
+        <div class="report-box">
+          <div class="amount green" id="simFinal">—</div>
+          <div class="label">Saldo Akhir</div>
         </div>
-      `).join('');
-    }
+        <div class="report-box">
+          <div class="amount" style="color:var(--violet)" id="simTotal">—</div>
+          <div class="label">Total Disetor</div>
+        </div>
+        <div class="report-box">
+          <div class="amount yellow" id="simBungaTotal">—</div>
+          <div class="label">Keuntungan Bunga</div>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:14px;font-weight:600">📊 Proyeksi Saldo per Bulan</p>
+        <div id="simBars" style="display:flex;gap:3px;align-items:flex-end;height:120px"></div>
+        <div id="simLabels" style="display:flex;gap:3px;margin-top:8px"></div>
+      </div>
+      <div id="simTip" style="margin-top:20px;padding:16px;background:var(--mint-dim);border:1px solid rgba(0,229,160,0.2);border-radius:var(--radius-sm);font-size:0.85rem;color:var(--mint)"></div>
+    </div>
+  </div>
+</div>
 
-    renderTargets();
-  </script>
+<script src="../js/main.js"></script>
+<script>
+const warnaMap = {
+  mint: { grad: 'var(--grad-mint)', color: 'var(--mint)', dim: 'var(--mint-dim)', border: 'rgba(0,229,160,0.25)' },
+  violet: { grad: 'var(--grad-violet)', color: 'var(--violet)', dim: 'var(--violet-dim)', border: 'rgba(124,111,255,0.25)' },
+  amber: { grad: 'var(--grad-amber)', color: 'var(--amber)', dim: 'var(--amber-dim)', border: 'rgba(255,179,71,0.25)' },
+  coral: { grad: 'var(--grad-coral)', color: 'var(--coral)', dim: 'var(--coral-dim)', border: 'rgba(255,107,107,0.25)' },
+  sky: { grad: 'linear-gradient(135deg,#38bdf8,#0284c7)', color: 'var(--sky)', dim: 'var(--sky-dim)', border: 'rgba(56,189,248,0.25)' },
+};
+
+function renderTargets() {
+  const data = store.tabungan;
+  const totalTerkumpul = data.reduce((s,d)=>s+Number(d.terkumpul),0);
+  const totalTarget = data.reduce((s,d)=>s+Number(d.target),0);
+  const completed = data.filter(d=>Number(d.terkumpul)>=Number(d.target)).length;
+
+  document.getElementById('totalTargets').textContent = data.length;
+  document.getElementById('totalTerkumpul').textContent = formatRp(totalTerkumpul);
+  document.getElementById('totalTarget').textContent = formatRp(totalTarget);
+  document.getElementById('completedTargets').textContent = completed;
+
+  const el = document.getElementById('savingCards');
+  if (!data.length) {
+    el.innerHTML = `<div style="color:var(--text-muted);text-align:center;padding:60px;background:var(--surface);border-radius:var(--radius);border:1px dashed var(--border)"><div style="font-size:3rem;margin-bottom:16px">🎯</div><p>Belum ada target. Yuk buat target pertamamu!</p></div>`;
+    return;
+  }
+  el.innerHTML = data.map((d, i) => {
+    const pct = Math.min(100, Math.round((d.terkumpul/d.target)*100));
+    const deadline = new Date(d.deadline);
+    const now = new Date();
+    const sisaHari = Math.ceil((deadline-now)/(1000*60*60*24));
+    const w = warnaMap[d.warna || 'mint'];
+    const emoji = d.emoji || '🎯';
+    const done = pct >= 100;
+    return `
+    <div class="saving-card" style="border-color:${done ? w.border : 'var(--border)'};">
+      <div class="saving-header">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:46px;height:46px;border-radius:14px;background:${w.dim};display:grid;place-items:center;font-size:1.5rem;border:1px solid ${w.border}">${emoji}</div>
+          <div>
+            <h4>${d.nama}</h4>
+            <p style="color:var(--text-muted);font-size:0.78rem">Deadline: ${d.deadline}</p>
+          </div>
+        </div>
+        <span class="badge ${done?'badge-green':'badge-blue'}">${done?'✅ Tercapai':pct+'%'}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px">
+        <div>
+          <div style="font-family:var(--font-display);font-weight:900;font-size:1.3rem;color:${w.color}">${formatRp(d.terkumpul)}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted)">dari ${formatRpFull(d.target)}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.8rem;color:${sisaHari<0?'var(--coral)':sisaHari<=7?'var(--amber)':'var(--text-muted)'};font-weight:700">
+            ${sisaHari>0?sisaHari+' hari lagi':sisaHari===0?'Hari ini!':'Lewat deadline'}
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted)">sisa ${formatRp(Math.max(0,d.target-d.terkumpul))}</div>
+        </div>
+      </div>
+      <div class="progress-bar" style="height:10px">
+        <div style="height:100%;width:${pct}%;background:${w.grad};border-radius:50px;transition:width 1.5s cubic-bezier(0.34,1.56,0.64,1)"></div>
+      </div>
+      <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+        ${!done ? `<button class="btn-primary" style="font-size:0.8rem;padding:9px 18px;background:${w.grad};box-shadow:none" onclick="setor(${i})">+ Setor Dana</button>` : ''}
+        <button class="btn-ghost small" onclick="editSetor(${i})">Edit</button>
+        <button class="btn-danger" onclick="hapusTarget(${i})">Hapus</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tambahTarget() {
+  const nama = document.getElementById('tNama').value.trim();
+  const target = document.getElementById('tTarget').value;
+  const terkumpul = document.getElementById('tTerkumpul').value||0;
+  const deadline = document.getElementById('tDeadline').value;
+  const emoji = document.getElementById('tEmoji').value || '🎯';
+  const warna = document.getElementById('tWarna').value;
+  if (!nama||!target||!deadline) { toast('Nama, target, dan deadline wajib diisi!','error'); return; }
+  store.tabungan.push({nama,target:Number(target),terkumpul:Number(terkumpul),deadline,emoji,warna});
+  save(); renderTargets(); resetTargetForm();
+  toast(`${emoji} Target "${nama}" berhasil dibuat!`, 'success');
+}
+
+function hapusTarget(i) {
+  const nama = store.tabungan[i].nama;
+  if (confirm(`Hapus target "${nama}"?`)) {
+    store.tabungan.splice(i,1); save(); renderTargets();
+    toast(`Target dihapus`, 'info', '🗑️');
+  }
+}
+
+function setor(i) {
+  const d = store.tabungan[i];
+  const sisa = d.target - d.terkumpul;
+  const jumlah = prompt(`Setor ke target "${d.nama}"\nSisa: ${formatRpFull(sisa)}\n\nJumlah yang ingin disetor (Rp):`);
+  if (!jumlah || isNaN(jumlah) || Number(jumlah) <= 0) return;
+  store.tabungan[i].terkumpul = Math.min(d.target, d.terkumpul + Number(jumlah));
+  save(); renderTargets();
+  if (store.tabungan[i].terkumpul >= d.target) toast(`🎉 Target "${d.nama}" TERCAPAI!`, 'success', '🎊');
+  else toast(`Disetor ${formatRp(Number(jumlah))} ke ${d.nama}`, 'success');
+}
+
+function editSetor(i) {
+  const d = store.tabungan[i];
+  const val = prompt(`Edit jumlah terkumpul untuk "${d.nama}" (Rp):`, d.terkumpul);
+  if (val===null || isNaN(val)) return;
+  store.tabungan[i].terkumpul = Math.min(Number(d.target), Math.max(0, Number(val)));
+  save(); renderTargets();
+  toast('Jumlah terkumpul diperbarui', 'info');
+}
+
+function resetTargetForm() {
+  ['tNama','tTarget','tTerkumpul'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tEmoji').value='🎯';
+}
+
+function simulasi() {
+  const awal = Number(document.getElementById('simAwal').value)||0;
+  const bulan = Number(document.getElementById('simBulan').value)||0;
+  const bunga = Number(document.getElementById('simBunga').value)||0;
+  const durasi = Math.min(360, Number(document.getElementById('simDurasi').value)||12);
+
+  let saldo = awal;
+  const monthly = bunga/100/12;
+  const bulanan = [];
+
+  for (let m=1;m<=durasi;m++) {
+    saldo = saldo*(1+monthly)+bulan;
+    bulanan.push(Math.round(saldo));
+  }
+
+  const final = bulanan[bulanan.length-1];
+  const totalSetor = awal+(bulan*durasi);
+  const totalBunga = Math.max(0,final-totalSetor);
+
+  document.getElementById('simFinal').textContent = formatRp(final);
+  document.getElementById('simTotal').textContent = formatRp(totalSetor);
+  document.getElementById('simBungaTotal').textContent = formatRp(totalBunga);
+  document.getElementById('simResult').style.display='block';
+
+  // bars — show max 24 months
+  const sample = durasi <= 24 ? bulanan : bulanan.filter((_,i)=>i % Math.ceil(durasi/24)===0);
+  const maxVal = Math.max(...sample);
+  document.getElementById('simBars').innerHTML = sample.map((v,i)=>`
+    <div style="flex:1;height:${Math.round((v/maxVal)*110)}px;background:linear-gradient(180deg,var(--mint),rgba(0,229,160,0.2));border-radius:4px 4px 0 0;cursor:pointer;transition:opacity 0.2s;min-width:8px" title="${formatRpFull(v)}"></div>
+  `).join('');
+  document.getElementById('simLabels').innerHTML = sample.map((_,i)=>`
+    <div style="flex:1;text-align:center;font-size:0.6rem;color:var(--text-muted);min-width:8px">${i+1}</div>
+  `).join('');
+
+  // tip
+  const monthly2 = bulan > 0 ? formatRp(bulan) : null;
+  let tip = '';
+  if (totalBunga > 0) tip = `💡 Dengan bunga ${bunga}%/tahun, kamu mendapatkan keuntungan <strong>${formatRp(totalBunga)}</strong> tanpa usaha tambahan!`;
+  else if (monthly2) tip = `📌 Menabung ${monthly2} per bulan selama ${durasi} bulan akan menghasilkan <strong>${formatRp(final)}</strong>.`;
+  if (tip) document.getElementById('simTip').innerHTML = tip;
+}
+
+renderTargets();
+</script>
 </body>
 </html>

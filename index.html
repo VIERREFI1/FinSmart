@@ -1,246 +1,488 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FinanceKu — Aplikasi Pengelolaan Keuangan</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <title>FinanceKu — Kelola Keuanganmu dengan Cerdas</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
 </head>
 <body>
-  <!-- NAV -->
-  <nav class="navbar">
-    <div class="nav-brand">
-      <span class="logo-icon">₿</span>
-      <span class="logo-text">Finance<span class="accent">Ku</span></span>
-    </div>
-    <ul class="nav-links">
-      <li><a href="#dashboard" class="active">Dashboard</a></li>
-      <li><a href="pages/pemasukan.html">Pemasukan</a></li>
-      <li><a href="pages/pengeluaran.html">Pengeluaran</a></li>
-      <li><a href="pages/tabungan.html">Tabungan</a></li>
-      <li><a href="pages/laporan.html">Laporan</a></li>
-    </ul>
-    <button class="btn-primary nav-cta">+ Tambah Transaksi</button>
-    <button class="hamburger" id="hamburger">&#9776;</button>
-  </nav>
 
-  <!-- HERO -->
-  <header class="hero" id="dashboard">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-glow glow-1"></div>
-    <div class="hero-glow glow-2"></div>
-    <div class="hero-content">
-      <p class="hero-tag">Aplikasi Pengelolaan Keuangan &amp; Perbankan Sederhana</p>
-      <h1 class="hero-title">Kontrol Penuh<br/><span class="gradient-text">Keuanganmu</span></h1>
-      <p class="hero-sub">Catat, analisis, dan kelola pemasukan &amp; pengeluaran kamu dengan cerdas. Raih target tabungan lebih cepat.</p>
-      <div class="hero-actions">
-        <a href="pages/pemasukan.html" class="btn-primary">Mulai Sekarang</a>
-        <a href="pages/laporan.html" class="btn-ghost">Lihat Laporan →</a>
-      </div>
-    </div>
-    <div class="hero-card-stack">
-      <div class="float-card card-main">
-        <p class="card-label">Saldo Pemasukan</p>
-        <h2 class="card-amount green">Rp 8.500.000</h2>
-        <div class="card-bar"><div class="bar-fill" style="width:72%"></div></div>
-        <p class="card-note">72% dari target bulan ini</p>
-      </div>
-      <div class="float-card card-side">
-        <p class="card-label">Pengeluaran</p>
-        <h3 class="card-amount red">Rp 3.240.000</h3>
-      </div>
-      <div class="float-card card-save">
-        <span class="save-icon">🎯</span>
-        <div>
-          <p class="card-label">Target Tabungan</p>
-          <h3 class="card-amount">Rp 2.000.000</h3>
-        </div>
-      </div>
-    </div>
-  </header>
+<!-- ANNOUNCE BAR -->
+<div class="announce-bar">
+  🎉 <strong>FinanceKu v2.0</strong> — Lebih canggih, lebih personal. Fitur budget & analisis kebiasaan baru! <strong>Coba Sekarang →</strong>
+</div>
 
-  <!-- FITUR SECTION -->
-  <section class="features" id="fitur">
-    <div class="section-header">
-      <span class="section-tag">Fungsi dari Fitur</span>
-      <h2 class="section-title">Semua yang Kamu <br/><span class="gradient-text">Butuhkan</span></h2>
-    </div>
-    <div class="features-grid">
-      <div class="feat-card" data-delay="0">
-        <div class="feat-icon" style="background: linear-gradient(135deg,#00d09c,#007a5e)">💰</div>
-        <h3>Saldo Pemasukan</h3>
-        <p>Menampilkan total uang yang dimiliki saat ini berdasarkan semua pemasukan yang sudah dicatat.</p>
-        <a href="pages/pemasukan.html" class="feat-link">Catat Pemasukan →</a>
-      </div>
-      <div class="feat-card" data-delay="100">
-        <div class="feat-icon" style="background: linear-gradient(135deg,#ff6b6b,#c0392b)">📤</div>
-        <h3>Jumlah Pengeluaran</h3>
-        <p>Mencatat dan menjumlahkan semua uang yang keluar agar pengeluaranmu selalu terpantau.</p>
-        <a href="pages/pengeluaran.html" class="feat-link">Catat Pengeluaran →</a>
-      </div>
-      <div class="feat-card" data-delay="200">
-        <div class="feat-icon" style="background: linear-gradient(135deg,#6c63ff,#3b37bd)">📊</div>
-        <h3>Total Laporan Keuangan</h3>
-        <p>Menyediakan ringkasan lengkap antara pemasukan, pengeluaran, dan saldo akhir secara otomatis.</p>
-        <a href="pages/laporan.html" class="feat-link">Lihat Laporan →</a>
-      </div>
-      <div class="feat-card" data-delay="300">
-        <div class="feat-icon" style="background: linear-gradient(135deg,#f6d365,#e0a800)">🎯</div>
-        <h3>Jumlah Target Tabungan</h3>
-        <p>Menentukan dan memantau target tabungan yang ingin dicapai, dengan simulasi pertumbuhan.</p>
-        <a href="pages/tabungan.html" class="feat-link">Set Target →</a>
-      </div>
-      <div class="feat-card" data-delay="400">
-        <div class="feat-icon" style="background: linear-gradient(135deg,#43e97b,#1a6e41)">🔍</div>
-        <h3>Total Kebiasaan Pengeluaran</h3>
-        <p>Menganalisis pola pengeluaran pengguna untuk membantu kamu lebih bijak dalam berbelanja.</p>
-        <a href="pages/laporan.html" class="feat-link">Analisis Pola →</a>
-      </div>
-      <div class="feat-card feat-card--highlight" data-delay="500">
-        <div class="feat-icon" style="background: linear-gradient(135deg,#a18cd1,#fbc2eb)">📈</div>
-        <h3>Simulasi Pertumbuhan Tabungan</h3>
-        <p>Simulasikan bagaimana tabungan kamu berkembang seiring waktu dengan bunga dan kontribusi rutin.</p>
-        <a href="pages/tabungan.html" class="feat-link">Coba Simulasi →</a>
-      </div>
-    </div>
-  </section>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="logo-icon">₿</div>
+    <span class="logo-text">Finance<span class="accent">Ku</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#dashboard" class="active">Dashboard</a></li>
+    <li><a href="pages/pemasukan.html">Pemasukan</a></li>
+    <li><a href="pages/pengeluaran.html">Pengeluaran</a></li>
+    <li><a href="pages/tabungan.html">Tabungan</a></li>
+    <li><a href="pages/laporan.html">Laporan</a></li>
+  </ul>
+  <button class="btn-primary nav-cta" onclick="openModal('quickAddModal')">+ Tambah Transaksi</button>
+  <button class="hamburger" id="hamburger">&#9776;</button>
+</nav>
 
-  <!-- DASHBOARD STATS -->
-  <section class="stats-section">
-    <div class="section-header">
-      <span class="section-tag">Overview</span>
-      <h2 class="section-title">Ringkasan <span class="gradient-text">Keuangan</span></h2>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-top">
-          <span class="stat-icon green-bg">↑</span>
-          <span class="stat-change positive">+12%</span>
-        </div>
-        <h3 class="stat-value">Rp 8.500.000</h3>
-        <p class="stat-label">Total Pemasukan</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <span class="stat-icon red-bg">↓</span>
-          <span class="stat-change negative">-5%</span>
-        </div>
-        <h3 class="stat-value">Rp 3.240.000</h3>
-        <p class="stat-label">Total Pengeluaran</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <span class="stat-icon blue-bg">≈</span>
-          <span class="stat-change positive">+8%</span>
-        </div>
-        <h3 class="stat-value">Rp 5.260.000</h3>
-        <p class="stat-label">Saldo Akhir</p>
-      </div>
-      <div class="stat-card">
-        <div class="stat-top">
-          <span class="stat-icon yellow-bg">🎯</span>
-          <span class="stat-change positive">62%</span>
-        </div>
-        <h3 class="stat-value">Rp 2.000.000</h3>
-        <p class="stat-label">Target Tabungan</p>
-      </div>
-    </div>
+<!-- HERO -->
+<header class="hero" id="dashboard">
+  <div class="hero-bg">
+    <div class="hero-grid"></div>
+    <div class="hero-glow-1"></div>
+    <div class="hero-glow-2"></div>
+    <div class="hero-noise"></div>
+  </div>
 
-    <!-- Chart Placeholder -->
-    <div class="chart-container">
-      <div class="chart-header">
-        <h3>Grafik Pemasukan vs Pengeluaran</h3>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Aplikasi Keuangan Pelajar Indonesia
+    </div>
+    <h1 class="hero-title">
+      Uangmu,<br/>
+      <span class="gradient-text">Kendalimu.</span>
+    </h1>
+    <p class="hero-sub">
+      Catat pemasukan & pengeluaran, pantau tabungan, dan pahami kebiasaan finansialmu — semua dalam satu tempat yang simpel dan menyenangkan.
+    </p>
+    <div class="hero-actions">
+      <a href="pages/pemasukan.html" class="btn-primary">Mulai Gratis →</a>
+      <a href="pages/laporan.html" class="btn-ghost">Lihat Laporan</a>
+    </div>
+    <div class="hero-trust">
+      <div class="hero-trust-avatars">
+        <span>👧</span><span>👦</span><span>👩</span><span>🧑</span>
+      </div>
+      <div class="hero-stars">★★★★★</div>
+      <span>Dipakai 1.200+ pelajar SMA</span>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="float-card card-main">
+      <p class="card-label">Total Pemasukan</p>
+      <h2 class="card-amount green" id="heroIncome">Rp 8.500.000</h2>
+      <div class="card-bar"><div class="bar-fill" style="width:72%"></div></div>
+      <p class="card-note">72% dari target bulan ini</p>
+      <span class="card-chip">↑ +12% vs bulan lalu</span>
+    </div>
+    <div class="float-card card-side">
+      <p class="card-label">Pengeluaran</p>
+      <h3 class="card-amount red" id="heroExpense">Rp 3.240.000</h3>
+      <p class="card-note" style="margin-top:4px">Maret 2025</p>
+    </div>
+    <div class="float-card card-save">
+      <span class="save-icon">🎯</span>
+      <div>
+        <p class="card-label">Total Tabungan</p>
+        <h3 class="card-amount" id="heroSave">Rp 2.000.000</h3>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <div class="ticker-item">💰 Gaji Bulanan <span class="chip chip-up">+Rp 5jt</span></div>
+    <div class="ticker-item">📈 Reksa Dana <span class="chip chip-up">+2.3%</span></div>
+    <div class="ticker-item">🛒 Belanja Groceries <span class="chip chip-down">-Rp 450rb</span></div>
+    <div class="ticker-item">📱 Tagihan Internet <span class="chip chip-down">-Rp 200rb</span></div>
+    <div class="ticker-item">💼 Freelance Design <span class="chip chip-up">+Rp 1.5jt</span></div>
+    <div class="ticker-item">🎯 Tabungan Laptop <span class="chip chip-up">62%</span></div>
+    <div class="ticker-item">🍜 Makan Siang <span class="chip chip-down">-Rp 35rb</span></div>
+    <div class="ticker-item">🚗 Bensin <span class="chip chip-down">-Rp 120rb</span></div>
+    <!-- Duplicate for seamless loop -->
+    <div class="ticker-item">💰 Gaji Bulanan <span class="chip chip-up">+Rp 5jt</span></div>
+    <div class="ticker-item">📈 Reksa Dana <span class="chip chip-up">+2.3%</span></div>
+    <div class="ticker-item">🛒 Belanja Groceries <span class="chip chip-down">-Rp 450rb</span></div>
+    <div class="ticker-item">📱 Tagihan Internet <span class="chip chip-down">-Rp 200rb</span></div>
+    <div class="ticker-item">💼 Freelance Design <span class="chip chip-up">+Rp 1.5jt</span></div>
+    <div class="ticker-item">🎯 Tabungan Laptop <span class="chip chip-up">62%</span></div>
+    <div class="ticker-item">🍜 Makan Siang <span class="chip chip-down">-Rp 35rb</span></div>
+    <div class="ticker-item">🚗 Bensin <span class="chip chip-down">-Rp 120rb</span></div>
+  </div>
+</div>
+
+<!-- QUICK ACTIONS -->
+<section class="quick-actions-section" id="fitur">
+  <div class="section-header">
+    <span class="section-tag">Akses Cepat</span>
+    <h2 class="section-title">Apa yang ingin<br/><span class="gradient-text">kamu lakukan?</span></h2>
+  </div>
+  <div class="quick-actions-grid">
+    <a href="pages/pemasukan.html" class="qa-card">
+      <div class="qa-icon" style="background:linear-gradient(135deg,#00e5a0,#00b87d)">💰</div>
+      <h4>Catat Pemasukan</h4>
+      <p>Tambahkan gaji, freelance, bonus, atau sumber pendapatan lain</p>
+    </a>
+    <a href="pages/pengeluaran.html" class="qa-card">
+      <div class="qa-icon" style="background:linear-gradient(135deg,#ff6b6b,#c0392b)">📤</div>
+      <h4>Catat Pengeluaran</h4>
+      <p>Pantau semua pengeluaran harianmu agar selalu terkontrol</p>
+    </a>
+    <a href="pages/tabungan.html" class="qa-card">
+      <div class="qa-icon" style="background:linear-gradient(135deg,#7c6fff,#5b4fe0)">🎯</div>
+      <h4>Set Target Tabungan</h4>
+      <p>Buat target, pantau progress, dan simulasikan pertumbuhan</p>
+    </a>
+    <a href="pages/laporan.html" class="qa-card">
+      <div class="qa-icon" style="background:linear-gradient(135deg,#ffb347,#e08a00)">📊</div>
+      <h4>Lihat Laporan</h4>
+      <p>Analisis lengkap keuanganmu dengan grafik dan insight cerdas</p>
+    </a>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-header">
+    <span class="section-tag">Fitur</span>
+    <h2 class="section-title">Semua yang kamu<br/><span class="gradient-text">butuhkan</span></h2>
+    <p class="section-sub">Dari pencatatan sederhana hingga analisis mendalam — FinanceKu hadir untuk semua kebutuhan finansialmu.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon" style="background:linear-gradient(135deg,#00e5a0,#007a5e)">💰</div>
+      <h3>Saldo Pemasukan Real-time</h3>
+      <p>Total uang masuk terupdate otomatis setiap kamu menambah transaksi baru. Selalu tahu posisi keuanganmu.</p>
+      <a href="pages/pemasukan.html" class="feat-link">Catat Pemasukan →</a>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:linear-gradient(135deg,#ff6b6b,#c0392b)">📤</div>
+      <h3>Pemantauan Pengeluaran</h3>
+      <p>Setiap sen yang keluar tercatat dan terkategorikan. Tidak ada lagi uang hilang tanpa jejak.</p>
+      <a href="pages/pengeluaran.html" class="feat-link">Catat Pengeluaran →</a>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:linear-gradient(135deg,#7c6fff,#3b37bd)">📊</div>
+      <h3>Laporan Keuangan Lengkap</h3>
+      <p>Ringkasan visual dengan grafik batang, analisis bulanan, dan export CSV untuk keperluan laporan.</p>
+      <a href="pages/laporan.html" class="feat-link">Lihat Laporan →</a>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:linear-gradient(135deg,#ffb347,#e0a800)">🎯</div>
+      <h3>Target Tabungan Pintar</h3>
+      <p>Set target dengan deadline, pantau progress dengan progress bar, dan terima notifikasi bila mendekati tujuan.</p>
+      <a href="pages/tabungan.html" class="feat-link">Set Target →</a>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon" style="background:linear-gradient(135deg,#38bdf8,#0369a1)">🔍</div>
+      <h3>Analisis Kebiasaan</h3>
+      <p>Visualisasi proporsi tiap kategori pengeluaran, sehingga kamu tahu di mana uangmu paling banyak habis.</p>
+      <a href="pages/laporan.html" class="feat-link">Analisis Pola →</a>
+    </div>
+    <div class="feat-card feat-card--highlight">
+      <div class="feat-icon" style="background:linear-gradient(135deg,#a18cd1,#7c6fff)">📈</div>
+      <h3>Simulasi Pertumbuhan</h3>
+      <p>Simulasikan bagaimana tabunganmu berkembang dengan bunga compounding dan kontribusi rutin bulanan.</p>
+      <a href="pages/tabungan.html" class="feat-link">Coba Simulasi →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS DASHBOARD -->
+<section class="stats-section" id="overview">
+  <div class="section-header">
+    <span class="section-tag">Overview</span>
+    <h2 class="section-title">Ringkasan <span class="gradient-text">Keuanganmu</span></h2>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-top">
+        <span class="stat-icon green-bg">↑</span>
+        <span class="stat-change positive">+12%</span>
+      </div>
+      <h3 class="stat-value green" id="dashTotalP">Rp 8.500.000</h3>
+      <p class="stat-label">Total Pemasukan</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <span class="stat-icon red-bg">↓</span>
+        <span class="stat-change negative">-5%</span>
+      </div>
+      <h3 class="stat-value red" id="dashTotalE">Rp 3.240.000</h3>
+      <p class="stat-label">Total Pengeluaran</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <span class="stat-icon blue-bg">≈</span>
+        <span class="stat-change positive">+8%</span>
+      </div>
+      <h3 class="stat-value" id="dashSaldo" style="color:var(--mint)">Rp 5.260.000</h3>
+      <p class="stat-label">Saldo Akhir</p>
+    </div>
+    <div class="stat-card">
+      <div class="stat-top">
+        <span class="stat-icon yellow-bg">🎯</span>
+        <span class="stat-change positive">62%</span>
+      </div>
+      <h3 class="stat-value yellow" id="dashTabungan">Rp 2.000.000</h3>
+      <p class="stat-label">Total Tabungan</p>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <div class="chart-header">
+      <h3>Grafik Pemasukan vs Pengeluaran</h3>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
         <div class="chart-legend">
           <span class="legend-dot green"></span> Pemasukan
           <span class="legend-dot red"></span> Pengeluaran
         </div>
       </div>
-      <div class="chart-bars" id="chartBars"></div>
-      <div class="chart-months">
-        <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>Mei</span><span>Jun</span>
-      </div>
     </div>
-  </section>
+    <div class="chart-bars" id="chartBars"></div>
+    <div class="chart-months" id="chartMonths">
+      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>Mei</span><span>Jun</span>
+    </div>
+  </div>
+</section>
 
-  <!-- TRANSAKSI TERAKHIR -->
-  <section class="transactions-section">
-    <div class="section-header row">
-      <div>
-        <span class="section-tag">Aktivitas</span>
-        <h2 class="section-title">Transaksi <span class="gradient-text">Terakhir</span></h2>
-      </div>
-      <a href="pages/laporan.html" class="btn-ghost small">Lihat Semua →</a>
+<!-- LAST TRANSACTIONS -->
+<section class="transactions-section">
+  <div class="section-header row">
+    <div>
+      <span class="section-tag">Aktivitas</span>
+      <h2 class="section-title">Transaksi <span class="gradient-text">Terakhir</span></h2>
     </div>
-    <div class="tx-list">
-      <div class="tx-item">
-        <div class="tx-icon green-bg">💵</div>
-        <div class="tx-info">
-          <p class="tx-name">Gaji Bulanan</p>
-          <p class="tx-date">08 Apr 2025</p>
-        </div>
-        <span class="tx-amount green">+ Rp 5.000.000</span>
-      </div>
-      <div class="tx-item">
-        <div class="tx-icon red-bg">🛒</div>
-        <div class="tx-info">
-          <p class="tx-name">Belanja Bulanan</p>
-          <p class="tx-date">07 Apr 2025</p>
-        </div>
-        <span class="tx-amount red">- Rp 800.000</span>
-      </div>
-      <div class="tx-item">
-        <div class="tx-icon green-bg">💼</div>
-        <div class="tx-info">
-          <p class="tx-name">Freelance Project</p>
-          <p class="tx-date">05 Apr 2025</p>
-        </div>
-        <span class="tx-amount green">+ Rp 1.500.000</span>
-      </div>
-      <div class="tx-item">
-        <div class="tx-icon red-bg">🏠</div>
-        <div class="tx-info">
-          <p class="tx-name">Sewa Kos</p>
-          <p class="tx-date">01 Apr 2025</p>
-        </div>
-        <span class="tx-amount red">- Rp 1.200.000</span>
-      </div>
-      <div class="tx-item">
-        <div class="tx-icon yellow-bg">🎯</div>
-        <div class="tx-info">
-          <p class="tx-name">Setor Tabungan</p>
-          <p class="tx-date">01 Apr 2025</p>
-        </div>
-        <span class="tx-amount blue">→ Rp 500.000</span>
-      </div>
+    <a href="pages/laporan.html" class="btn-ghost small">Lihat Semua →</a>
+  </div>
+  <div class="tx-list" id="txList">
+    <!-- Filled by JS -->
+    <div class="tx-item">
+      <div class="tx-icon green-bg">💵</div>
+      <div class="tx-info"><p class="tx-name">Gaji Bulanan</p><p class="tx-date">08 Apr 2025</p></div>
+      <span class="badge badge-green" style="margin-right:8px">Gaji</span>
+      <span class="tx-amount green">+ Rp 5.000.000</span>
     </div>
-  </section>
+    <div class="tx-item">
+      <div class="tx-icon red-bg">🛒</div>
+      <div class="tx-info"><p class="tx-name">Belanja Bulanan</p><p class="tx-date">07 Apr 2025</p></div>
+      <span class="badge badge-red" style="margin-right:8px">Belanja</span>
+      <span class="tx-amount red">- Rp 800.000</span>
+    </div>
+    <div class="tx-item">
+      <div class="tx-icon green-bg">💼</div>
+      <div class="tx-info"><p class="tx-name">Freelance Project</p><p class="tx-date">05 Apr 2025</p></div>
+      <span class="badge badge-blue" style="margin-right:8px">Freelance</span>
+      <span class="tx-amount green">+ Rp 1.500.000</span>
+    </div>
+    <div class="tx-item">
+      <div class="tx-icon red-bg">🏠</div>
+      <div class="tx-info"><p class="tx-name">Sewa Kos</p><p class="tx-date">01 Apr 2025</p></div>
+      <span class="badge badge-red" style="margin-right:8px">Tagihan</span>
+      <span class="tx-amount red">- Rp 1.200.000</span>
+    </div>
+    <div class="tx-item">
+      <div class="tx-icon yellow-bg">🎯</div>
+      <div class="tx-info"><p class="tx-name">Setor Tabungan Laptop</p><p class="tx-date">01 Apr 2025</p></div>
+      <span class="badge badge-yellow" style="margin-right:8px">Tabungan</span>
+      <span class="tx-amount yellow">→ Rp 500.000</span>
+    </div>
+  </div>
+</section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="logo-icon">₿</span>
+<!-- INSIGHTS / TIPS -->
+<section class="insights-section">
+  <div class="section-header">
+    <span class="section-tag">Tips Finansial</span>
+    <h2 class="section-title">Insight <span class="gradient-text">Keuangan</span></h2>
+    <p class="section-sub">Pelajari kebiasaan keuangan yang sehat dan raih kebebasan finansialmu lebih cepat.</p>
+  </div>
+  <div class="insights-grid">
+    <div class="insight-card">
+      <div class="insight-emoji">🏦</div>
+      <h4>Aturan 50/30/20</h4>
+      <p>Alokasikan 50% penghasilan untuk kebutuhan, 30% untuk keinginan, dan 20% untuk tabungan. Aturan sederhana yang terbukti efektif.</p>
+      <span class="insight-tag" style="background:var(--mint-dim);color:var(--mint)">📌 Wajib Tahu</span>
+    </div>
+    <div class="insight-card">
+      <div class="insight-emoji">☕</div>
+      <h4>Efek Latte Factor</h4>
+      <p>Pengeluaran kecil rutin seperti kopi Rp 30rb/hari = Rp 900rb/bulan = Rp 10,8jt/tahun. Sadari dan kurangi pengeluaran kecil yang tidak sadar.</p>
+      <span class="insight-tag" style="background:var(--amber-dim);color:var(--amber)">💡 Insight</span>
+    </div>
+    <div class="insight-card">
+      <div class="insight-emoji">📅</div>
+      <h4>Pay Yourself First</h4>
+      <p>Segera pindahkan bagian tabungan begitu menerima penghasilan, sebelum membayar hal lain. Jadikan menabung sebagai prioritas, bukan sisa.</p>
+      <span class="insight-tag" style="background:var(--violet-dim);color:var(--violet)">🚀 Strategi</span>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonial-section">
+  <div class="section-header">
+    <span class="section-tag">Testimoni</span>
+    <h2 class="section-title">Dipercaya <span class="gradient-text">Banyak Pelajar</span></h2>
+  </div>
+  <div style="overflow:hidden">
+    <div class="testimonial-track">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Sejak pakai FinanceKu, akhirnya tahu ke mana aja uang sakuku pergi tiap bulan. Super membantu!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--mint-dim);color:var(--mint)">A</div>
+          <div><div class="testimonial-name">Anisa R.</div><div class="testimonial-role">Siswi SMA 3 Jakarta</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Fitur simulasi tabungannya keren banget. Jadi semangat nabung buat beli motor baru!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--violet-dim);color:var(--violet)">B</div>
+          <div><div class="testimonial-name">Budi S.</div><div class="testimonial-role">Siswa SMK Surabaya</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★☆</div>
+        <p class="testimonial-text">"Grafik pemasukannya bagus. Langsung keliatan bulan mana paling banyak jajan haha."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--coral-dim);color:var(--coral)">C</div>
+          <div><div class="testimonial-name">Citra M.</div><div class="testimonial-role">Mahasiswi Yogyakarta</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Laporan keuangannya bisa di-export CSV, jadi gampang buat tugas ekonomi di sekolah."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--amber-dim);color:var(--amber)">D</div>
+          <div><div class="testimonial-name">Dika P.</div><div class="testimonial-role">Siswa SMA Bandung</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Designnya enak banget dilihat. Tidak terasa berat atau ribet, cocok buat anak muda."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--sky-dim);color:var(--sky)">E</div>
+          <div><div class="testimonial-name">Eka W.</div><div class="testimonial-role">Siswi SMA Medan</div></div>
+        </div>
+      </div>
+      <!-- duplicate for seamless loop -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Sejak pakai FinanceKu, akhirnya tahu ke mana aja uang sakuku pergi tiap bulan. Super membantu!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--mint-dim);color:var(--mint)">A</div>
+          <div><div class="testimonial-name">Anisa R.</div><div class="testimonial-role">Siswi SMA 3 Jakarta</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Fitur simulasi tabungannya keren banget. Jadi semangat nabung buat beli motor baru!"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--violet-dim);color:var(--violet)">B</div>
+          <div><div class="testimonial-name">Budi S.</div><div class="testimonial-role">Siswa SMK Surabaya</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★☆</div>
+        <p class="testimonial-text">"Grafik pemasukannya bagus. Langsung keliatan bulan mana paling banyak jajan haha."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--coral-dim);color:var(--coral)">C</div>
+          <div><div class="testimonial-name">Citra M.</div><div class="testimonial-role">Mahasiswi Yogyakarta</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Laporan keuangannya bisa di-export CSV, jadi gampang buat tugas ekonomi di sekolah."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--amber-dim);color:var(--amber)">D</div>
+          <div><div class="testimonial-name">Dika P.</div><div class="testimonial-role">Siswa SMA Bandung</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Designnya enak banget dilihat. Tidak terasa berat atau ribet, cocok buat anak muda."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--sky-dim);color:var(--sky)">E</div>
+          <div><div class="testimonial-name">Eka W.</div><div class="testimonial-role">Siswi SMA Medan</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-wrap">
+        <div class="logo-icon">₿</div>
         <span class="logo-text">Finance<span class="accent">Ku</span></span>
-        <p>Aplikasi Pengelolaan Keuangan &amp; Perbankan Sederhana untuk SMA/High School</p>
       </div>
-      <div class="footer-links">
-        <h4>Fitur</h4>
-        <a href="pages/pemasukan.html">Pemasukan</a>
-        <a href="pages/pengeluaran.html">Pengeluaran</a>
-        <a href="pages/tabungan.html">Tabungan</a>
-        <a href="pages/laporan.html">Laporan</a>
-      </div>
-      <div class="footer-links">
-        <h4>Info</h4>
-        <a href="#">Tentang Kami</a>
-        <a href="#">Panduan</a>
-        <a href="#">Kontak</a>
+      <p>Aplikasi pengelolaan keuangan pribadi untuk pelajar SMA/SMK Indonesia. Gratis, simpel, dan powerful.</p>
+      <div class="footer-social">
+        <button class="social-btn">📸</button>
+        <button class="social-btn">🐦</button>
+        <button class="social-btn">💼</button>
+        <button class="social-btn">📧</button>
       </div>
     </div>
-    <p class="footer-copy">© 2025 FinanceKu — Dibuat untuk High School Project</p>
-  </footer>
+    <div class="footer-col">
+      <h4>Fitur</h4>
+      <a href="pages/pemasukan.html">Pemasukan</a>
+      <a href="pages/pengeluaran.html">Pengeluaran</a>
+      <a href="pages/tabungan.html">Tabungan</a>
+      <a href="pages/laporan.html">Laporan</a>
+    </div>
+    <div class="footer-col">
+      <h4>Pelajari</h4>
+      <a href="#">Tips Menabung</a>
+      <a href="#">Aturan 50/30/20</a>
+      <a href="#">Investasi Pemula</a>
+      <a href="#">Panduan Aplikasi</a>
+    </div>
+    <div class="footer-col">
+      <h4>Info</h4>
+      <a href="#">Tentang Kami</a>
+      <a href="#">Kontak</a>
+      <a href="#">Kebijakan Privasi</a>
+      <a href="#">FAQ</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 FinanceKu — Dibuat dengan ❤️ untuk Proyek Sekolah</p>
+    <div class="footer-badges">
+      <span class="footer-badge">🔒 Data Lokal</span>
+      <span class="footer-badge">✨ Gratis Selamanya</span>
+      <span class="footer-badge">🇮🇩 Made in Indonesia</span>
+    </div>
+  </div>
+</footer>
 
-  <script src="js/main.js"></script>
+<!-- QUICK ADD MODAL -->
+<div class="modal-overlay" id="quickAddModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('quickAddModal')">✕</button>
+    <h3>+ Tambah Transaksi</h3>
+    <p>Pilih jenis transaksi yang ingin dicatat</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <a href="pages/pemasukan.html" class="qa-card" style="border:2px solid var(--mint-dim)" onclick="closeModal('quickAddModal')">
+        <div class="qa-icon" style="background:var(--grad-mint);width:48px;height:48px;border-radius:12px;font-size:1.3rem">💰</div>
+        <h4>Pemasukan</h4>
+        <p style="font-size:0.75rem">Gaji, freelance, bonus...</p>
+      </a>
+      <a href="pages/pengeluaran.html" class="qa-card" style="border:2px solid var(--coral-dim)" onclick="closeModal('quickAddModal')">
+        <div class="qa-icon" style="background:var(--grad-coral);width:48px;height:48px;border-radius:12px;font-size:1.3rem">📤</div>
+        <h4>Pengeluaran</h4>
+        <p style="font-size:0.75rem">Makan, transport, belanja...</p>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
 </body>
 </html>
