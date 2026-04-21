@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabungan — FinanceKu</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="logo-icon">₿</span>
+      <span class="logo-text">Finance<span class="accent">Ku</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Dashboard</a></li>
+      <li><a href="pemasukan.html">Pemasukan</a></li>
+      <li><a href="pengeluaran.html">Pengeluaran</a></li>
+      <li><a href="tabungan.html" class="active">Tabungan</a></li>
+      <li><a href="laporan.html">Laporan</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <div class="page-hero">
+    <span class="section-tag">Tabungan</span>
+    <h1>Target <span class="gradient-text">Tabungan</span></h1>
+    <p>Tentukan target, pantau perkembangan, dan simulasikan pertumbuhan tabunganmu.</p>
+  </div>
+
+  <div class="page-content">
+    <!-- Target Cards -->
+    <div style="margin-bottom:40px">
+      <div class="section-header row">
+        <div><h2 class="section-title">Target <span class="gradient-text">Aktif</span></h2></div>
+      </div>
+      <div class="saving-cards" id="savingCards">
+        <div style="color:var(--text-muted);text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)">
+          Belum ada target tabungan. Tambahkan di bawah!
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Target Form -->
+    <div class="form-card">
+      <h3>🎯 Tambah Target Tabungan</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nama Target</label>
+          <input type="text" id="tNama" placeholder="e.g. Beli Laptop, Liburan..."/>
+        </div>
+        <div class="form-group">
+          <label>Target Jumlah (Rp)</label>
+          <input type="number" id="tTarget" placeholder="0" min="0"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Saldo Awal / Sudah Tersimpan (Rp)</label>
+          <input type="number" id="tTerkumpul" placeholder="0" min="0"/>
+        </div>
+        <div class="form-group">
+          <label>Deadline</label>
+          <input type="date" id="tDeadline"/>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="tambahTarget()">Simpan Target</button>
+        <button class="btn-ghost" onclick="resetTargetForm()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Simulasi -->
+    <div class="form-card">
+      <h3>📈 Simulasi Pertumbuhan Tabungan</h3>
+      <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:24px">
+        Hitung berapa yang kamu butuhkan per bulan untuk mencapai target, atau lihat pertumbuhan dengan bunga.
+      </p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Saldo Awal (Rp)</label>
+          <input type="number" id="simAwal" placeholder="0" value="0"/>
+        </div>
+        <div class="form-group">
+          <label>Tambahan per Bulan (Rp)</label>
+          <input type="number" id="simBulan" placeholder="500000" value="500000"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bunga per Tahun (%)</label>
+          <input type="number" id="simBunga" placeholder="3.5" step="0.1" value="3.5"/>
+        </div>
+        <div class="form-group">
+          <label>Durasi (Bulan)</label>
+          <input type="number" id="simDurasi" placeholder="12" value="12"/>
+        </div>
+      </div>
+      <div class="form-actions" style="margin-bottom:24px">
+        <button class="btn-primary" onclick="simulasi()">Hitung Simulasi</button>
+      </div>
+
+      <div id="simResult" style="display:none">
+        <div class="report-summary" style="margin-bottom:0">
+          <div class="report-box">
+            <div class="amount green" id="simFinal">-</div>
+            <div class="label">Saldo Akhir</div>
+          </div>
+          <div class="report-box">
+            <div class="amount blue" id="simTotal">-</div>
+            <div class="label">Total Setor</div>
+          </div>
+          <div class="report-box">
+            <div class="amount yellow" id="simBungaTotal">-</div>
+            <div class="label">Total Bunga</div>
+          </div>
+        </div>
+        <div style="margin-top:24px">
+          <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:12px">Proyeksi per Bulan</p>
+          <div id="simBars" style="display:flex;gap:4px;align-items:flex-end;height:100px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    function renderTargets() {
+      const data = store.tabungan;
+      const el = document.getElementById('savingCards');
+      if (!data.length) {
+        el.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:40px;background:var(--surface);border-radius:var(--radius);border:1px solid var(--border)">Belum ada target tabungan. Tambahkan di bawah!</div>';
+        return;
+      }
+      el.innerHTML = data.map((d,i) => {
+        const pct = Math.min(100, Math.round((d.terkumpul/d.target)*100));
+        const deadline = new Date(d.deadline);
+        const now = new Date();
+        const sisaHari = Math.ceil((deadline-now)/(1000*60*60*24));
+        return `
+        <div class="saving-card">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
+            <div>
+              <h4>${d.nama}</h4>
+              <p style="color:var(--text-muted);font-size:0.82rem">Deadline: ${d.deadline}</p>
+            </div>
+            <span class="badge ${pct>=100?'badge-green':'badge-blue'}">${pct}%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:0.85rem;color:var(--text-muted)">Terkumpul</span>
+            <span style="font-family:var(--font-display);font-weight:700;color:var(--green)">${formatRp(d.terkumpul)}</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <div class="saving-meta">
+            <span>Target: ${formatRp(d.target)}</span>
+            <span style="color:${sisaHari<0?'var(--red)':'var(--text-muted)'}">${sisaHari>0?sisaHari+' hari lagi':sisaHari===0?'Hari ini!':'Lewat deadline'}</span>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:8px">
+            <button class="btn-primary" style="font-size:0.8rem;padding:8px 16px" onclick="setor(${i})">+ Setor</button>
+            <button class="btn-danger" style="font-size:0.78rem" onclick="hapusTarget(${i})">Hapus</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function tambahTarget() {
+      const nama = document.getElementById('tNama').value.trim();
+      const target = document.getElementById('tTarget').value;
+      const terkumpul = document.getElementById('tTerkumpul').value||0;
+      const deadline = document.getElementById('tDeadline').value;
+      if (!nama||!target||!deadline) { alert('Semua field wajib diisi!'); return; }
+      store.tabungan.push({nama,target:Number(target),terkumpul:Number(terkumpul),deadline});
+      save(); renderTargets(); resetTargetForm();
+    }
+
+    function hapusTarget(i) {
+      if (confirm('Hapus target ini?')) { store.tabungan.splice(i,1); save(); renderTargets(); }
+    }
+
+    function setor(i) {
+      const jumlah = prompt('Berapa jumlah yang ingin disetor (Rp)?');
+      if (!jumlah || isNaN(jumlah)) return;
+      store.tabungan[i].terkumpul = Math.min(store.tabungan[i].target, store.tabungan[i].terkumpul + Number(jumlah));
+      save(); renderTargets();
+    }
+
+    function resetTargetForm() {
+      ['tNama','tTarget','tTerkumpul'].forEach(id=>document.getElementById(id).value='');
+    }
+
+    function simulasi() {
+      const awal = Number(document.getElementById('simAwal').value)||0;
+      const bulan = Number(document.getElementById('simBulan').value)||0;
+      const bunga = Number(document.getElementById('simBunga').value)||0;
+      const durasi = Number(document.getElementById('simDurasi').value)||12;
+
+      let saldo = awal;
+      const monthly = bunga/100/12;
+      const bulanan = [];
+
+      for (let m=1;m<=durasi;m++) {
+        saldo = saldo*(1+monthly)+bulan;
+        bulanan.push(Math.round(saldo));
+      }
+
+      const final = bulanan[bulanan.length-1];
+      const totalSetor = awal+(bulan*durasi);
+      const totalBunga = final-totalSetor;
+
+      document.getElementById('simFinal').textContent = formatRp(final);
+      document.getElementById('simTotal').textContent = formatRp(totalSetor);
+      document.getElementById('simBungaTotal').textContent = formatRp(Math.max(0,totalBunga));
+      document.getElementById('simResult').style.display='block';
+
+      const maxVal = Math.max(...bulanan);
+      document.getElementById('simBars').innerHTML = bulanan.map((v,i)=>`
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+          <div style="width:100%;height:${Math.round((v/maxVal)*90)}px;background:linear-gradient(180deg,var(--green),rgba(0,208,156,0.3));border-radius:3px 3px 0 0"></div>
+          <span style="font-size:0.6rem;color:var(--text-muted)">B${i+1}</span>
+        </div>
+      `).join('');
+    }
+
+    renderTargets();
+  </script>
+</body>
+</html>

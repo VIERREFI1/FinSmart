@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pengeluaran — FinanceKu</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="logo-icon">₿</span>
+      <span class="logo-text">Finance<span class="accent">Ku</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Dashboard</a></li>
+      <li><a href="pemasukan.html">Pemasukan</a></li>
+      <li><a href="pengeluaran.html" class="active">Pengeluaran</a></li>
+      <li><a href="tabungan.html">Tabungan</a></li>
+      <li><a href="laporan.html">Laporan</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <div class="page-hero">
+    <span class="section-tag">Pengeluaran</span>
+    <h1>Jumlah <span class="gradient-text">Pengeluaran</span></h1>
+    <p>Catat dan pantau semua uang keluar agar keuanganmu tetap sehat.</p>
+  </div>
+
+  <div class="page-content">
+    <div class="stats-grid" style="margin-bottom:40px">
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon red-bg">↓</span>
+        </div>
+        <h3 class="stat-value red" id="totalPengeluaran">Rp 0</h3>
+        <p class="stat-label">Total Pengeluaran</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><span class="stat-icon blue-bg">#</span></div>
+        <h3 class="stat-value" id="countPengeluaran">0</h3>
+        <p class="stat-label">Jumlah Transaksi</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top"><span class="stat-icon yellow-bg">⌀</span></div>
+        <h3 class="stat-value" id="avgPengeluaran">Rp 0</h3>
+        <p class="stat-label">Rata-rata per Transaksi</p>
+      </div>
+    </div>
+
+    <!-- Kebiasaan Pengeluaran -->
+    <div class="form-card" id="kebiasaanCard" style="display:none">
+      <h3>🔍 Analisis Kebiasaan Pengeluaran</h3>
+      <div class="habit-grid" id="habitGrid"></div>
+    </div>
+
+    <div class="form-card">
+      <h3>+ Tambah Pengeluaran</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nama Pengeluaran</label>
+          <input type="text" id="inpNama" placeholder="e.g. Belanja, Makan, Transport..."/>
+        </div>
+        <div class="form-group">
+          <label>Jumlah (Rp)</label>
+          <input type="number" id="inpJumlah" placeholder="0" min="0"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="inpKategori">
+            <option>Makanan & Minuman</option>
+            <option>Transport</option>
+            <option>Belanja</option>
+            <option>Tagihan</option>
+            <option>Hiburan</option>
+            <option>Kesehatan</option>
+            <option>Pendidikan</option>
+            <option>Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tanggal</label>
+          <input type="date" id="inpTanggal"/>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:20px">
+        <label>Catatan (opsional)</label>
+        <textarea id="inpCatatan" rows="2" placeholder="Catatan tambahan..."></textarea>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="tambah()">Simpan Pengeluaran</button>
+        <button class="btn-ghost" onclick="resetForm()">Reset</button>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>Riwayat Pengeluaran</h3>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr><th>Nama</th><th>Kategori</th><th>Jumlah</th><th>Tanggal</th><th>Catatan</th><th>Aksi</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    const catColors = {
+      'Makanan & Minuman':'badge-green','Transport':'badge-blue','Belanja':'badge-yellow',
+      'Tagihan':'badge-red','Hiburan':'badge-blue','Kesehatan':'badge-green',
+      'Pendidikan':'badge-blue','Lainnya':'badge-red'
+    };
+
+    function render() {
+      const data = store.pengeluaran;
+      const total = data.reduce((s,d)=>s+Number(d.jumlah),0);
+      document.getElementById('totalPengeluaran').textContent = formatRp(total);
+      document.getElementById('countPengeluaran').textContent = data.length;
+      document.getElementById('avgPengeluaran').textContent = data.length ? formatRp(Math.round(total/data.length)) : 'Rp 0';
+
+      // kebiasaan
+      if (data.length > 0) {
+        const cats = {};
+        data.forEach(d=>{ cats[d.kategori] = (cats[d.kategori]||0)+Number(d.jumlah); });
+        const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+        document.getElementById('kebiasaanCard').style.display = 'block';
+        document.getElementById('habitGrid').innerHTML = sorted.map(([k,v])=>{
+          const pct = Math.round((v/total)*100);
+          return `<div class="habit-item">
+            <div class="habit-label"><span>${k}</span><span>${pct}% — ${formatRp(v)}</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          </div>`;
+        }).join('');
+      }
+
+      const tbody = document.getElementById('tableBody');
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:40px">Belum ada data pengeluaran</td></tr>';
+        return;
+      }
+      tbody.innerHTML = [...data].reverse().map((d,i)=>`
+        <tr>
+          <td><strong>${d.nama}</strong></td>
+          <td><span class="badge ${catColors[d.kategori]||'badge-red'}">${d.kategori}</span></td>
+          <td class="red" style="font-family:var(--font-display);font-weight:700">${formatRp(d.jumlah)}</td>
+          <td style="color:var(--text-muted)">${d.tanggal}</td>
+          <td style="color:var(--text-muted);font-size:0.85rem">${d.catatan||'-'}</td>
+          <td><button class="btn-danger" style="font-size:0.78rem;padding:6px 12px" onclick="hapus(${store.pengeluaran.length-1-i})">Hapus</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function tambah() {
+      const nama = document.getElementById('inpNama').value.trim();
+      const jumlah = document.getElementById('inpJumlah').value;
+      const kategori = document.getElementById('inpKategori').value;
+      const tanggal = document.getElementById('inpTanggal').value;
+      const catatan = document.getElementById('inpCatatan').value;
+      if (!nama||!jumlah||!tanggal) { alert('Nama, jumlah, dan tanggal wajib diisi!'); return; }
+      store.pengeluaran.push({nama,jumlah:Number(jumlah),kategori,tanggal,catatan});
+      save(); render(); resetForm();
+    }
+
+    function hapus(idx) {
+      if (confirm('Hapus?')) { store.pengeluaran.splice(idx,1); save(); render(); }
+    }
+
+    function resetForm() {
+      ['inpNama','inpJumlah','inpCatatan'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('inpTanggal').value = new Date().toISOString().split('T')[0];
+    }
+
+    document.getElementById('inpTanggal').value = new Date().toISOString().split('T')[0];
+    render();
+  </script>
+</body>
+</html>

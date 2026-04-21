@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laporan — FinanceKu</title>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="logo-icon">₿</span>
+      <span class="logo-text">Finance<span class="accent">Ku</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Dashboard</a></li>
+      <li><a href="pemasukan.html">Pemasukan</a></li>
+      <li><a href="pengeluaran.html">Pengeluaran</a></li>
+      <li><a href="tabungan.html">Tabungan</a></li>
+      <li><a href="laporan.html" class="active">Laporan</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger">&#9776;</button>
+  </nav>
+
+  <div class="page-hero">
+    <span class="section-tag">Laporan</span>
+    <h1>Total Laporan <span class="gradient-text">Keuangan</span></h1>
+    <p>Ringkasan lengkap pemasukan, pengeluaran, saldo akhir, dan analisis kebiasaan pengeluaranmu.</p>
+  </div>
+
+  <div class="page-content">
+    <!-- Summary -->
+    <div class="report-summary">
+      <div class="report-box" style="border-color:rgba(0,208,156,0.3)">
+        <div class="amount green" id="rpTotalPemasukan">Rp 0</div>
+        <div class="label">Total Pemasukan</div>
+      </div>
+      <div class="report-box" style="border-color:rgba(255,107,107,0.3)">
+        <div class="amount red" id="rpTotalPengeluaran">Rp 0</div>
+        <div class="label">Total Pengeluaran</div>
+      </div>
+      <div class="report-box" style="border-color:rgba(108,99,255,0.3)">
+        <div class="amount" id="rpSaldoAkhir" style="color:var(--blue)">Rp 0</div>
+        <div class="label">Saldo Akhir</div>
+      </div>
+    </div>
+
+    <!-- Health Indicator -->
+    <div class="form-card" id="healthCard">
+      <h3>💡 Kesehatan Keuangan</h3>
+      <div id="healthMsg" style="color:var(--text-muted);font-size:0.95rem;line-height:1.7"></div>
+      <div style="margin-top:20px">
+        <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px">Rasio Pengeluaran vs Pemasukan</p>
+        <div class="progress-bar" style="height:12px">
+          <div class="progress-fill" id="healthBar" style="width:0%;background:linear-gradient(90deg,var(--green),var(--red))"></div>
+        </div>
+        <p style="font-size:0.8rem;color:var(--text-muted);margin-top:6px" id="healthPct">0% dari total pemasukan digunakan untuk pengeluaran</p>
+      </div>
+    </div>
+
+    <!-- Kebiasaan Pengeluaran -->
+    <div class="form-card" id="habitCard" style="display:none">
+      <h3>🔍 Analisis Kebiasaan Pengeluaran</h3>
+      <div class="habit-grid" id="habitGrid"></div>
+    </div>
+
+    <!-- Semua Transaksi -->
+    <div class="form-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px">
+        <h3 style="margin-bottom:0;padding-bottom:0;border:none">📋 Semua Transaksi</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <select id="filterType" onchange="render()" style="padding:8px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:var(--font-body)">
+            <option value="all">Semua</option>
+            <option value="pemasukan">Pemasukan</option>
+            <option value="pengeluaran">Pengeluaran</option>
+          </select>
+          <button class="btn-ghost small" onclick="exportCSV()">⬇ Export CSV</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="data-table">
+          <thead>
+            <tr><th>Nama</th><th>Tipe</th><th>Kategori</th><th>Jumlah</th><th>Tanggal</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Reset -->
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn-danger" onclick="resetAll()">⚠ Reset Semua Data</button>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    function render() {
+      const totalP = store.pemasukan.reduce((s,d)=>s+Number(d.jumlah),0);
+      const totalE = store.pengeluaran.reduce((s,d)=>s+Number(d.jumlah),0);
+      const saldo = totalP - totalE;
+
+      document.getElementById('rpTotalPemasukan').textContent = formatRp(totalP);
+      document.getElementById('rpTotalPengeluaran').textContent = formatRp(totalE);
+      document.getElementById('rpSaldoAkhir').textContent = formatRp(saldo);
+
+      // Health
+      if (totalP > 0) {
+        const pct = Math.min(100, Math.round((totalE/totalP)*100));
+        document.getElementById('healthBar').style.width = pct+'%';
+        document.getElementById('healthPct').textContent = pct+'% dari total pemasukan digunakan untuk pengeluaran';
+        let msg = '';
+        if (pct < 50) msg = '✅ <strong>Sangat Baik!</strong> Pengeluaranmu kurang dari 50% pemasukan. Teruskan dan tingkatkan target tabunganmu!';
+        else if (pct < 70) msg = '🟡 <strong>Cukup Baik.</strong> Pengeluaran di bawah 70%. Coba kurangi pengeluaran tidak perlu untuk meningkatkan tabungan.';
+        else if (pct < 90) msg = '🟠 <strong>Perlu Perhatian.</strong> Pengeluaranmu mendekati 90% pemasukan. Evaluasi kebiasaan pengeluaranmu segera.';
+        else msg = '🔴 <strong>Kritis!</strong> Pengeluaranmu hampir melebihi pemasukan. Segera kurangi pengeluaran atau cari sumber pemasukan tambahan.';
+        document.getElementById('healthMsg').innerHTML = msg;
+      }
+
+      // Kebiasaan
+      if (store.pengeluaran.length) {
+        const cats = {};
+        const totalE2 = store.pengeluaran.reduce((s,d)=>s+Number(d.jumlah),0);
+        store.pengeluaran.forEach(d=>{ cats[d.kategori]=(cats[d.kategori]||0)+Number(d.jumlah); });
+        const sorted = Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+        document.getElementById('habitCard').style.display = 'block';
+        document.getElementById('habitGrid').innerHTML = sorted.map(([k,v])=>{
+          const pct = Math.round((v/totalE2)*100);
+          return `<div class="habit-item">
+            <div class="habit-label"><span>${k}</span><span>${pct}% — ${formatRp(v)}</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          </div>`;
+        }).join('');
+      }
+
+      // All Transactions
+      const ft = document.getElementById('filterType').value;
+      let rows = [];
+      if (ft !== 'pengeluaran') {
+        store.pemasukan.forEach(d => rows.push({...d, tipe:'pemasukan'}));
+      }
+      if (ft !== 'pemasukan') {
+        store.pengeluaran.forEach(d => rows.push({...d, tipe:'pengeluaran'}));
+      }
+      rows.sort((a,b)=>new Date(b.tanggal)-new Date(a.tanggal));
+
+      const tbody = document.getElementById('tableBody');
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:40px">Belum ada transaksi</td></tr>';
+        return;
+      }
+      tbody.innerHTML = rows.map(d=>`
+        <tr>
+          <td><strong>${d.nama}</strong></td>
+          <td><span class="badge ${d.tipe==='pemasukan'?'badge-green':'badge-red'}">${d.tipe==='pemasukan'?'Pemasukan':'Pengeluaran'}</span></td>
+          <td style="color:var(--text-muted)">${d.kategori}</td>
+          <td class="${d.tipe==='pemasukan'?'green':'red'}" style="font-family:var(--font-display);font-weight:700">
+            ${d.tipe==='pemasukan'?'+':'-'} ${formatRp(d.jumlah)}
+          </td>
+          <td style="color:var(--text-muted)">${d.tanggal}</td>
+        </tr>
+      `).join('');
+    }
+
+    function exportCSV() {
+      const rows = [['Nama','Tipe','Kategori','Jumlah','Tanggal','Catatan']];
+      store.pemasukan.forEach(d=>rows.push([d.nama,'Pemasukan',d.kategori,d.jumlah,d.tanggal,d.catatan||'']));
+      store.pengeluaran.forEach(d=>rows.push([d.nama,'Pengeluaran',d.kategori,d.jumlah,d.tanggal,d.catatan||'']));
+      const csv = rows.map(r=>r.join(',')).join('\n');
+      const a = document.createElement('a');
+      a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+      a.download = 'laporan_keuangan.csv';
+      a.click();
+    }
+
+    function resetAll() {
+      if (confirm('Hapus SEMUA data? Tindakan ini tidak bisa dibatalkan!')) {
+        store.pemasukan=[]; store.pengeluaran=[]; store.tabungan=[];
+        save(); render();
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
